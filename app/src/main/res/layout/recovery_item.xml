@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginBottom="@dimen/dp_5"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="41dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="22dp"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/sp_16"
+            tools:text="BixinKEY-QRSPR" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="17dp"
+            android:layout_marginTop="@dimen/dp_2"
+            android:textColor="#b1b7c5"
+            android:textSize="@dimen/sp_12"
+            tools:text="备注：家庭共用1号" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="41dp"
+        android:padding="@dimen/sp_14"
+        android:src="@drawable/jiantou" />
+
+</LinearLayout>

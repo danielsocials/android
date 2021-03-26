@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/t_white">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="419dp"
+        android:layout_marginStart="@dimen/layout_margin"
+        android:layout_marginEnd="@dimen/layout_margin"
+        android:layout_marginBottom="@dimen/layout_margin"
+        app:cardCornerRadius="@dimen/corner_radius">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_14"
+                android:text="@string/touch_again"
+                android:textStyle="bold"
+                android:textSize="@dimen/big_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/cancel_touch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_16"
+
+                android:contentDescription="@string/close"
+                android:src="@drawable/close_big_black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/view5"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/line_hight"
+                android:layout_marginTop="50dp"
+                android:background="@color/separation_line"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="251dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="37dp"
+                android:background="@drawable/touch_again"
+                android:contentDescription="@string/touch_again"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view5" />
+
+            <TextView
+                android:id="@+id/textView32"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin"
+                android:text="@string/touch_again"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageView5" />
+
+
+            <TextView
+                android:id="@+id/textView34"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin"
+                android:drawableStart="@drawable/chenggong"
+                android:drawablePadding="@dimen/corner_radius"
+                android:text="@string/connect"
+                android:textColor="@color/text"
+                android:textSize="@dimen/smaller_text_size"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/textView32"
+                app:layout_constraintTop_toBottomOf="@id/textView32" />
+
+
+            <TextView
+                android:id="@+id/first_promote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:drawableStart="@drawable/chenggong"
+                android:drawablePadding="@dimen/corner_radius"
+                android:text="@string/verify_pin"
+                android:textColor="@color/text"
+                android:textStyle="bold"
+                android:textSize="@dimen/smaller_text_size"
+                app:layout_constraintStart_toStartOf="@id/textView32"
+                app:layout_constraintTop_toBottomOf="@id/textView34" />
+
+            <TextView
+                android:id="@+id/sign_success"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:drawableStart="@drawable/connecting"
+                android:drawablePadding="@dimen/corner_radius"
+                android:text="@string/sign_successful"
+                android:textColor="@color/text"
+                android:textSize="@dimen/smaller_text_size"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/textView32"
+                app:layout_constraintTop_toBottomOf="@id/first_promote" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

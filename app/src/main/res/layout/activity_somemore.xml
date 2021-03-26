@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/button_bk_ddake"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_60"
+        android:layout_marginTop="@dimen/dp_10">
+
+        <ImageView
+            android:id="@+id/img_back"
+            android:layout_width="@dimen/dp_44"
+            android:layout_height="@dimen/dp_44"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dp_10"
+            android:src="@drawable/left_arrow" />
+
+        <TextView
+            android:id="@+id/tet_keyName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-medium"
+            tools:text="OneKey"
+            android:textColor="@color/text"
+            android:textSize="@dimen/text_size" />
+
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bk_page">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bk_page"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="41dp"
+                android:lineSpacingExtra="@dimen/dp_10"
+                android:text="@string/public_use"
+                android:textColor="@color/text_six"
+                android:textSize="@dimen/sp_14" />
+
+            <RelativeLayout
+                android:id="@+id/lin_OnckOne"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_70"
+                android:layout_marginTop="@dimen/dp_5"
+                android:background="@color/button_bk_ddake">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="@dimen/dp_24"
+                    android:layout_height="@dimen/dp_24"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:src="@drawable/device_msg" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_toEndOf="@+id/imageView"
+                    android:gravity="center_vertical"
+                    android:text="@string/bixinkey_message"
+                    android:textColor="@color/text_color"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="37dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:padding="15dp"
+                    android:src="@drawable/jiantou" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/line_hight"
+                android:layout_marginStart="@dimen/dp_16"
+                android:layout_marginEnd="@dimen/dp_16"
+                android:background="@color/separation_line" />
+
+            <LinearLayout
+                android:id="@+id/lin_OnckTwo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_70"
+                android:background="@color/button_bk_ddake"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/dp_24"
+                    android:layout_height="@dimen/dp_24"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:src="@drawable/hard_update" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:gravity="center_vertical"
+                    android:text="@string/verson_update"
+                    android:textColor="@color/text_color"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tet_code"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/dp_16"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|end"
+                    android:singleLine="true"
+                    android:textColor="@color/graytext_color"
+                    android:textSize="@dimen/sp_13" />
+
+                <ImageView
+                    android:layout_width="37dp"
+                    android:layout_height="match_parent"
+                    android:padding="15dp"
+                    android:src="@drawable/jiantou" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/line_hight"
+                android:layout_marginStart="@dimen/sp_16"
+                android:layout_marginEnd="@dimen/sp_16"
+                android:background="@color/separation_line" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tetVerification"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_70"
+                    android:background="@color/button_bk_ddake"
+                    android:clickable="true"
+                    android:drawablePadding="@dimen/dp_10"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:paddingStart="@dimen/dp_20"
+                    android:paddingEnd="@dimen/dp_15"
+                    android:text="@string/verification_key"
+                    android:textColor="@color/text"
+                    android:textSize="@dimen/sp_15"
+                    app:drawableEndCompat="@drawable/jiantou"
+                    app:drawableStartCompat="@drawable/privacy_1" />
+                <TextView
+                    android:id="@+id/verified"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_30"
+                    android:text="@string/verify_success"
+                    android:textSize="@dimen/sp_14"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/green_bacj"
+                    android:textColor="#00B812"
+                    android:gravity="center"
+                    android:paddingHorizontal="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_45"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="41dp"
+                android:lineSpacingExtra="@dimen/dp_10"
+                android:text="@string/safe"
+                android:textColor="@color/text_six"
+                android:textSize="@dimen/sp_14" />
+
+            <LinearLayout
+                android:id="@+id/change_pin"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_70"
+                android:background="@color/button_bk_ddake"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/dp_24"
+                    android:layout_height="@dimen/dp_24"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:src="@drawable/fix_pin" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/fix_pin"
+                    android:textColor="@color/text_color"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="37dp"
+                    android:layout_height="match_parent"
+                    android:padding="15dp"
+                    android:src="@drawable/jiantou" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/line_hight"
+                android:layout_marginStart="@dimen/dp_16"
+                android:layout_marginEnd="@dimen/dp_16"
+                android:background="@color/separation_line"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/check_xpub"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_70"
+                android:background="@color/button_bk_ddake"
+                android:clickable="true"
+                android:drawablePadding="@dimen/dp_10"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp_20"
+                android:paddingEnd="@dimen/dp_16"
+                android:text="@string/get_xpub"
+                android:textColor="@color/text"
+                app:drawableEndCompat="@drawable/jiantou"
+                app:drawableStartCompat="@drawable/check_pub" />
+            <LinearLayout
+                android:id="@+id/hide_wallet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="41dp"
+                    android:lineSpacingExtra="@dimen/dp_10"
+                    android:text="@string/senior"
+                    android:textColor="@color/text_six"
+                    android:textSize="@dimen/sp_14" />
+
+                <TextView
+                    android:id="@+id/text_hide_wallet"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_70"
+                    android:background="@color/button_bk_ddake"
+                    android:clickable="true"
+                    android:drawablePadding="@dimen/dp_10"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:paddingStart="@dimen/dp_20"
+                    android:paddingEnd="@dimen/dp_16"
+                    android:text="@string/hide_wallet_msg"
+                    android:textColor="@color/text"
+                    app:drawableEndCompat="@drawable/jiantou"
+                    app:drawableStartCompat="@drawable/hide_wallet_" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tetBuckup"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_70"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/button_bk_ddake"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp_16"
+                android:paddingEnd="@dimen/dp_16"
+                android:text="@string/bixinkey_backups"
+                android:textColor="@color/text"
+                android:textSize="@dimen/text_size"
+                android:visibility="gone"
+                app:drawableEndCompat="@drawable/jiantou" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="41dp"
+                android:lineSpacingExtra="@dimen/dp_10"
+                android:text="危险操作"
+                android:textColor="@color/text_six"
+                android:textSize="@dimen/sp_14" />
+
+            <LinearLayout
+                android:id="@+id/wipe_device"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_70"
+                android:layout_marginTop="@dimen/dp_5"
+                android:background="@color/button_bk_ddake">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/restore_factory"
+                    android:textColor="@color/text_ten"
+                    android:textSize="15sp" />
+
+
+                <ImageView
+                    android:layout_width="37dp"
+                    android:layout_height="match_parent"
+                    android:padding="15dp"
+                    android:src="@drawable/jiantou" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/line_hight"
+                android:layout_marginStart="@dimen/dp_16"
+                android:layout_marginEnd="@dimen/dp_16"
+                android:background="@color/separation_line" />
+
+            <TextView
+                android:id="@+id/tet_deleteWallet"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_70"
+                android:layout_marginBottom="@dimen/dp_100"
+                android:background="@color/button_bk_ddake"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp_20"
+                android:paddingEnd="@dimen/text_margin"
+                android:text="@string/delete_device"
+                android:textColor="@color/text_ten"
+                android:textSize="@dimen/text_size"
+                app:drawableEndCompat="@drawable/jiantou" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

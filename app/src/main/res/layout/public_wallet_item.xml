@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="153dp"
+    android:layout_marginStart="@dimen/dp_20"
+    android:layout_marginTop="@dimen/dp_20"
+    android:layout_marginEnd="@dimen/dp_20"
+    android:background="@drawable/gray_broken">
+
+    <View
+        android:id="@+id/ewrwerw"
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:layout_marginStart="@dimen/dp_1"
+        android:layout_marginTop="@dimen/dp_1"
+        android:layout_marginEnd="@dimen/dp_1"
+        android:background="@drawable/gray_up_tuo" />
+
+    <TextView
+        android:id="@+id/tet_Walletname"
+        android:layout_width="wrap_content"
+        android:layout_height="68dp"
+        android:layout_marginStart="@dimen/dp_14"
+        android:gravity="center_vertical"
+        android:text="@string/title_name"
+        android:textColor="@color/text_three"
+        android:textSize="@dimen/sp_16" />
+
+    <TextView
+        android:id="@+id/img_deleteKey"
+        android:layout_width="wrap_content"
+        android:layout_height="68dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/dp_14"
+        android:gravity="center"
+        android:text="@string/delete"
+        android:textColor="@color/text_ten" />
+
+    <TextView
+        android:id="@+id/tet_AddBixinkey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ewrwerw"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="15.5dp"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_16"
+        android:maxLines="4"
+        android:textColor="#b1b7c5"
+        android:textSize="15sp"
+        tools:text="33dfdfdjkfdfjdkfd3dfdfn3334j5fjfjffjeejjdk3k3033dfdfdjkfdfjdkfd3jkdfjkdfjdkfdfdjfkdfdnfd" />
+
+
+</RelativeLayout>

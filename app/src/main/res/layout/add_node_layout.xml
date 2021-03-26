@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/white_tuo_big"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/edit_ip"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="31.5dp"
+            android:layout_marginEnd="26dp"
+            android:background="@drawable/gray_tuo_6"
+            android:hint="@string/ip"
+            android:paddingStart="@dimen/dp_16"
+            android:paddingEnd="@dimen/dp_16"
+            android:singleLine="true"
+            android:textColor="@color/text_color"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/edit_port"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="@dimen/dp_15"
+            android:layout_marginEnd="26dp"
+            android:background="@drawable/gray_tuo_6"
+            android:hint="@string/port_number"
+            android:paddingStart="@dimen/dp_16"
+            android:paddingEnd="@dimen/dp_16"
+            android:singleLine="true"
+            android:textColor="@color/text_color"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+</LinearLayout>

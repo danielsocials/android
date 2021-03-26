@@ -1,0 +1,180 @@
+package org.haobtc.onekey.constant;
+
+/**
+ * python constant
+ *
+ * @author liyan
+ */
+public final class PyConstant {
+    /** python modules and attributes */
+    public static final String ELECTRUM_CONSTANTS_MODULE = "electrum.constants";
+
+    public static final String TREZORLIB_TRANSPORT_NFC = "trezorlib.transport.nfc";
+    public static final String TREZORLIB_TRANSPORT_BLUETOOTH = "trezorlib.transport.bluetooth";
+    public static final String TREZORLIB_TRANSPORT_ANDROID_USB = "trezorlib.transport.android_usb";
+    public static final String TREZORLIB_TRANSPORT_PROTOCOL = "trezorlib.transport.protocol";
+    public static final String TREZORLIB_CUSTOMER_UI = "trezorlib.customer_ui";
+    public static final String UI_HANDLER = "handler";
+    public static final String BLUETOOTH_HANDLER = "BlueToothHandler";
+    public static final String BLUETOOTH_TRANSPORT = "BlueToothTransport";
+
+    public static final String NFC_HANDLE = "NFCHandle";
+    public static final String NFC_TRANSPORT = "NFCTransport";
+
+    public static final String CUSTOMER_UI = "CustomerUI";
+    public static final String ANDROID_USB_TRANSPORT = "AndroidUsbTransport";
+
+    public static final String WRITE_SUCCESS = "WRITE_SUCCESS";
+    public static final String ENABLED = "ENABLED";
+    public static final String BLE = "BLE";
+    public static final String BLE_DEVICE = "BLE_DEVICE";
+    public static final String CALL_BACK = "CALL_BACK";
+    public static final String ANDROID_COMMANDS = "AndroidCommands";
+    public static final String ANDROID_ID = "android_id";
+    public static final String CALLBACK = "callback";
+    public static final String CALLBACK_SERVER_STATUS = "set_server_status";
+    public static final String CALLBACK_HISTORY = "update_history";
+    public static final String CALLBACK_STATUS = "update_status";
+    public static final String ELECTRUM_GUI_ANDROID_CONSOLE = "electrum_gui.android.console";
+    public static final String USER_CANCEL = "set_user_cancel";
+    public static final String NOTIFICATION = "notify";
+    public static final String IS_CANCEL = "IS_CANCEL";
+    public static final String SET_TEST_NETWORK = "set_testnet";
+    public static final String SET_REG_TEST_NETWORK = "set_regtest";
+    public static final String PROCESS_REPORTER = "PROCESS_REPORTER";
+    /** 断点续传标记 */
+    public static final String HTTP = "HTTP";
+    /** 断点续传偏移量 */
+    public static final String OFFSET = "OFFSET";
+
+    public static final String TAG = "BLE";
+
+    public static final int BUTTON_REQUEST_9 = 109;
+    /** 按键确认 */
+    public static final int BUTTON_REQUEST_7 = 107;
+    /** 发币确认 */
+    public static final int BUTTON_REQUEST_8 = 108;
+    /** 恢复出厂设置 */
+    public static final int BUTTON_REQUEST_6 = 106;
+    /** 验证当前PIN */
+    public static final int PIN_CURRENT = 1;
+    /** 设置新PIN */
+    public static final int PIN_NEW_FIRST = 2;
+    /** 设置passphrass */
+    public static final int PASS_NEW_PASSPHRASS = 6;
+    /** 验证passphrass */
+    public static final int PASS_PASSPHRASS = 3;
+
+    /** 校验地址确认 */
+    public static final int VERIFY_ADDRESS_CONFIRM = 110;
+    /** 原生隔离见证地址（bech32） */
+    public static final String ADDRESS_TYPE_P2WPKH = "p2wpkh";
+    /** 普通地址() */
+    public static final String ADDRESS_TYPE_P2PKH = "p2pkh";
+    /** 兼容地址() */
+    public static final String ADDRESS_TYPE_P2SH_P2WPKH = "p2wpkh-p2sh";
+
+    // ============================= Python api name======================
+    /** * 回写PIN */
+    public static final String SET_PIN = "set_pin";
+    /** 回写收到的蓝牙数据 */
+    public static final String SET_BLE_RESPONSE = "set_response";
+    /** 设置通讯取消标志 */
+    public static final String CANCEL_CURRENT_COMM = "set_cancel_flag";
+    /** 设置蓝牙写成功的标志 */
+    public static final String SET_BLE_WRITE_SUCCESS_FLAG = "set_write_success_flag";
+    /** 加载所有创建的钱包 */
+    public static final String LOAD_ALL_WALLET = "load_all_wallet";
+    /**
+     * 通过xpub创建钱包接口 import_create_hw_wallet(self, name, m, n, xpubs, hide_type=False, hd=False,
+     * derived=False)
+     */
+    public static final String CREATE_WALLET_BY_XPUB = "import_create_hw_wallet";
+    /** 获取硬件钱包信息接口 */
+    public static final String GET_FEATURE = "get_feature";
+    /** 加载本地钱包详情 */
+    public static final String GET_WALLETS_INFO = "list_wallets";
+
+    /** 查看钱包余额 */
+    public static final String GET_BALANCE = "select_wallet";
+
+    /** 查看当前钱包的备份状态 */
+    public static final String HAS_BACKUP = "get_backup_info";
+
+    /** 校验扩展公钥合法性 */
+    public static final String VALIDATE_XPUB = "verify_xpub";
+
+    /** 通过助记词创建HD钱包 */
+    public static final String CREATE_HD_WALLET = "create_hd_wallet";
+
+    /** 通过助记词创建HD钱包 */
+    public static final String RECOVERY_CONFIRM = "recovery_confirmed";
+    /** 固件升级 */
+    public static final String FIRMWARE_UPDATE = "firmware_update";
+    /** 解析交易 */
+    public static final String ANALYZE_TX = "get_tx_info_from_raw";
+    /** 获取当前费率信息 */
+    public static final String GET_DEFAULT_FEE_DETAILS = "get_default_fee_info";
+    /** 计算当前交易的手续费 */
+    public static final String CALCULATE_FEE = "get_fee_by_feerate";
+    /** 通过临时交易构建最终交易 */
+    public static final String MAKE_TX = "mktx";
+    /** 检验地址合法性 */
+    public static final String VERIFY_ADDRESS = "verify_address";
+    /** 比特币-> 现金 转换 */
+    public static final String EXCHANGE_RATE_CONVERSION = "get_exchange_currency";
+    /** 广播交易 */
+    public static final String BROADCAST_TX = "broadcast_tx";
+    /** 签名交易 */
+    public static final String SIGN_TX = "sign_tx";
+    /** 获取当前选择钱包的地址信息 */
+    public static final String ADDRESS_INFO = "get_wallet_address_show_UI";
+    /** 校验签名信息 */
+    public static final String VERIFY_MESSAGE_SIGNATURE = "verify_message";
+    /** 删除钱包备份状态 */
+    public static final String CLEAR_BACK_FLAGS = "delete_backup_info";
+
+    public static final String VERIFY_SOFT_PASS = "check_password";
+
+    public static final String CHANGE_SOFT_PASS = "update_wallet_password";
+
+    public static final String EXPORT_MNEMONICS = "export_seed";
+    public static final String DELETE_WALLET = "delete_wallet";
+    public static final String CREATE_WALLET = "create";
+    public static final String EXPORT_PRIVATE_KEY = "export_privkey";
+    public static final String EXPORT_KEYSTORE = "export_keystore";
+    public static final String HD_DERIVED = "create_derived_wallet";
+    /** 重置App 接口 */
+    public static final String RESET_APP = "reset_wallet_info";
+    /** 获取派生钱包个数 */
+    public static final String GET_DEVIRED_NUM = "get_devired_num";
+    /** 获取交易历史 */
+    public static final String GET_TX_HISTORY = "get_all_tx_list";
+    /** 取消恢复 */
+    public static final String CANCEL_RECOVERY = "_set_recovery_flag";
+    /** 覆盖观察钱包 */
+    public static final String REP_WATCH_ONLY_WALLET = "replace_watch_only_wallet";
+    /** Get eth gas price, for eth only */
+    public static final String GET_ETH_GAS_PRICE = "get_eth_gas_price";
+
+    /** 校验接口 */
+    public static final String VERIFY_LEGALITY = "verify_legality";
+
+    public static final String SIGN_ETH_TX = "sign_eth_tx";
+
+    public static final String Create_Hw_Derived_Wallet = "create_hw_derived_wallet";
+
+    public static final String GET_XPUB_FORM_HW = "get_xpub_from_hw";
+    /** 添加代币 */
+    public static final String Add_Token = "add_token";
+
+    public static final String Delete_Token = "delete_token";
+
+    /** 获取token 总列表 */
+    public static final String GET_ALL_TOKEN = "get_all_token_info";
+
+    /** 获取已添加的Token列表 */
+    public static final String GET_CUR_TOKEN_ADDRESS = "get_cur_wallet_token_address";
+    /** 获取用户自定义的Token */
+    public static final String GET_CUS_LIST_INFO = "get_all_customer_token_info";
+}

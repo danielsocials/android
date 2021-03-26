@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginBottom="@dimen/dp_10"
+    android:background="@drawable/white_tuo"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/dp_18"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:textColor="@color/light_text"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:drawablePadding="23dp"
+            android:text="@string/address" />
+
+        <TextView
+            android:id="@+id/tet_moreaddress"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:ellipsize="end"
+            tools:text="xxxxxxxxxxxxxxxxxxxx" />
+
+        <TextView
+            android:id="@+id/test_change_address"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_18"
+            android:paddingStart="@dimen/dp_9"
+            android:paddingEnd="@dimen/dp_9"
+            android:background="@drawable/gray_tuocircle"
+            android:gravity="center"
+            android:visibility="visible"
+            android:textColor="@color/change_addr"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:singleLine="true"
+            android:text="@string/show_change_address"
+            android:textSize="@dimen/sp_10" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_hight"
+        android:layout_marginStart="@dimen/text_margin"
+        android:layout_marginTop="@dimen/dp_18"
+        android:background="@color/separation_line" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginBottom="@dimen/dp_18"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_18">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:textColor="@color/light_text"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:drawablePadding="23dp"
+            android:text="@string/feenum" />
+
+        <TextView
+            android:id="@+id/tet_payNum"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/button_bk_disableok"
+            android:layout_marginEnd="@dimen/text_margin"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tools:text="xxxxxxxxxxxxxxx" />
+
+    </LinearLayout>
+</LinearLayout>

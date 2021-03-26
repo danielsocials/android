@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--normal, pressed, checkable, checkable+pressed, checkable+checked,
+    checkable+checked+pressed-->
+    <item android:drawable="@drawable/key_board_bk_pressed" android:state_pressed="true"/>
+    <item android:drawable="@drawable/key_board_bk_normal" android:state_pressed="false"/>
+
+</selector>

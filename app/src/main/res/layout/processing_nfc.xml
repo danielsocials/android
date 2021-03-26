@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/processing_bk"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    tools:context=".activities.settings.fixpin.ChangePinProcessingActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/button_bk_ddake"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="370dp"
+            android:paddingTop="@dimen/dp_60"
+            android:background="@color/processing_bk"
+            android:src="@drawable/nfc" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="31dp"
+            android:gravity="center_horizontal"
+            android:text="@string/bixinkey_fit"
+            android:textColor="@color/text"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:gravity="center_horizontal"
+            android:text="@string/tip_tips"
+            android:textColor="#b1b7c5"
+            android:textSize="12sp" />
+        <TextView
+            android:id="@+id/first_promote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="135dp"
+            android:layout_marginTop="22dp"
+            android:drawableLeft="@drawable/connecting"
+            android:drawablePadding="@dimen/dp_6"
+            android:gravity="center"
+            android:text="@string/waitting_touch"
+            android:textColor="@color/text"
+            android:textSize="@dimen/smaller_text_size" />
+
+        <TextView
+            android:id="@+id/second_promote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="135dp"
+            android:layout_marginTop="12dp"
+            android:drawableLeft="@drawable/connecting"
+            android:drawablePadding="@dimen/dp_6"
+            android:text="@string/order_sending"
+            android:textColor="@color/text"
+            android:textSize="@dimen/smaller_text_size" />
+
+        <TextView
+            android:id="@+id/third_promote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="135dp"
+            android:text="@string/pin_seted"
+            android:drawableLeft="@drawable/connecting"
+            android:drawablePadding="@dimen/dp_6"
+            android:textColor="@color/text"
+            android:textSize="@dimen/smaller_text_size"
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/fourth_promote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="135dp"
+            android:text="@string/pin_seted"
+            android:drawableLeft="@drawable/connecting"
+            android:drawablePadding="@dimen/dp_6"
+            android:textColor="@color/text"
+            android:textSize="@dimen/smaller_text_size"
+            android:visibility="gone"/>
+
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/img_back"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginEnd="15.3dp"
+        android:padding="8dp"
+
+        android:src="@drawable/back" />
+
+</RelativeLayout>

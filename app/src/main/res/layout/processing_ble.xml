@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/processing_bk"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    tools:context=".activities.settings.fixpin.ChangePinProcessingActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/button_bk_ddake"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="370dp"
+            android:background="@color/processing_bk"
+            android:paddingTop="@dimen/dp_60"
+            android:src="@drawable/ble" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="31dp"
+            android:gravity="center_horizontal"
+            android:textColor="@color/text"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:gravity="center_horizontal"
+            android:text="@string/tip_connnection"
+            android:textColor="@color/text_0"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/first_promote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/connecting"
+                android:drawablePadding="@dimen/dp_9"
+                android:gravity="center"
+                android:text="@string/verifying_pin"
+                android:textColor="@color/text"
+                android:textSize="@dimen/smaller_text_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/second_promote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/connecting"
+                android:drawablePadding="@dimen/dp_9"
+                android:text="@string/pin_seted"
+                android:textColor="@color/text"
+                android:textSize="@dimen/smaller_text_size"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/third_promote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/connecting"
+                android:drawablePadding="@dimen/dp_9"
+                android:text="@string/pin_seted"
+                android:textColor="@color/text"
+                android:textSize="@dimen/smaller_text_size"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/fourth_promote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/connecting"
+                android:drawablePadding="@dimen/dp_9"
+                android:text="@string/pin_seted"
+                android:textColor="@color/text"
+                android:textSize="@dimen/smaller_text_size"
+                android:visibility="gone" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/img_back"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginEnd="15.3dp"
+        android:contentDescription="@string/back"
+
+        android:padding="8dp"
+        android:src="@drawable/back" />
+
+</RelativeLayout>

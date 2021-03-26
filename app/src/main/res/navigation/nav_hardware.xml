@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_hardware"
+    app:startDestination="@id/select_chain_fragment">
+
+
+    <fragment
+        android:id="@+id/select_chain_fragment"
+        android:name="org.haobtc.onekey.onekeys.walletprocess.SelectChainCoinFragment"
+        android:label="SelectChainCoinFragment">
+        <action
+            android:id="@+id/goto_set_name"
+            app:destination="@id/set_name_fragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/set_name_fragment"
+        android:name="org.haobtc.onekey.onekeys.walletprocess.SoftWalletNameSettingFragment" >
+
+    </fragment>
+
+
+</navigation>

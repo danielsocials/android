@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="type">
+        <item>All</item>
+        <item>Send</item>
+        <item>Received</item>
+    </string-array>
+    <string-array name="state">
+        <item>All</item>
+        <item>Waiting Broadcast</item>
+        <item>Waiting Signature</item>
+        <item>Confirming</item>
+        <item>Completed</item>
+    </string-array>
+    <string-array name="currency">
+        <item>CNY</item>
+        <item>USD</item>
+        <item>JPY</item>
+        <item>KRW</item>
+        <item>GBP</item>
+        <item>EUR</item>
+        <item>MYR</item>
+        <item>HKD</item>
+        <item>AUD</item>
+        <item>INR</item>
+    </string-array>
+    <string-array name="currency_symbol">
+        <item>¥</item>
+        <item>$</item>
+        <item>¥</item>
+        <item>₩</item>
+        <item>￡</item>
+        <item>€</item>
+        <item>RM</item>
+        <item>$</item>
+        <item>AUD</item>
+        <item>₽</item>
+    </string-array>
+    <string-array name="waveSideBarLetters">
+        <item>#</item>
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+        <item>E</item>
+        <item>F</item>
+        <item>G</item>
+        <item>H</item>
+        <item>I</item>
+        <item>J</item>
+        <item>K</item>
+        <item>L</item>
+        <item>M</item>
+        <item>N</item>
+        <item>O</item>
+        <item>P</item>
+        <item>Q</item>
+        <item>R</item>
+        <item>S</item>
+        <item>T</item>
+        <item>U</item>
+        <item>V</item>
+        <item>W</item>
+        <item>X</item>
+        <item>Y</item>
+        <item>Z</item>
+    </string-array>
+</resources>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/white"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".activities.WalletUnActivatedActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50">
+
+        <ImageView
+            android:id="@+id/img_back"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_centerVertical="true"
+
+            android:padding="@dimen/dp_8"
+            android:src="@drawable/back" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bk_page">
+
+        <ImageView
+            android:id="@+id/picture"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_82"
+            android:src="@drawable/wallet_unactive" />
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/picture"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:textColor="@color/text"
+            android:textSize="@dimen/sp_18"
+            android:textStyle="bold" />
+
+
+        <LinearLayout
+            android:id="@+id/linear_use_se"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text"
+            android:layout_marginTop="@dimen/dp_53"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/img_use_se"
+                android:layout_width="@dimen/dp_14"
+                android:layout_height="@dimen/dp_14"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginBottom="@dimen/dp_5"
+                android:background="@drawable/circle_checkbox"
+                android:button="@null"
+                android:checked="false" />
+
+            <TextView
+                android:id="@+id/se"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/dp_6"
+                android:paddingEnd="@dimen/dp_6"
+                android:text="@string/use_se"
+                android:textColor="@color/light_text"
+                android:textSize="@dimen/sp_12" />
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/button_activate"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/text"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="78dp"
+            android:background="@drawable/button_bk"
+            android:text="@string/active"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_activate"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_7"
+            android:text="@string/random"
+            android:textColor="@color/light_text"
+            android:textSize="@dimen/sp_12" />
+
+        <Button
+            android:id="@+id/button_recover"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/button_activate"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_40"
+            android:background="@drawable/button_bk"
+            android:text="@string/recovery"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_recover"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_7"
+            android:text="@string/recovery_promote"
+            android:textColor="@color/light_text"
+            android:textSize="@dimen/sp_12" />
+    </RelativeLayout>
+
+</LinearLayout>

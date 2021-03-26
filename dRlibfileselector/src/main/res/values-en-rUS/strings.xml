@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">FileSelector</string>
+    <string name="action_settings">Settings</string>
+    <string name="mode_file">File selection</string>
+    <string name="mode_file_multi">Multiple files</string>
+    <string name="mode_folder">Folder selection</string>
+    <string name="mode_folder_multi">Multiple folders</string>
+    <string name="action_fileselector_ok">Complete</string>
+    <string name="title_activity_fs">FsActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="choosepath">Select path</string>
+    <string name="nochoose">There are no files in this folder</string>
+    <string name="nochoosepath">You have not selected the document path. Please select it and try again</string>
+    <string name="comfirm">Confirm</string>
+    <string name="preservations">Preservation</string>
+
+</resources>

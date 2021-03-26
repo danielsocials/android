@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PasswordInputView">
+        <attr name="borderWidth" format="dimension"/>
+        <attr name="borderColor" format="color"/>
+        <attr name="borderRadius" format="dimension"/>
+        <attr name="passwordLength" format="integer"/>
+        <attr name="passwordWidth" format="dimension"/>
+        <attr name="passwordColor" format="color"/>
+        <attr name="passwordRadius" format="dimension"/>
+    </declare-styleable>
+    <declare-styleable name="PwdEditText">
+        <attr name="space" format="dimension" />
+        <attr name="strokeWidth" format="dimension" />
+        <attr name="checkedColor" format="color" />
+        <attr name="defaultColor" format="color" />
+        <attr name="textLength" format="integer" />
+        <attr name="backColor" format="color" />
+        <attr name="textColor" format="color" />
+        <attr name="circle" format="dimension" />
+        <attr name="round" format="dimension" />
+        <attr name="textSize" format="dimension" />
+        <attr name="isPwd" format="boolean" />
+        <attr name="waitInputColor" format="color" />
+        <attr name="isWaitInput" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="LoadingTextView">
+        <attr name="text" format="string"/>
+    </declare-styleable>
+
+    <!--SuperTextView-->
+    <declare-styleable name="SuperTextView">
+        <attr name="corner" format="dimension"/>
+        <attr name="left_top_corner" format="boolean"/>
+        <attr name="right_top_corner" format="boolean"/>
+        <attr name="left_bottom_corner" format="boolean"/>
+        <attr name="right_bottom_corner" format="boolean"/>
+        <attr name="solid" format="reference|color"/>
+        <attr name="stroke_width" format="dimension"/>
+        <attr name="stroke_color" format="reference|color"/>
+        <attr name="state_drawable" format="reference"/>
+        <attr name="state_drawable_width" format="dimension"/>
+        <attr name="state_drawable_height" format="dimension"/>
+        <attr name="state_drawable_padding_left" format="dimension"/>
+        <attr name="state_drawable_padding_top" format="dimension"/>
+        <attr name="isShowState" format="boolean"/>
+        <attr name="text_stroke" format="boolean"/>
+        <attr name="text_stroke_color" format="reference|color"/>
+        <attr name="text_stroke_width" format="dimension"/>
+        <attr name="text_fill_color" format="reference|color"/>
+        <attr name="autoAdjust" format="boolean"/>
+        <attr name="state_drawable_mode" format="enum">
+            <enum name="left" value="0" />
+            <enum name="top" value="1" />
+            <enum name="right" value="2" />
+            <enum name="bottom" value="3" />
+            <enum name="center" value="4" />
+            <enum name="fill" value="5" />
+            <enum name="leftTop" value="6" />
+            <enum name="rightTop" value="7" />
+            <enum name="leftBottom" value="8" />
+            <enum name="rightBottom" value="9" />
+        </attr>
+        <attr name="shaderStartColor" format="reference|color" />
+        <attr name="shaderEndColor" format="reference|color" />
+        <attr name="shaderMode" format="enum">
+            <enum name="topToBottom" value="0" />
+            <enum name="bottomToTop" value="1" />
+            <enum name="leftTopRight" value="2" />
+            <enum name="rightToLeft" value="3" />
+        </attr>
+        <attr name="shaderEnable" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="WaveSideBarView">
+        <attr name="sidebarTextColor" format="color|reference" />
+        <attr name="sidebarBackgroundColor" format="color|reference" />
+        <attr name="sidebarChooseTextColor" format="color|reference" />
+        <attr name="sidebarTextSize" format="dimension" />
+        <attr name="sidebarLargeTextSize" format="dimension" />
+        <attr name="sidebarRadius" format="dimension" />
+        <attr name="sidebarBallRadius" format="dimension" />
+    </declare-styleable>
+</resources>

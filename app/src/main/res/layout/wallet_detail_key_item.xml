@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_60"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_hight"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:background="@color/line_color" />
+
+    <TextView
+        android:id="@+id/tet_publicperson_item_id"
+        tools:text="BixinKEY-1212"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_60"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_40"
+        android:gravity="center_vertical"
+        android:textColor="@color/text_color"
+        android:textSize="15sp" />
+
+    <ImageView
+        android:layout_width="37dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:padding="15dp"
+        android:src="@drawable/jiantou" />
+</RelativeLayout>

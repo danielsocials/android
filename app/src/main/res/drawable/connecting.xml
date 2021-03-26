@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <rotate
+            android:drawable="@drawable/jinxingzhong"
+            android:fromDegrees="0"
+            android:toDegrees="+360"
+            android:pivotX="50%"
+            android:pivotY="50%"
+            android:visible="true"
+            />
+    </item>
+
+</layer-list>

@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/button_bk_ddake"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".activities.personalwallet.mnemonic_word.MnemonicWordActivity">
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:background="@color/button_bk_ddake">
+
+        <ImageView
+            android:id="@+id/img_back"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/dp_8"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/input_help_word"
+            android:textColor="@color/text"
+            android:textSize="@dimen/text_size" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/RelativeLayout"
+        android:background="@color/bk_page"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:outlineSpotShadowColor="@color/shadow_color"
+            app:cardCornerRadius="@dimen/dp_8"
+            app:cardElevation="@dimen/dp_8"
+            tools:ignore="UnusedAttribute">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/white_tuo"
+                android:orientation="vertical">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_marginStart="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_18"
+                    android:layout_marginBottom="@dimen/dp_18">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_70"
+                        android:text="@string/_12_help_word"
+                        android:textColor="#484d5c"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/text_paste"
+                        android:layout_width="@dimen/dp_60"
+                        android:textSize="@dimen/sp_13"
+                        android:textColor="@color/button_bk_disableok"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:gravity="center"
+                        android:text="@string/paste" />
+
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="190dp"
+                    android:layout_marginStart="@dimen/dp_16"
+                    android:layout_marginEnd="@dimen/dp_16"
+                    android:layout_marginBottom="@dimen/dp_30"
+                    android:orientation="vertical">
+
+                    <!--         one           -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_40">
+
+                        <EditText
+                            android:id="@+id/edit_one"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/dp_5"
+                            android:layout_marginEnd="@dimen/dp_5"
+                            android:layout_weight="1"
+                            android:background="@drawable/gray_tuo_6"
+                            android:gravity="center"
+                            android:imeOptions="actionNext"
+                            android:nextFocusForward="@id/edit_two"
+                            android:singleLine="true"
+                            android:textSize="@dimen/sp_12" />
+
+                        <EditText
+                            android:id="@+id/edit_two"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/dp_5"
+                            android:layout_marginEnd="@dimen/dp_5"
+                            android:layout_weight="1"
+                            android:background="@drawable/gray_tuo_6"
+                            android:gravity="center"
+                            android:imeOptions="actionNext"
+                            android:nextFocusForward="@id/edit_three"
+                            android:singleLine="true"
+                            android:textSize="@dimen/sp_12" />
+
+                        <EditText
+                            android:id="@+id/edit_three"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/dp_5"
+                            android:layout_marginEnd="@dimen/dp_5"
+                            android:layout_weight="1"
+                            android:background="@drawable/gray_tuo_6"
+                            android:gravity="center"
+                            android:imeOptions="actionNext"
+                            android:nextFocusForward="@id/edit_four"
+                            android:singleLine="true"
+                            android:textSize="@dimen/sp_12" />
+
+                    </LinearLayout>
+                    <!--         two           -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_40"
+                        android:layout_marginTop="@dimen/dp_10">
+
+                        <EditText
+                            android:id="@+id/edit_four"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/dp_5"
+                            android:layout_marginEnd="@dimen/dp_5"
+                            android:layout_weight="1"
+                            android:background="@drawable/gray_tuo_6"
+                            android:gravity="center"
+                            android:imeOptions="actionNext"
+                            android:nextFocusForward="@id/edit_five"
+                            android:singleLine="true"
+                            android:textSize="@dimen/sp_12" />
+
+                        <EditText
+                            android:id="@+id/edit_five"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/dp_5"
+                            android:layout_marginEnd="@dimen/dp_5"
+                            android:layout_weight="1"
+                            android:background="@drawable/gray_tuo_6"
+                            android:gravity="center"
+                            android:imeOptions="actionNext"
+                            android:nextFocusForward="@id/edit_six"
+                            android:singleLine="true"
+                            android:textSize="@dimen/sp_12" />
+
+                        <EditText
+                            android:id="@+id/edit_six"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/dp_5"
+                            android:layout_marginEnd="@dimen/dp_5"
+                            android:layout_weight="1"
+                            android:background="@drawable/gray_tuo_6"
+                            android:gravity="center"
+                            android:imeOptions="actionNext"
+                            android:nextFocusForward="@id/edit_seven"
+                            android:singleLine="true"
+                            android:textSize="@dimen/sp_12" />
+
+                    </LinearLayout>
+                    <!--         three           -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_40"
+                        android:layout_marginTop="@dimen/dp_10">
+
+                        <EditText
+                            android:id="@+id/edit_seven"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/dp_5"
+                            android:layout_marginEnd="@dimen/dp_5"
+                            android:layout_weight="1"
+                            android:background="@drawable/gray_tuo_6"
+                            android:gravity="center"
+                            android:imeOptions="actionNext"
+                            android:nextFocusForward="@id/edit_eight"
+                            android:singleLine="true"
+                            android:textSize="@dimen/sp_12" />
+
+                        <EditText
+                            android:id="@+id/edit_eight"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/dp_5"
+                            android:layout_marginEnd="@dimen/dp_5"
+                            android:layout_weight="1"
+                            android:background="@drawable/gray_tuo_6"
+                            android:gravity="center"
+                            android:imeOptions="actionNext"
+                            android:nextFocusForward="@id/edit_nine"
+                            android:singleLine="true"
+                            android:textSize="@dimen/sp_12" />
+
+                        <EditText
+                            android:id="@+id/edit_nine"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/dp_5"
+                            android:layout_marginEnd="@dimen/dp_5"
+                            android:layout_weight="1"
+                            android:background="@drawable/gray_tuo_6"
+                            android:gravity="center"
+                            android:imeOptions="actionNext"
+                            android:nextFocusForward="@id/edit_ten"
+                            android:singleLine="true"
+                            android:textSize="@dimen/sp_12" />
+
+                    </LinearLayout>
+                    <!--         four           -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_40"
+                        android:layout_marginTop="@dimen/dp_10">
+
+                        <EditText
+                            android:id="@+id/edit_ten"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/dp_5"
+                            android:layout_marginEnd="@dimen/dp_5"
+                            android:layout_weight="1"
+                            android:background="@drawable/gray_tuo_6"
+                            android:gravity="center"
+                            android:imeOptions="actionNext"
+                            android:nextFocusForward="@id/edit_eleven"
+                            android:singleLine="true"
+                            android:textSize="@dimen/sp_12" />
+
+                        <EditText
+                            android:id="@+id/edit_eleven"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/dp_5"
+                            android:layout_marginEnd="@dimen/dp_5"
+                            android:layout_weight="1"
+                            android:background="@drawable/gray_tuo_6"
+                            android:gravity="center"
+                            android:imeOptions="actionNext"
+                            android:nextFocusForward="@id/edit_twelve"
+                            android:singleLine="true"
+                            android:textSize="@dimen/sp_12" />
+
+                        <EditText
+                            android:id="@+id/edit_twelve"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/dp_5"
+                            android:layout_marginEnd="@dimen/dp_5"
+                            android:layout_weight="1"
+                            android:background="@drawable/gray_tuo_6"
+                            android:gravity="center"
+                            android:singleLine="true"
+                            android:textSize="@dimen/sp_12" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_setPin"
+        android:layout_width="300dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_height="50dp"
+        android:layout_marginBottom="@dimen/dp_40"
+        android:background="@drawable/button_bk_grey"
+        android:enabled="false"
+        android:text="@string/next"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white" />
+</RelativeLayout>

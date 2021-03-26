@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="419dp"
+        android:layout_marginStart="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:background="@drawable/white_tuo">
+
+        <RadioGroup
+            android:id="@+id/radio_group"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginBottom="5.5dp"
+            android:orientation="horizontal">
+
+
+            <RadioButton
+                android:id="@+id/radio_one"
+                android:layout_width="65dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/dp_20"
+                android:button="@null"
+                android:drawableBottom="@drawable/src_qiye"
+                android:gravity="center"
+                android:text="@string/blue_toose"
+                android:textColor="@drawable/textcolor"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/radio_two"
+                android:layout_width="65dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/dp_20"
+                android:button="@null"
+                android:checked="true"
+                android:drawableBottom="@drawable/src_qiye"
+                android:gravity="center"
+                android:text="@string/nfc_line"
+                android:textColor="@drawable/textcolor"
+                android:textSize="15sp" />
+
+        </RadioGroup>
+
+        <ImageView
+            android:id="@+id/img_Cancel"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="47.5dp"
+            android:layout_alignParentEnd="true"
+            android:contentDescription="@string/use_hardware"
+            android:padding="@dimen/dp_14"
+
+            android:src="@drawable/close_big_black"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/ln"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_hight"
+            android:layout_below="@id/radio_group"
+            android:background="@color/separation_line" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:gravity="center_horizontal"
+            android:layout_below="@+id/ln"
+            android:text="@string/bixinkey_fit"
+            android:textColor="@color/text"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

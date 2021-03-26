@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shareInterpolator="false">
+    <!-- 如果不想共享一个interpolator(动画变化的速率)，则设置android:shareInterpolator="false"，并且需要在每一个动画效果处添加interpolator -->
+
+    <rotate
+        android:fromDegrees="0"
+        android:toDegrees="+360"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:repeatCount="-1"
+        android:repeatMode="restart"
+        android:interpolator="@android:anim/linear_interpolator"
+        android:duration="800"
+        />
+</set>

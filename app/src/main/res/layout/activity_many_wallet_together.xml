@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    tools:context=".activities.jointwallet.MultiSigWalletCreator">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dp_10"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60"
+            android:layout_marginTop="@dimen/dp_10">
+
+            <ImageView
+                android:id="@+id/img_back"
+                android:layout_width="@dimen/dp_44"
+                android:layout_height="@dimen/dp_44"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/dp_10"
+                android:src="@drawable/left_arrow" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/creat_ggwallet"
+                android:textColor="@color/text"
+                android:textSize="@dimen/text_size" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_15"
+            android:layout_marginStart="@dimen/dp_25"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_25"
+            android:background="@android:color/white">
+
+            <ImageView
+                android:id="@+id/img_Progree1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/step1"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/img_Progree2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/step2"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/img_Progree3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/step3"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/dp_16"
+            android:paddingEnd="@dimen/dp_16">
+
+            <TextView
+                android:id="@+id/tet_Trone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Basics_message"
+                android:textColor="@color/onekey"
+                android:textSize="@dimen/sp_12" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tet_Trtwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/band_manager"
+                android:textColor="#b3b3b3"
+                android:textSize="@dimen/sp_12" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tet_Trthree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/creat_finish"
+                android:textColor="#b3b3b3"
+                android:textSize="@dimen/sp_12" />
+
+        </LinearLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/button_bk_ddake"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <!--    one    -->
+                <LinearLayout
+                    android:id="@+id/card_viewOne"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <EditText
+                        android:id="@+id/edit_Walletname"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_60"
+                        android:layout_marginStart="34dp"
+                        android:layout_marginTop="@dimen/dp_30"
+                        android:layout_marginEnd="34dp"
+                        android:background="@drawable/gray_broken"
+                        android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:hint="@string/set_wallet_name"
+                        android:paddingStart="@dimen/dp_20"
+                        android:paddingEnd="@dimen/dp_20"
+                        android:textColor="@color/text_two"
+                        android:textSize="@dimen/sp_16" />
+
+                    <TextView
+                        android:id="@+id/text_change"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dp_25"
+                        android:background="@drawable/green_bacj"
+                        android:paddingStart="@dimen/dp_14"
+                        android:paddingTop="@dimen/dp_5"
+                        android:paddingEnd="@dimen/dp_14"
+                        android:paddingBottom="@dimen/dp_5"
+                        android:text="@string/public_greater_sign"
+                        android:textColor="@color/onekey"
+                        android:textSize="@dimen/sp_14"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="34dp"
+                        android:layout_marginTop="@dimen/dp_24"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/together_num"
+                        android:textColor="@color/text_color"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="34dp"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:text="@string/public_key"
+                        android:textColor="@color/graytext_color"
+                        android:textSize="12sp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recl_public"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_30"
+                        android:layout_marginEnd="@dimen/dp_30"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/public_item">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="34dp"
+                        android:layout_marginTop="@dimen/dp_24"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/signed_num"
+                        android:textColor="@color/text_color"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="34dp"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:text="@string/tet_tips"
+                        android:textColor="@color/graytext_color"
+                        android:textSize="12sp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recl_sign_num"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_30"
+                        android:layout_marginEnd="@dimen/dp_30"
+                        android:visibility="visible"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/public_item">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                    <Button
+                        android:id="@+id/button"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="34dp"
+                        android:layout_marginTop="@dimen/dp_50"
+                        android:layout_marginEnd="34dp"
+                        android:layout_marginBottom="@dimen/dp_80"
+                        android:background="@drawable/btn_no_check"
+                        android:text="@string/next"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/white"
+                        android:visibility="visible" />
+                </LinearLayout>
+                <!--      three      -->
+                <RelativeLayout
+                    android:id="@+id/card_viewThree"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/layout_margin"
+                    android:layout_marginTop="@dimen/layout_margin"
+                    android:layout_marginEnd="@dimen/layout_margin"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tet_who_wallet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_20"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:textColor="@color/text_three"
+                        android:textSize="@dimen/big_text_size"/>
+
+                    <TextView
+                        android:id="@+id/tet_many_key"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tet_who_wallet"
+                        android:layout_marginStart="@dimen/dp_20"
+                        android:layout_marginTop="@dimen/corner_radius"
+                        android:textColor="@color/text_six"
+                        android:textSize="@dimen/sp_12"
+                        tools:text="@string/multisig_use_promote" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recl_publicPerson"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_20"
+                        android:layout_marginEnd="@dimen/dp_20"
+                        android:layout_below="@+id/tet_many_key"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:layout_marginBottom="@dimen/dp_100"
+                        tools:itemCount="1"
+                        tools:listitem="@layout/public_key_item">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                    <Button
+                        android:id="@+id/btn_Finish"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_60"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="34dp"
+                        android:layout_marginTop="@dimen/dp_80"
+                        android:layout_marginEnd="34dp"
+                        android:layout_marginBottom="@dimen/dp_30"
+                        android:background="@drawable/btn_checked"
+                        android:text="@string/back"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/white"
+                        android:visibility="visible" />
+
+                </RelativeLayout>
+
+                <!--      two      -->
+                <RelativeLayout
+                    android:id="@+id/rel_text_two"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/dp_24"
+                        android:layout_marginStart="@dimen/dp_20"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:gravity="center_vertical"
+                        android:text="@string/band_pub"
+                        android:textColor="@color/text_three"
+                        android:textSize="@dimen/sp_18" />
+
+                    <TextView
+                        android:id="@+id/text_pub_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/dp_24"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:layout_marginEnd="29dp"
+                        android:layout_toEndOf="@+id/textView"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/onekey"
+                        android:textSize="@dimen/sp_18"
+                        tools:text="1/3" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/dp_24"
+                        android:layout_below="@+id/textView"
+                        android:layout_marginStart="@dimen/dp_20"
+                        android:layout_marginTop="@dimen/dp_12"
+                        android:gravity="center_vertical"
+                        android:text="@string/band_pub_tip"
+                        android:textColor="@color/text_six"
+                        android:textSize="@dimen/sp_12" />
+
+                </RelativeLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recl_BinxinKey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="2"
+                    tools:listitem="@layout/public_wallet_item">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <RelativeLayout
+                    android:id="@+id/bn_add_key"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_95"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:background="@drawable/eos_gray_back"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/text_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_20"
+                        android:layout_marginTop="@dimen/dp_12"
+                        android:drawablePadding="@dimen/dp_5"
+                        android:gravity="center_vertical"
+                        android:text="@string/add_bixin_key"
+                        android:textColor="@color/button_bk_ddake"
+                        android:textSize="@dimen/sp_14"
+                        app:drawableStartCompat="@drawable/tou_add" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:layout_below="@+id/text_name"
+                        android:layout_marginStart="@dimen/dp_20"
+                        android:layout_marginTop="@dimen/dp_9"
+                        android:layout_marginEnd="29dp"
+                        android:text="@string/add_public_tip"
+                        android:textColor="@color/text_eleven"
+                        android:textSize="@dimen/sp_12" />
+
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/bn_complete_add_cosigner"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_60"
+                    android:layout_marginStart="34dp"
+                    android:layout_marginTop="@dimen/dp_50"
+                    android:layout_marginEnd="34dp"
+                    android:layout_marginBottom="@dimen/dp_30"
+                    android:background="@drawable/btn_no_check"
+                    android:text="@string/create_"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+
+</RelativeLayout>
+
+
+
+
+
+
+
+
+

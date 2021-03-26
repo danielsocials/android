@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp_10"
+    android:background="@drawable/white_tuo"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="17dp"
+        android:layout_marginBottom="17dp"
+        android:text="@string/btc_c"
+        android:textColor="#494949"
+        android:textSize="18sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_hight"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:background="@color/line_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="17dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="53dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="17dp"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:text="@string/to"
+            android:textColor="#b3b3b3"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tet_getAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:layout_weight="1"
+            android:textColor="#494949"
+            android:textSize="15sp"
+            tools:text="lnbcdfd4fdsklnb4fdsklnbcdfd4fdsklnbcdfd4fdsk" />
+
+        <TextView
+            android:id="@+id/test_change_address"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_18"
+            android:paddingStart="@dimen/dp_9"
+            android:paddingEnd="@dimen/dp_9"
+            android:layout_marginTop="17dp"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:background="@drawable/gray_tuocircle"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="@string/show_change_address"
+            android:textColor="@color/change_addr"
+            android:textSize="@dimen/sp_10"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_hight"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:background="@color/line_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="17dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="53dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="17dp"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:text="@string/feenum"
+            android:textColor="#b3b3b3"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tet_getNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:textColor="#494949"
+            android:textSize="15sp"
+            tools:text="0.00005BTC" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,173 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <!--导航栏颜色-->
+        <item name="colorPrimary">@android:color/white</item>
+        <!--状态栏颜色（页面最顶层显示时间的地方）-->
+        <item name="colorPrimaryDark">@android:color/white</item>
+        <!--全局的获取焦点后的光标颜色(控件主题颜色)-->
+        <item name="colorAccent">@color/onekey</item>
+        <!--Needed by MaterialAlertDialog-->
+        <item name="colorSurface">@android:color/white</item>
+        <!-- 底部导航条的颜色 -->
+        <item name="android:navigationBarColor">@android:color/white</item>
+    </style>
+
+    <style name="code_text_style">
+        <item name="android:layout_width">44dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:maxLength">1</item>
+        <item name="android:clickable">false</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:background">@drawable/pin_input</item>
+    </style>
+    <!-- dialog样式 -->
+    <style name="MyDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:backgroundDimAmount">0.6</item>
+    </style>
+
+    <style name="dialog" parent="@style/AppTheme">
+        <!--Dialog的windowFrame框为无-->
+        <item name="android:windowFrame">@null</item>
+        <!--是否浮现在activity之上-->
+        <item name="android:windowIsFloating">true</item>
+        <!--是否半透明-->
+        <item name="android:windowIsTranslucent">true</item>
+        <!--是否显示title-->
+        <item name="android:windowNoTitle">true</item>
+        <!--设置dialog的背景，（#00000000）-->
+        <item name="android:background">@android:color/transparent</item>
+        <!--显示区域背景是否透明，（#00000000）-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--就是用来控制灰度的值，当为1时，界面除了我们的dialog内容是高亮显示的，dialog以外的区域是黑色的，完全看不到其他内容，系统的默认值是0.5-->
+        <item name="android:backgroundDimAmount">0.5</item>
+        <!--显示区域以外是否使用黑色半透明背景-->
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="AnimBottom" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/push_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/push_bottom_out</item>
+    </style>
+    <!--解决APP启动白屏问题-->
+    <style name="LunchTheme" parent="@style/AppTheme">
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@drawable/launch_page</item>
+    </style>
+
+    <style name="spinner_style">
+        <!--        <item name="android:background">@drawable/spinner_selector</item>-->
+        <item name="android:paddingLeft">5dip</item>
+    </style>
+
+    <declare-styleable name="CommonTabLayout">
+        <!-- indicator -->
+        <attr name="tl_indicator_color" format="integer" />
+        <attr name="tl_indicator_height" format="dimension" />
+        <attr name="tl_indicator_width" format="dimension" />
+        <attr name="tl_indicator_margin_left" format="dimension" />
+        <attr name="tl_indicator_margin_top" format="dimension" />
+        <attr name="tl_indicator_margin_right" format="dimension" />
+        <attr name="tl_indicator_margin_bottom" format="dimension" />
+        <attr name="tl_indicator_corner_radius" format="dimension" />
+        <attr name="tl_indicator_gravity" format="integer" />
+        <attr name="tl_indicator_style" format="integer" />
+        <attr name="tl_indicator_anim_enable" format="boolean" />
+        <attr name="tl_indicator_anim_duration" format="integer" />
+        <attr name="tl_indicator_bounce_enable" format="boolean" />
+
+        <!-- underline -->
+        <attr name="tl_underline_color" format="integer" />
+        <attr name="tl_underline_height" format="dimension" />
+        <attr name="tl_underline_gravity" format="integer" />
+
+        <!-- divider -->
+        <attr name="tl_divider_color" format="dimension" />
+        <attr name="tl_divider_width" format="dimension" />
+        <attr name="tl_divider_padding" format="dimension" />
+
+        <!-- tab -->
+        <attr name="tl_tab_padding" format="dimension" />
+        <attr name="tl_tab_space_equal" format="dimension" />
+        <attr name="tl_tab_width" format="dimension" />
+
+        <!-- title -->
+        <attr name="tl_textsize" format="dimension" />
+        <attr name="tl_textSelectColor" format="integer" />
+        <attr name="tl_textUnselectColor" format="integer" />
+        <attr name="tl_textBold" format="integer" />
+        <attr name="tl_textAllCaps" format="boolean" />
+
+        <!-- icon -->
+        <!-- 设置icon宽度 -->
+        <attr name="tl_iconWidth" format="dimension" />
+        <!-- 设置icon高度 -->
+        <attr name="tl_iconHeight" format="dimension" />
+        <!-- 设置icon是否可见 -->
+        <attr name="tl_iconVisible" format="boolean" />
+        <!-- 设置icon显示位置,对应Gravity中常量值 -->
+        <attr name="tl_iconGravity" format="enum">
+            <enum name="LEFT" value="3" />
+            <enum name="TOP" value="48" />
+            <enum name="RIGHT" value="5" />
+            <enum name="BOTTOM" value="80" />
+        </attr>
+        <!-- 设置icon与文字间距 -->
+        <attr name="tl_iconMargin" format="dimension" />
+
+    </declare-styleable>
+
+    <declare-styleable name="MsgView">
+        <!-- 圆角矩形背景色 -->
+        <attr name="mv_backgroundColor" format="color" />
+        <!-- 圆角弧度,单位dp-->
+        <attr name="mv_cornerRadius" format="dimension" />
+        <!-- 圆角弧度,单位dp-->
+        <attr name="mv_strokeWidth" format="dimension" />
+        <!-- 圆角边框颜色-->
+        <attr name="mv_strokeColor" format="color" />
+        <!-- 圆角弧度是高度一半-->
+        <attr name="mv_isRadiusHalfHeight" format="boolean" />
+        <!-- 圆角矩形宽高相等,取较宽高中大值-->
+        <attr name="mv_isWidthHeightEqual" format="boolean" />
+    </declare-styleable>
+
+    <style name="MyDarkTheme" parent="ZendeskSdkTheme.Dark">
+        <item name="zs_helpConversationsIcon">@drawable/left_arrow</item>
+        <item name="colorPrimary">@color/onekey</item>
+        <!--状态栏颜色（页面最顶层显示时间的地方）-->
+        <item name="colorPrimaryDark">@color/onekey</item>
+    </style>
+
+    <style name="AnimBottomPop" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/anim_bottom_pop_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_bottom_pop_out</item>
+    </style>
+
+    <style name="BottomSheetEdit" parent="BottomSheetDialogTheme">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/shape_bg_bottom_sheet</item>
+    </style>
+
+    <style name="BottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item> <!-- This is important -->
+        <item name="android:statusBarColor">@color/transparent</item> <!-- And then this will be needed -->
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+    </style>
+</resources>

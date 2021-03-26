@@ -1,0 +1,388 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.chaquo.python'
+apply plugin: 'kotlin-kapt'
+
+def REPO_ROOT = "../.."
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+    defaultConfig {
+        applicationId "org.haobtc.onekey"
+        minSdkVersion 26 // android 8.0.0
+        targetSdkVersion 29
+        versionCode 1
+        versionName "2.1.3"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        def ecVersion = null
+        file("$REPO_ROOT/electrum/version.py").eachLine {
+            def matcher = it =~ / *ELECTRUM_VERSION *= *'([0-9.]+)'.*/
+            if (matcher.matches()) {
+                ecVersion = matcher.group(1)
+            }
+        }
+        if (ecVersion == null) {
+            throw new GradleException("Couldn't find version number")
+        }
+        File versionPropsFile = file('version.properties')
+
+        def BUILD_NUM
+        def TRAVIS_BUILD_NUMBER = System.getenv("TRAVIS_BUILD_NUMBER") ?: null
+        if (TRAVIS_BUILD_NUMBER == null) {
+            if (versionPropsFile.canRead()) {
+                Properties versionProps = new Properties()
+                versionProps.load(new FileInputStream(versionPropsFile))
+                BUILD_NUM = versionProps['VERSION_CODE'].toInteger() + 1
+            } else {
+                throw new GradleException("Could not read version.properties!")
+            }
+        } else {
+            BUILD_NUM = TRAVIS_BUILD_NUMBER.toInteger()
+        }
+        def verParsed = ecVersion.split(/\./).collect { Integer.parseInt(it) }
+        versionCode = (verParsed[0] * 1000000) + (verParsed[1] * 10000) + BUILD_NUM
+        println "VERSION_CODE incremented to " + versionCode
+
+        python {
+            pip {
+                install "-r", "$REPO_ROOT/contrib/deterministic-build/requirements.txt"
+                install "-r", "$REPO_ROOT/contrib/deterministic-build/requirements-android.txt"
+            }
+            pyc {
+                src true
+                pip true
+            }
+        }
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a"
+        }
+        resConfigs "zh", "zh-rCN"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [eventBusIndex: 'org.haobtc.onekey.MyEventBusIndex']
+            }
+        }
+        vectorDrawables.useSupportLibrary = true
+    }
+    buildFeatures {
+        viewBinding = true
+    }
+    sourceSets {
+        main {
+            python {
+                srcDir REPO_ROOT
+                include("electrum/**", "electrum_gui/**")
+                exclude "**/*.po", "**/*.pot"
+                srcDir "$REPO_ROOT/trezor/python-trezor/src"
+                include "trezorlib/**"
+            }
+        }
+    }
+    flavorDimensions "version", "appstore"
+    productFlavors {
+        Onekey {
+            dimension "appstore"
+            buildConfigField "String", "appStore", "\"Onekey\""
+        }
+        GooglePlay {
+            dimension "appstore"
+            buildConfigField "String", "appStore", "\"GooglePlay\""
+        }
+
+        MainNet {
+            dimension "version"
+            buildConfigField "String", "net_type", "\"MainNet\""
+            applicationId "com.bixin.wallet.mainnet"
+            manifestPlaceholders = [app_name: "@string/app_name", allow_backup: false,  app_icon: "@mipmap/ic_launcher"]
+        }
+        TestNet {
+            dimension "version"
+            buildConfigField "String", "net_type", "\"TestNet\""
+            applicationId "com.bixin.wallet.testnet"
+            manifestPlaceholders = [app_name: "@string/testnet", allow_backup: true,  app_icon: "@mipmap/ic_launcher_test"]
+        }
+        RegTest {
+            dimension "version"
+            buildConfigField "String", "net_type", "\"RegTest\""
+            applicationId "com.bixin.wallet.regnet"
+            manifestPlaceholders = [app_name: "@string/regnet", allow_backup: true, app_icon: "@mipmap/ic_launcher_test"]
+        }
+    }
+    lintOptions {
+
+        abortOnError false
+
+        disable "MissingTranslation"
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file("../debug.keystore")
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+            storePassword "android"
+
+            // Optional, specify signing versions used
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+        release {
+            storeFile file(System.getenv("RELEASE_STORE_FILE") ?: "../debug.keystore")
+            keyAlias System.getenv("RELEASE_KEY_ALIAS") ?: "androiddebugkey"
+            storePassword System.getenv("RELEASE_STORE_PASSWORD") ?: "android"
+            keyPassword System.getenv("RELEASE_KEY_PASSWORD") ?: "android"
+
+            // Optional, specify signing versions used
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles 'proguard-android-optimize-wallet.txt', 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // 过滤 Google Play 测试版编译体。
+    variantFilter { variant ->
+        def names = variant.flavors*.name
+        if (names.contains("GooglePlay") && !names.contains("MainNet")) {
+            setIgnore(true)
+        }
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "bixin-${variant.versionCode}-${variant.productFlavors[0].name}-${variant.productFlavors[1].name}-${variant.buildType.name}.apk"
+        }
+
+        // release 自增 version.properties
+        def obj
+        if (variant.hasProperty('assembleProvider')) {
+            obj = variant.assembleProvider.get()
+        } else {
+            obj = variant.assemble
+        }
+        obj.doLast { assemble ->
+            if (assemble.name.toLowerCase().contains("release")) {
+                println("release: version.properties increment")
+                File versionPropsFile = file('version.properties')
+                if (versionPropsFile.canRead()) {
+                    Properties versionProps = new Properties()
+                    versionProps.load(new FileInputStream(versionPropsFile))
+                    int version = versionProps['VERSION_CODE'].toInteger() + 1
+                    versionProps['VERSION_CODE'] = version.toString()
+                    versionProps.store(versionPropsFile.newWriter(), null)
+                } else {
+                    throw new GradleException("Could not read version.properties!")
+                }
+            }
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/NOTICE' // will not include NOTICE file
+        exclude 'META-INF/LICENSE' // will not include LICENSE file
+    }
+}
+
+afterEvaluate {
+    def stringsTask = task("generateStrings", type: Exec) {
+        def pyVersion = "3"
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            executable "py"
+            args "-$pyVersion"
+        } else {
+            executable "python$pyVersion"
+        }
+        args "generate_strings.py"
+    }
+
+    for (variant in android.applicationVariants) {
+        // Rename directories to match package names, like package_dir does in setup.py.
+        def task = tasks.getByName("merge${variant.name.capitalize()}PythonSources")
+        def dstDir = task.destinationDir
+        task.doLast {
+            def src = "$dstDir/electrum"
+            def dst = "$dstDir/electrum"
+            if (!file(src).renameTo(dst)) {
+                throw new GradleException("Failed to rename $src to $dst")
+            }
+        }
+
+        // Automatically generate strings the first time the app is built. To regenerate them
+        // later, either delete values/strings.xml and rebuild the app, or simply rerun the
+        // `generateStrings` task manually.
+        if (!file("src/main/res/values/strings.xml").exists()) {
+            tasks.getByName("generate${variant.name.capitalize()}Resources")
+                    .dependsOn(stringsTask)
+        }
+    }
+}
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.exifinterface:exifinterface:1.3.2'
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.preference:preference:1.1.1'
+    implementation "androidx.core:core-ktx:1.3.2"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    def nav_version = "2.3.2"
+    // fragment navigation
+    implementation "androidx.navigation:navigation-fragment:$nav_version"
+    implementation "androidx.navigation:navigation-ui:$nav_version"
+    // storage
+    def room_version = "2.2.6"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    // third part
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.6'
+    implementation 'com.google.android.material:material:1.2.1'
+    def acraVersion = "5.2.0"
+    implementation "ch.acra:acra-core:$acraVersion"
+    implementation "ch.acra:acra-dialog:$acraVersion"
+    implementation "ch.acra:acra-http:$acraVersion"
+    //noinspection AnnotationProcessorOnCompilePath
+    implementation 'com.jakewharton:butterknife:10.1.0'
+    kapt 'com.jakewharton:butterknife-compiler:10.1.0'
+    //Picasso
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    //immersionbar
+    implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
+    //baseadpter
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+    //OKhttp
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.zhy:okhttputils:2.0.0'
+    //autosize
+    implementation 'me.jessyan:autosize:1.2.1'
+    //gson
+    implementation 'com.google.code.gson:gson:2.8.6'
+    //Eventbus
+    implementation 'org.greenrobot:eventbus:3.1.1'
+    kapt 'org.greenrobot:eventbus-annotation-processor:3.1.1'
+    //wheel_viewpager
+    implementation 'com.github.ThirdGoddess:GoddessTNT:v1.5'
+    implementation project(path: ':dRlibfileselector')
+    //Pull up refresh pull down load
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.3'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.3'
+    //bluetooth
+    implementation project(':blelibrary')
+    implementation project(':zxinglibrary')
+    //alibaba json
+    implementation 'com.alibaba:fastjson:1.1.70.android'
+    // app internal update
+    OnekeyImplementation('com.azhon:appupdateX:2.9.0')
+    // dfu
+//    implementation 'no.nordicsemi.android:dfu:1.10.1'
+    implementation project(':dfu')
+    //SwipeDelMenuLayout
+    implementation 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0'
+    // android aop programing support
+    implementation 'org.aspectj:aspectjrt:1.9.5'
+    // guava
+    implementation 'com.google.guava:guava:30.1-android'
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.65.01'
+    implementation 'org.jetbrains:annotations:15.0'
+    implementation 'com.tencent.bugly:crashreport:3.2.33'
+    implementation 'com.tencent.bugly:nativecrashreport:3.7.471'
+    implementation 'com.lxj:xpopup:2.2.7'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation "io.reactivex.rxjava3:rxjava:3.0.4"
+    implementation 'com.orhanobut:logger:2.2.0'
+    implementation 'com.zendesk:support:5.0.2'
+    implementation 'com.zendesk:messaging:5.1.0'
+    implementation 'com.zendesk:answerbot:3.0.1'
+    implementation 'com.zendesk:chat:3.1.0'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    kapt 'com.github.bumptech.glide:compiler:4.12.0'
+    implementation 'com.yqritc:recyclerview-flexibledivider:1.4.0'
+    implementation 'com.github.Zhao-Yan-Yan:MultiStatePage:1.1.1'
+    implementation 'com.noober.background:core:1.6.5'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.1'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.10.1'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.10.1'
+    // https://mvnrepository.com/artifact/org.web3j/abi
+    implementation 'org.web3j:abi:5.0.0'
+    implementation 'com.github.lzyzsd:jsbridge:1.0.4'
+}
+
+// 为 lint 任务设置别名
+task lintRegTestDebug(dependsOn: "lintRegTestOnekeyDebug")
+
+repositories {
+    mavenCentral()
+    maven { url 'https://zendesk.jfrog.io/zendesk/repo' }
+}
+// AspectJ
+import org.aspectj.bridge.IMessage
+import org.aspectj.bridge.MessageHandler
+import org.aspectj.tools.ajc.Main
+
+final def log = project.logger
+final def variants = project.android.applicationVariants
+
+variants.all { variant ->
+    if (!variant.buildType.isDebuggable()) {
+        log.debug("Skipping non-debuggable build type '${variant.buildType.name}'.")
+        return;
+    }
+    // Android 3.3.0+
+    JavaCompile javaCompileTask = variant.javaCompileProvider.get()
+    javaCompileTask.doLast {
+        String[] args = ["-showWeaveInfo",
+                         "-1.8",
+                         "-inpath", javaCompileTask.destinationDir.toString(),
+                         "-aspectpath", javaCompileTask.classpath.asPath,
+                         "-d", javaCompileTask.destinationDir.toString(),
+                         "-classpath", javaCompileTask.classpath.asPath,
+                         "-bootclasspath", project.android.bootClasspath.join(File.pathSeparator)]
+        log.debug "ajc args: " + Arrays.toString(args)
+
+        MessageHandler handler = new MessageHandler(true);
+        new Main().run(args, handler);
+        for (IMessage message : handler.getMessages(null, true)) {
+            switch (message.getKind()) {
+                case IMessage.ABORT:
+                case IMessage.ERROR:
+                case IMessage.FAIL:
+                    log.error message.message, message.thrown
+                    break
+                case IMessage.WARNING:
+                    log.warn message.message, message.thrown
+                    break
+                case IMessage.INFO:
+                    log.info message.message, message.thrown
+                    break
+                case IMessage.DEBUG:
+                    log.debug message.message, message.thrown
+                    break
+            }
+        }
+    }
+}

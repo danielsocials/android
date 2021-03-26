@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bk_page">
+
+        <!--progress-->
+        <RelativeLayout
+            android:id="@+id/lin_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin"
+            android:background="@android:color/white"
+            android:paddingStart="@dimen/sp_16"
+            android:paddingEnd="@dimen/sp_16">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="38dp">
+
+                <ImageView
+                    android:id="@+id/img_progressone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/step1"
+                    android:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/img_progressthree"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/step2"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/img_progressfour"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/step3"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginTop="45dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tet_Trone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/create_trans"
+                    android:textColor="@color/button_bk_disableok"
+                    android:textSize="@dimen/sp_12" />
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/tet_Trthree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/broadcast"
+                    android:textColor="#b3b3b3"
+                    android:textSize="@dimen/sp_12" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/tet_Trfore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chain_confirmation"
+                    android:textColor="#b3b3b3"
+                    android:textSize="@dimen/sp_12" />
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/tb2"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="?attr/colorPrimary"
+            android:navigationIcon="@drawable/back">
+
+            <ImageView
+                android:id="@+id/img_back"
+                android:layout_width="45dp"
+                android:layout_height="@dimen/dp_40"
+                android:layout_centerVertical="true"
+                android:layout_gravity="end"
+                android:layout_marginEnd="15.3dp"
+
+                android:padding="8dp"
+                android:src="@drawable/back" />
+
+            <TextView
+                android:id="@+id/tv_in_tb2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/trans_details"
+                android:textColor="@color/text"
+                android:textSize="@dimen/text_size" />
+
+        </RelativeLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/hjsdjhsbhm"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/lin_progress">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/dp_20">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/layout_margin"
+                    android:layout_marginTop="@dimen/layout_margin"
+                    android:layout_marginEnd="@dimen/layout_margin"
+                    android:layout_marginBottom="30dp"
+                    android:outlineSpotShadowColor="@color/shadow_color"
+                    app:cardCornerRadius="@dimen/dp_8"
+                    app:cardElevation="@dimen/dp_8"
+                    tools:ignore="UnusedAttribute">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/white_tuo"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/dp_21">
+
+                        <TextView
+                            android:id="@+id/textView14"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/text_margin"
+                            android:layout_marginTop="42dp"
+                            android:layout_marginEnd="@dimen/dp_16"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center"
+                            android:textColor="@color/set_txt"
+                            android:textSize="22sp"
+                            tools:text="+1.387648738 BTC" />
+
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/line_hight"
+                            android:layout_marginTop="27dp"
+                            android:background="@color/separation_line" />
+
+                        <LinearLayout
+                            android:id="@+id/lin_payAddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="21.5dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="53dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/text_margin"
+                                android:layout_marginEnd="@dimen/dp_20"
+                                android:text="@string/pay_addr"
+                                android:textColor="@color/light_text"
+                                android:textSize="@dimen/sp_13" />
+
+                            <TextView
+                                android:id="@+id/tet_payAddress"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/text_margin"
+                                android:layout_weight="1"
+                                android:ellipsize="end"
+                                android:textColor="@color/text_color"
+                                android:textSize="15sp"
+                                tools:text="xxxxxxxxxxxxxxxxxxxx" />
+
+                            <TextView
+                                android:id="@+id/tet_payAddressNum"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/dp_5"
+                                android:textColor="@color/light_text"
+                                android:textSize="@dimen/sp_13"
+                                tools:text="@string/waitmoredres" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/dp_10"
+                                android:contentDescription="@string/arrows"
+                                android:src="@drawable/jiantou" />
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/lin_getMoreaddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_19"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="53dp"
+                                android:layout_height="20dp"
+                                android:layout_marginStart="@dimen/text_margin"
+                                android:layout_marginEnd="@dimen/dp_20"
+                                android:drawablePadding="23dp"
+                                android:text="@string/receive_addr"
+                                android:textColor="@color/light_text"
+                                android:textSize="@dimen/sp_13" />
+
+                            <TextView
+                                android:id="@+id/tet_getMoneyaddress"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/dp_10"
+                                android:layout_weight="1"
+                                android:ellipsize="end"
+                                android:textColor="@color/text_color"
+                                android:textSize="15sp"
+                                tools:text="xxxxxxxxxxxxxxxxxxxx" />
+
+                            <TextView
+                                android:id="@+id/tet_addressNum"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/dp_5"
+                                android:textColor="@color/light_text"
+                                android:textSize="@dimen/sp_13"
+                                tools:text="@string/waitmoredres" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/dp_10"
+                                android:contentDescription="@string/arrows"
+                                android:src="@drawable/jiantou" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/lin_fee"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="21.5dp"
+                            android:baselineAligned="false"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="53dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/text_margin"
+                                android:layout_marginEnd="@dimen/dp_20"
+                                android:text="@string/fee"
+                                android:textColor="@color/light_text"
+                                android:textSize="@dimen/sp_13" />
+
+                            <TextView
+                                android:id="@+id/textView15"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:textColor="@color/text_color"
+                                android:textSize="15sp"
+                                tools:text="1.33333" />
+
+                            <TextView
+                                android:id="@+id/tet_addSpeed"
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/dp_24"
+                                android:layout_marginEnd="@dimen/dp_10"
+                                android:background="@drawable/black_tuo"
+                                android:gravity="center"
+                                android:paddingStart="@dimen/dp_12"
+                                android:paddingEnd="@dimen/dp_12"
+                                android:text="@string/add_speed"
+                                android:textColor="@color/button_bk_disableok"
+                                android:textSize="@dimen/sp_13"
+                                android:visibility="gone" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="21.5dp">
+
+                            <TextView
+                                android:layout_width="53dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/text_margin"
+                                android:layout_marginEnd="@dimen/dp_20"
+                                android:text="@string/comments"
+                                android:textColor="@color/light_text"
+                                android:textSize="@dimen/sp_13" />
+
+                            <TextView
+                                android:id="@+id/tet_content"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_color"
+                                android:textSize="15sp"
+                                tools:text="hello" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="21.5dp">
+
+                            <TextView
+                                android:id="@+id/textView18"
+                                android:layout_width="53dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/text_margin"
+                                android:layout_marginEnd="@dimen/dp_20"
+                                android:text="@string/transaction_status"
+                                android:textColor="@color/light_text"
+                                android:textSize="@dimen/sp_13" />
+
+                            <TextView
+                                android:id="@+id/tet_state"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_color"
+                                android:textSize="15sp"
+                                tools:text="@string/transaction_waitting" />
+
+                            <TextView
+                                android:id="@+id/tet_confirm"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/dp_5"
+                                android:layout_weight="1"
+                                android:textColor="@color/text_color"
+                                android:textSize="15sp"
+                                tools:text="@string/confirmnum" />
+
+                            <TextView
+                                android:id="@+id/tet_receiveAddSpeed"
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/dp_24"
+                                android:layout_marginEnd="@dimen/dp_10"
+                                android:background="@drawable/black_tuo"
+                                android:gravity="center"
+                                android:paddingStart="@dimen/dp_12"
+                                android:paddingEnd="@dimen/dp_12"
+                                android:text="@string/add_speed"
+                                android:textColor="@color/button_bk_disableok"
+                                android:textSize="@dimen/sp_13"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/linearSignStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="21.5dp">
+
+                            <TextView
+                                android:layout_width="53dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/text_margin"
+                                android:layout_marginEnd="@dimen/dp_20"
+                                android:text="@string/signature_status"
+                                android:textColor="@color/light_text"
+                                android:textSize="@dimen/sp_13" />
+
+                            <TextView
+                                android:id="@+id/textView20"
+                                android:layout_width="42dp"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/little_blue_back_2"
+                                android:gravity="center"
+                                android:paddingStart="5dp"
+                                android:paddingEnd="5dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="@dimen/smaller_text_size"
+                                android:visibility="visible"
+                                app:layout_constraintStart_toEndOf="@+id/textView19"
+                                app:layout_constraintTop_toTopOf="@+id/textView19"
+                                tools:text="0/0" />
+
+                            <TextView
+                                android:id="@+id/tet_Nosign"
+                                android:layout_width="53dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/dp_20"
+                                android:text="@string/no_singn"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/sp_13"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/lin_tractionHash"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="21.5dp"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="56dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/text_margin"
+                                android:layout_marginEnd="@dimen/dp_16"
+                                android:text="@string/trsactionhash"
+                                android:textColor="@color/light_text"
+                                android:textSize="@dimen/sp_13" />
+
+                            <TextView
+                                android:id="@+id/tet_trsactionHash"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/dp_16"
+                                android:textColor="@color/text_color"
+                                android:textSize="15sp"
+                                tools:text="33dfdfdjkfdfjdkfd3jkdfjkdfjdkfdfdjfkdfdnfddfdkfjdkfdfdfn3334j5fjfjffjeejjdk33320" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/lin_tractionTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="21.5dp"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="52dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/text_margin"
+                                android:layout_marginEnd="@dimen/dp_20"
+                                android:text="@string/confrim_time"
+                                android:textColor="@color/light_text"
+                                android:textSize="@dimen/sp_13" />
+
+                            <TextView
+                                android:id="@+id/tet_trsactionTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/dp_16"
+                                android:textColor="@color/text_color"
+                                android:textSize="15sp"
+                                tools:text="2019-12-9 12:00:00" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <Button
+                    android:id="@+id/sig_trans"
+                    android:layout_width="300dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_marginStart="@dimen/text_margin"
+                    android:layout_marginEnd="@dimen/text_margin"
+                    android:background="@drawable/button_bk"
+                    android:text="@string/signature_trans"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white" />
+
+                <Button
+                    android:id="@+id/btn_share"
+                    android:layout_width="300dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_marginStart="@dimen/text_margin"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/text_margin"
+                    android:layout_marginBottom="@dimen/dp_16"
+                    android:background="@drawable/button_bk"
+                    android:text="@string/sharetrsaction"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:id="@+id/tet_grive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:gravity="center_horizontal"
+                    android:text="@string/broad_text"
+                    android:textColor="@color/graytext_color"
+                    android:textSize="@dimen/sp_12"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </RelativeLayout>
+
+</RelativeLayout>

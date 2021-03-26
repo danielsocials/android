@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="blockline">
+        <item>https://btc.com/</item>
+        <item>https://www.blockin.com/tx/</item>
+        <item>https://www.blockchain.com/btc/tx/</item>
+        <item>https://blockchair.com/bitcoin/transaction/</item>
+        <item>http://blockr.io/tx/info/</item>
+        <item>https://bchain.info/BTC/tx/</item>
+        <item>https://bitinfocharts.com/bitcoin/tx/</item>
+        <item>https://bchain.info/BTC/tx/</item>
+        <item>https://tradeblock.com/bitcoin/tx/</item>
+        <item>https://live.blockcypher.com/btc/tx/</item>
+        <item>https://insight.bitpay.com/tx/</item>
+        <item>https://chain.so/tx/BTC/</item>
+        <item>https://www.smartbit.com.au/tx/</item>
+
+    </string-array>
+
+</resources>

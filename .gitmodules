@@ -1,0 +1,6 @@
+[submodule "python/electrum"]
+	path = python/electrum
+	url = https://github.com/OneKeyHQ/electrum.git
+[submodule "python/python-trezor"]
+	path = python/python-trezor
+	url = https://github.com/OneKeyHQ/python-trezor.git

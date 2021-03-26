@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="PasswordInputView">
-        <attr name="borderWidth" format="dimension"/>
-        <attr name="borderColor" format="color"/>
-        <attr name="borderRadius" format="dimension"/>
-        <attr name="passwordLength" format="integer"/>
-        <attr name="passwordWidth" format="dimension"/>
-        <attr name="passwordColor" format="color"/>
-        <attr name="passwordRadius" format="dimension"/>
+        <attr name="borderWidth" format="dimension" />
+        <attr name="borderColor" format="color" />
+        <attr name="borderRadius" format="dimension" />
+        <attr name="passwordLength" format="integer" />
+        <attr name="passwordWidth" format="dimension" />
+        <attr name="passwordColor" format="color" />
+        <attr name="passwordRadius" format="dimension" />
     </declare-styleable>
     <declare-styleable name="PwdEditText">
         <attr name="space" format="dimension" />
@@ -26,30 +26,30 @@
     </declare-styleable>
 
     <declare-styleable name="LoadingTextView">
-        <attr name="text" format="string"/>
+        <attr name="text" format="string" />
     </declare-styleable>
 
     <!--SuperTextView-->
     <declare-styleable name="SuperTextView">
-        <attr name="corner" format="dimension"/>
-        <attr name="left_top_corner" format="boolean"/>
-        <attr name="right_top_corner" format="boolean"/>
-        <attr name="left_bottom_corner" format="boolean"/>
-        <attr name="right_bottom_corner" format="boolean"/>
-        <attr name="solid" format="reference|color"/>
-        <attr name="stroke_width" format="dimension"/>
-        <attr name="stroke_color" format="reference|color"/>
-        <attr name="state_drawable" format="reference"/>
-        <attr name="state_drawable_width" format="dimension"/>
-        <attr name="state_drawable_height" format="dimension"/>
-        <attr name="state_drawable_padding_left" format="dimension"/>
-        <attr name="state_drawable_padding_top" format="dimension"/>
-        <attr name="isShowState" format="boolean"/>
-        <attr name="text_stroke" format="boolean"/>
-        <attr name="text_stroke_color" format="reference|color"/>
-        <attr name="text_stroke_width" format="dimension"/>
-        <attr name="text_fill_color" format="reference|color"/>
-        <attr name="autoAdjust" format="boolean"/>
+        <attr name="corner" format="dimension" />
+        <attr name="left_top_corner" format="boolean" />
+        <attr name="right_top_corner" format="boolean" />
+        <attr name="left_bottom_corner" format="boolean" />
+        <attr name="right_bottom_corner" format="boolean" />
+        <attr name="solid" format="reference|color" />
+        <attr name="stroke_width" format="dimension" />
+        <attr name="stroke_color" format="reference|color" />
+        <attr name="state_drawable" format="reference" />
+        <attr name="state_drawable_width" format="dimension" />
+        <attr name="state_drawable_height" format="dimension" />
+        <attr name="state_drawable_padding_left" format="dimension" />
+        <attr name="state_drawable_padding_top" format="dimension" />
+        <attr name="isShowState" format="boolean" />
+        <attr name="text_stroke" format="boolean" />
+        <attr name="text_stroke_color" format="reference|color" />
+        <attr name="text_stroke_width" format="dimension" />
+        <attr name="text_fill_color" format="reference|color" />
+        <attr name="autoAdjust" format="boolean" />
         <attr name="state_drawable_mode" format="enum">
             <enum name="left" value="0" />
             <enum name="top" value="1" />
@@ -81,5 +81,9 @@
         <attr name="sidebarLargeTextSize" format="dimension" />
         <attr name="sidebarRadius" format="dimension" />
         <attr name="sidebarBallRadius" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="MaxHeightNestedScrollView">
+        <attr name="maxHeight" format="dimension" />
     </declare-styleable>
 </resources>

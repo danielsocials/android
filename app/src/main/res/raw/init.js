@@ -1,88 +1,79 @@
-const addressHex = "%1$s";
-const rpcURL = "%2$s";
-const chainID = "%3$s";
-const debug = true;
+console.log('Onekey web3 provider init')
 
-function executeCallback (id, error, value) {
-  OnekeyWallet.executeCallback(id, error, value)
+var config = {
+    address: "%1$s",
+    rpcUrl: "%2$s",
+    chainId: "%3$s"
+};
+
+window.trustwallet.customMethodMessage = {
+    personalEcRecover: {
+        postMessage: (message) => {
+            provider.sendResponse(message.id, message.object.data);
+        }
+    },
+    signMessageHash: {
+        postMessage: (message) => {
+            debugPrint('signMessage', message.object.data)
+            const id = message.id;
+            const messageHex = message.object.data;
+            const payload = message.object.params;
+            onekeyJsCall.signMessageHex(id, messageHex, payload);
+        }
+    }
 }
 
-function debugPrint(...args){
-  if(debug){
-    console.log(args)
-  }
+const provider = new window.trustwallet.Provider(config);
+provider.isDebug = true;
+window.ethereum = provider;
+window.web3 = new window.trustwallet.Web3(provider);
+window.web3.eth.defaultAccount = config.address;
+
+window.chrome = {webstore: {}};
+
+function debugPrint(...args) {
+    if (provider.isDebug) {
+        console.log(args)
+    }
 }
 
-window.OnekeyWallet.init(rpcURL, {
-  getAccounts: function (cb) { cb(null, [addressHex]) },
-  signTransaction: function (tx, cb){
-    debugPrint('signing a transaction', JSON.stringify(tx))
-    const { id = 8888 } = tx
-    OnekeyWallet.addCallback(id, cb)
-
-    var gasLimit = tx.gasLimit || tx.gas || null;
-    var gasPrice = tx.gasPrice || null;
-    var data = tx.data || null;
-    var nonce = tx.nonce || -1;
-    onekeyJsCall.signTransaction(id, tx.to || null, tx.value, nonce, gasLimit, gasPrice, data);
-  },
-//  processTransaction: function (tx, cb){
-//      debugPrint('signing a transaction', JSON.stringify(tx))
-//      const { id = 8888 } = tx
-//      OnekeyWallet.addCallback(id, cb)
-//
-//      var gasLimit = tx.gasLimit || tx.gas || null;
-//      var gasPrice = tx.gasPrice || null;
-//      var data = tx.data || null;
-//      var nonce = tx.nonce || -1;
-//      onekeyJsCall.signTransaction(id, tx.to || null, tx.value, nonce, gasLimit, gasPrice, data);
-//    },
-  signMessage: function (msgParams, cb) {
-      debugPrint('signMessage', msgParams)
-      const { data, chainType } = msgParams
-      const { id = 8888 } = msgParams
-    OnekeyWallet.addCallback(id, cb)
-    onekeyJsCall.signMessage(id, data);
-  },
-  signPersonalMessage: function (msgParams, cb) {
-      debugPrint('signPersonalMessage', msgParams)
-      const { data, chainType } = msgParams
-      const { id = 8888 } = msgParams
-    OnekeyWallet.addCallback(id, cb)
-    onekeyJsCall.signPersonalMessage(id, data);
-  },
-  signTypedMessage: function (msgParams, cb) {
-    debugPrint('signTypedMessage ', msgParams)
-    const { data } = msgParams
-    const { id = 8888 } = msgParams
-    OnekeyWallet.addCallback(id, cb)
-    onekeyJsCall.signTypedMessage(id, JSON.stringify(msgParams))
-  },
-  enable: function() {
-      return new Promise(function(resolve, reject) {
-          //send back the coinbase account as an array of one
-          resolve([addressHex])
-      })
-  }
-}, {
-    address: addressHex,
-    networkVersion: chainID
-})
+function executeCallback(id, error, result) {
+    if (error == null) {
+        debugPrint('init.js send Response', id, JSON.stringify(result))
+        provider.sendResponse(id, result)
+    } else {
+        debugPrint('init.js send Error', id, error)
+        provider.sendError(id, error)
+    }
+}
 
 window.web3.setProvider = function () {
-  console.log('Onekey Wallet - overrode web3.setProvider')
+    console.debug('Onekey Wallet - overrode web3.setProvider')
 }
 
-window.web3.version.getNetwork = function(cb) {
-    debugPrint('Onekey Provider - getNetwork '+ chainID)
-    cb(null, chainID)
-}
+window.webkit = {
+    messageHandlers: {
+        signTransaction: {
+            postMessage: (message) => {
+                debugPrint('init.js sign Transaction', JSON.stringify(message))
 
-window.web3.eth.getCoinbase = function(cb) {
-    debugPrint('Onekey Provider - getCoinbase '+ addressHex)
-    return cb(null, addressHex)
-}
+                const id = message.id
+                const tx = message.object
 
-window.web3.eth.defaultAccount = addressHex
+                var gasLimit = tx.gasLimit || tx.gas || null;
+                var gasPrice = tx.gasPrice || null;
+                var data = tx.data || null;
+                var nonce = tx.nonce || -1;
+                onekeyJsCall.signTransaction(message.id, tx.to || null, tx.value, nonce, gasLimit, gasPrice, data);
+            }
+        },
+        requestAccounts: {
+            postMessage: (message) => {
+                debugPrint('init.js request accounts', JSON.stringify(message))
+                executeCallback(message.id, null, [config.address])
+            }
+        }
+    }
+};
 
-window.ethereum = web3.currentProvider
+console.log('Onekey web3 provider init done')

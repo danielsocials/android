@@ -47,10 +47,7 @@ import org.haobtc.onekey.onekeys.dappbrowser.Web3View
 import org.haobtc.onekey.onekeys.dappbrowser.bean.*
 import org.haobtc.onekey.onekeys.dappbrowser.callback.DappActionSheetCallback
 import org.haobtc.onekey.onekeys.dappbrowser.callback.SignAuthenticationCallback
-import org.haobtc.onekey.onekeys.dappbrowser.listener.OnSignMessageListener
-import org.haobtc.onekey.onekeys.dappbrowser.listener.OnSignPersonalMessageListener
-import org.haobtc.onekey.onekeys.dappbrowser.listener.OnSignTransactionListener
-import org.haobtc.onekey.onekeys.dappbrowser.listener.OnSignTypedMessageListener
+import org.haobtc.onekey.onekeys.dappbrowser.listener.*
 import org.haobtc.onekey.onekeys.dappbrowser.ui.DappSettingSheetDialog.ClickType.Companion.CLICK_BROWSER
 import org.haobtc.onekey.onekeys.dappbrowser.ui.DappSettingSheetDialog.ClickType.Companion.CLICK_COLLECTION
 import org.haobtc.onekey.onekeys.dappbrowser.ui.DappSettingSheetDialog.ClickType.Companion.CLICK_COPY_URL
@@ -91,6 +88,7 @@ class DappBrowserFragment : BaseFragment(),
     OnSignPersonalMessageListener,
     OnSignTypedMessageListener,
     OnSignMessageListener,
+    OnSignMessageHexListener,
     DappActionSheetCallback,
     SignAuthenticationCallback,
     CurrentCoinTypeProvider {
@@ -512,6 +510,7 @@ class DappBrowserFragment : BaseFragment(),
     web3.setOnSignPersonalMessageListener(this)
     web3.setOnSignTransactionListener(this)
     web3.setOnSignTypedMessageListener(this)
+    web3.setOnSignMessageHexListener(this)
     if (mLoadOnInit != null) {
       web3.loadUrl(URLUtils.formatUrl(mLoadOnInit), getWeb3Headers())
       setDappTitle(URLUtils.formatUrl(mLoadOnInit))
@@ -833,6 +832,10 @@ class DappBrowserFragment : BaseFragment(),
    * @param message 信息
    */
   override fun onSignMessage(message: EthereumMessage) {
+    handleSignMessage(message)
+  }
+
+  override fun onSignMessageHex(message: OnekeyMessageHex) {
     handleSignMessage(message)
   }
 

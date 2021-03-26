@@ -11,8 +11,10 @@ import org.haobtc.onekey.onekeys.dappbrowser.bean.Address;
 import org.haobtc.onekey.onekeys.dappbrowser.bean.CryptoFunctions;
 import org.haobtc.onekey.onekeys.dappbrowser.bean.EthereumMessage;
 import org.haobtc.onekey.onekeys.dappbrowser.bean.EthereumTypedMessage;
+import org.haobtc.onekey.onekeys.dappbrowser.bean.OnekeyMessageHex;
 import org.haobtc.onekey.onekeys.dappbrowser.bean.SignMessageType;
 import org.haobtc.onekey.onekeys.dappbrowser.bean.Web3Transaction;
+import org.haobtc.onekey.onekeys.dappbrowser.listener.OnSignMessageHexListener;
 import org.haobtc.onekey.onekeys.dappbrowser.listener.OnSignMessageListener;
 import org.haobtc.onekey.onekeys.dappbrowser.listener.OnSignPersonalMessageListener;
 import org.haobtc.onekey.onekeys.dappbrowser.listener.OnSignTransactionListener;
@@ -27,23 +29,26 @@ public class SignCallbackJSInterface {
     @NonNull private final OnSignMessageListener onSignMessageListener;
     @NonNull private final OnSignPersonalMessageListener onSignPersonalMessageListener;
     @NonNull private final OnSignTypedMessageListener onSignTypedMessageListener;
+    @NonNull private final OnSignMessageHexListener onSignMessageHexListener;
 
     public SignCallbackJSInterface(
             WebView webView,
             @NonNull OnSignTransactionListener onSignTransactionListener,
             @NonNull OnSignMessageListener onSignMessageListener,
             @NonNull OnSignPersonalMessageListener onSignPersonalMessageListener,
-            @NonNull OnSignTypedMessageListener onSignTypedMessageListener) {
+            @NonNull OnSignTypedMessageListener onSignTypedMessageListener,
+            @NonNull OnSignMessageHexListener onSignMessageHexListener) {
         this.webView = webView;
         this.onSignTransactionListener = onSignTransactionListener;
         this.onSignMessageListener = onSignMessageListener;
         this.onSignPersonalMessageListener = onSignPersonalMessageListener;
         this.onSignTypedMessageListener = onSignTypedMessageListener;
+        this.onSignMessageHexListener = onSignMessageHexListener;
     }
 
     @JavascriptInterface
     public void signTransaction(
-            int callbackId,
+            long callbackId,
             String recipient,
             String value,
             String nonce,
@@ -71,7 +76,7 @@ public class SignCallbackJSInterface {
     }
 
     @JavascriptInterface
-    public void signMessage(int callbackId, String data) {
+    public void signMessage(long callbackId, String data) {
         webView.post(
                 () ->
                         onSignMessageListener.onSignMessage(
@@ -80,7 +85,7 @@ public class SignCallbackJSInterface {
     }
 
     @JavascriptInterface
-    public void signPersonalMessage(int callbackId, String data) {
+    public void signPersonalMessage(long callbackId, String data) {
         webView.post(
                 () ->
                         onSignPersonalMessageListener.onSignPersonalMessage(
@@ -92,7 +97,7 @@ public class SignCallbackJSInterface {
     }
 
     @JavascriptInterface
-    public void signTypedMessage(int callbackId, String data) {
+    public void signTypedMessage(long callbackId, String data) {
         webView.post(
                 () -> {
                     try {
@@ -112,6 +117,14 @@ public class SignCallbackJSInterface {
                         e.printStackTrace();
                     }
                 });
+    }
+
+    @JavascriptInterface
+    public void signMessageHex(long callbackId, String data, String payload) {
+        webView.post(
+                () ->
+                        onSignMessageHexListener.onSignMessageHex(
+                                new OnekeyMessageHex(data, payload, callbackId)));
     }
 
     private String getUrl() {

@@ -127,23 +127,27 @@
                     android:textColor="@color/text_color2"
                     android:textSize="@dimen/sp_17" />
 
-                <TextView
-                    android:id="@+id/text_receive_address"
+                <org.haobtc.onekey.ui.widget.MaxHeightNestedScrollView
+                    android:id="@+id/layout_message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_toEndOf="@+id/textView1"
-                    android:ellipsize="end"
-                    android:gravity="end"
-                    android:maxLines="15"
-                    android:textColor="@color/text_three"
-                    android:textSize="@dimen/sp_14"
-                    tools:text="sdfjsbkdbskjndksnjfkjsnkejnfksnjkdnjahbjhbdjhbajsdbkasjndkajnsdk" />
+                    app:maxHeight="260dp">
+
+                    <TextView
+                        android:id="@+id/text_receive_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_three"
+                        android:textSize="@dimen/sp_14"
+                        tools:text="sdfjsbkdbskjndksnjfkjsnkejnfksnjkdnjahbjhbdjhbajsdbkasjndkajnsdk" />
+                </org.haobtc.onekey.ui.widget.MaxHeightNestedScrollView>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/line_hight"
-                    android:layout_below="@+id/text_receive_address"
+                    android:layout_below="@+id/layout_message"
                     android:layout_marginTop="@dimen/dp_10"
                     android:background="@color/line_color" />
 

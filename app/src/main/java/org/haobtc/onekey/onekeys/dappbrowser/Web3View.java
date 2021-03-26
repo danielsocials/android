@@ -23,8 +23,10 @@ import java.io.InputStream;
 import org.haobtc.onekey.BuildConfig;
 import org.haobtc.onekey.onekeys.dappbrowser.bean.EthereumMessage;
 import org.haobtc.onekey.onekeys.dappbrowser.bean.EthereumTypedMessage;
+import org.haobtc.onekey.onekeys.dappbrowser.bean.OnekeyMessageHex;
 import org.haobtc.onekey.onekeys.dappbrowser.bean.Signable;
 import org.haobtc.onekey.onekeys.dappbrowser.bean.Web3Transaction;
+import org.haobtc.onekey.onekeys.dappbrowser.listener.OnSignMessageHexListener;
 import org.haobtc.onekey.onekeys.dappbrowser.listener.OnSignMessageListener;
 import org.haobtc.onekey.onekeys.dappbrowser.listener.OnSignPersonalMessageListener;
 import org.haobtc.onekey.onekeys.dappbrowser.listener.OnSignTransactionListener;
@@ -42,6 +44,7 @@ public class Web3View extends WebView {
     @Nullable private OnSignMessageListener onSignMessageListener;
     @Nullable private OnSignPersonalMessageListener onSignPersonalMessageListener;
     @Nullable private OnSignTypedMessageListener onSignTypedMessageListener;
+    @Nullable private OnSignMessageHexListener onSignMessageHexListener;
     private JsInjectorClient jsInjectorClient;
     private Web3ViewClient webViewClient;
     private URLLoadInterface loadInterface;
@@ -101,7 +104,8 @@ public class Web3View extends WebView {
                         innerOnSignTransactionListener,
                         innerOnSignMessageListener,
                         innerOnSignPersonalMessageListener,
-                        innerOnSignTypedMessageListener),
+                        innerOnSignTypedMessageListener,
+                        innerOnSignMessageHexListener),
                 "onekeyJsCall");
     }
 
@@ -160,6 +164,11 @@ public class Web3View extends WebView {
     public void setOnSignTypedMessageListener(
             @Nullable OnSignTypedMessageListener onSignTypedMessageListener) {
         this.onSignTypedMessageListener = onSignTypedMessageListener;
+    }
+
+    public void setOnSignMessageHexListener(
+            @Nullable OnSignMessageHexListener onSignMessageHexListener) {
+        this.onSignMessageHexListener = onSignMessageHexListener;
     }
 
     public void onSignTransactionSuccessful(Web3Transaction transaction, String signHex) {
@@ -232,6 +241,14 @@ public class Web3View extends WebView {
                 @Override
                 public void onSignTypedMessage(EthereumTypedMessage message) {
                     onSignTypedMessageListener.onSignTypedMessage(message);
+                }
+            };
+
+    private final OnSignMessageHexListener innerOnSignMessageHexListener =
+            new OnSignMessageHexListener() {
+                @Override
+                public void onSignMessageHex(OnekeyMessageHex message) {
+                    onSignMessageHexListener.onSignMessageHex(message);
                 }
             };
 

@@ -4,38 +4,33 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.annotation.StyleRes
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import org.haobtc.onekey.R
 import org.haobtc.onekey.databinding.DialogBaseBottomBinding
-import org.haobtc.onekey.extensions.setCustomNavigationBar
 
 
 /**
  * @author Onekey@QuincySx
  * @create 2021-03-03 10:23 AM
  */
-open class BaseAlertBottomDialog(context: Context) : Dialog(context) {
-  enum class TEXT_STYLE {
+class BaseAlertBottomDialog @JvmOverloads constructor(context: Context, @StyleRes themeResId: Int = 0) : Dialog(context, themeResId) {
+  enum class TextStyle {
     CENTERED, LEFT
   }
 
-  private lateinit var mBinding: DialogBaseBottomBinding
+  private val mBinding by lazy {
+    DialogBaseBottomBinding.inflate(layoutInflater)
+  }
   private var mPrimaryButtonListener: View.OnClickListener? = null
   private var mSecondaryButtonListener: View.OnClickListener? = null
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(
-        DialogBaseBottomBinding.inflate(layoutInflater).also {
-          mBinding = it
-        }.root
-    )
+  init {
+    setContentView(mBinding.root)
     window?.apply {
       setLayout(
           ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -60,20 +55,22 @@ open class BaseAlertBottomDialog(context: Context) : Dialog(context) {
     }
   }
 
-  open fun setProgressMode() {
+  fun setProgressMode(): BaseAlertBottomDialog {
     mBinding.layoutIconInfo.visibility = View.VISIBLE
     mBinding.ivDialogLogo.visibility = View.GONE
     mBinding.progressBar.setVisibility(View.VISIBLE)
+    return this
   }
 
-  open fun setIcon(resId: Int) {
+  fun setIcon(resId: Int): BaseAlertBottomDialog {
     mBinding.layoutIconInfo.visibility = View.VISIBLE
     mBinding.progressBar.visibility = View.GONE
     mBinding.ivDialogLogo.visibility = View.VISIBLE
     mBinding.ivDialogLogo.setImageResource(resId)
+    return this
   }
 
-  open fun setIcon(url: String) {
+  fun setIcon(url: String): BaseAlertBottomDialog {
     mBinding.layoutIconInfo.visibility = View.VISIBLE
     mBinding.progressBar.visibility = View.GONE
     mBinding.ivDialogLogo.visibility = View.VISIBLE
@@ -84,6 +81,17 @@ open class BaseAlertBottomDialog(context: Context) : Dialog(context) {
         .error(R.mipmap.ic_launcher_foreground)
         .fitCenter()
         .into(mBinding.ivDialogLogo)
+    return this
+  }
+
+  fun setTitleOverride(resId: Int): BaseAlertBottomDialog {
+    setTitle(resId)
+    return this
+  }
+
+  fun setTitleOverride(message: CharSequence?): BaseAlertBottomDialog {
+    setTitle(message)
+    return this
   }
 
   override fun setTitle(resId: Int) {
@@ -96,24 +104,28 @@ open class BaseAlertBottomDialog(context: Context) : Dialog(context) {
     mBinding.dialogMainText.text = message
   }
 
-  fun setMessage(resId: Int) {
+  fun setMessage(resId: Int): BaseAlertBottomDialog {
     mBinding.dialogSubText.visibility = View.VISIBLE
     mBinding.dialogSubText.text = context.resources?.getString(resId)
+    return this
   }
 
-  fun setMessage(message: CharSequence?) {
+  fun setMessage(message: CharSequence?): BaseAlertBottomDialog {
     mBinding.dialogSubText.visibility = View.VISIBLE
     mBinding.dialogSubText.text = message
+    return this
   }
 
-  fun setMessage(message: String?) {
+  fun setMessage(message: String?): BaseAlertBottomDialog {
     mBinding.dialogSubText.visibility = View.VISIBLE
     mBinding.dialogSubText.text = message
+    return this
   }
 
-  fun setPrimaryButtonText(resId: Int) {
+  fun setPrimaryButtonText(resId: Int): BaseAlertBottomDialog {
     mBinding.tvButtonPrimary.visibility = View.VISIBLE
     mBinding.tvButtonPrimary.text = context.resources?.getString(resId)
+    return this
   }
 
   fun setPrimaryButtonListener(listener: View.OnClickListener?): BaseAlertBottomDialog {
@@ -121,9 +133,10 @@ open class BaseAlertBottomDialog(context: Context) : Dialog(context) {
     return this
   }
 
-  fun setSecondaryButtonText(resId: Int) {
+  fun setSecondaryButtonText(resId: Int): BaseAlertBottomDialog {
     mBinding.tvButtonSecondary.visibility = View.VISIBLE
     mBinding.tvButtonSecondary.text = context.resources?.getString(resId)
+    return this
   }
 
   fun setSecondaryButtonListener(listener: View.OnClickListener?): BaseAlertBottomDialog {
@@ -133,14 +146,16 @@ open class BaseAlertBottomDialog(context: Context) : Dialog(context) {
     return this
   }
 
-  fun setView(view: View?) {
+  fun setView(view: View?): BaseAlertBottomDialog {
     mBinding.dialogView.addView(view)
+    return this
   }
 
-  fun setTextStyle(style: TEXT_STYLE?) {
+  fun setTextStyle(style: TextStyle?): BaseAlertBottomDialog {
     when (style) {
-      TEXT_STYLE.CENTERED -> mBinding.dialogSubText.gravity = Gravity.CENTER_HORIZONTAL
-      TEXT_STYLE.LEFT -> mBinding.dialogSubText.gravity = Gravity.START
+      TextStyle.CENTERED -> mBinding.dialogSubText.gravity = Gravity.CENTER_HORIZONTAL
+      TextStyle.LEFT -> mBinding.dialogSubText.gravity = Gravity.START
     }
+    return this
   }
 }

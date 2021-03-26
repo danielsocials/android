@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import org.haobtc.onekey.R;
 
 /**
@@ -77,13 +78,25 @@ public class DappResultAlertDialog extends Dialog {
         dialogLayout.requestLayout();
     }
 
-    public void setProgressMode() {
+    public DappResultAlertDialog setProgressMode() {
         icon.setVisibility(View.GONE);
         messageText.setVisibility(View.GONE);
         button.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
+        return this;
     }
 
+    public DappResultAlertDialog setTitleOverride(@StringRes int resId) {
+        setTitle(resId);
+        return this;
+    }
+
+    public DappResultAlertDialog setTitleOverride(CharSequence message) {
+        setTitle(message);
+        return this;
+    }
+
+    @Override
     public void setTitle(int resId) {
         titleText.setVisibility(View.VISIBLE);
         titleText.setText(context.getResources().getString(resId));
@@ -95,52 +108,62 @@ public class DappResultAlertDialog extends Dialog {
         titleText.setText(message);
     }
 
-    public void setButtonText(int resId) {
+    public DappResultAlertDialog setButtonText(int resId) {
         button.setVisibility(View.VISIBLE);
         button.setText(context.getResources().getString(resId));
+        return this;
     }
 
-    public void setButtonListener(View.OnClickListener listener) {
+    public DappResultAlertDialog setButtonListener(View.OnClickListener listener) {
         button.setOnClickListener(listener);
+        return this;
     }
 
-    public void setSecondaryButtonText(int resId) {
+    public DappResultAlertDialog setSecondaryButtonText(int resId) {
         secondaryButton.setVisibility(View.VISIBLE);
         secondaryButton.setText(context.getResources().getString(resId));
+        return this;
     }
 
-    public void setSecondaryButtonListener(View.OnClickListener listener) {
+    public DappResultAlertDialog setSecondaryButtonListener(View.OnClickListener listener) {
         secondaryButton.setOnClickListener(listener);
+        return this;
     }
 
-    public void setMessage(int resId) {
+    public DappResultAlertDialog setMessage(int resId) {
         messageText.setVisibility(View.VISIBLE);
         messageText.setText(context.getResources().getString(resId));
+        return this;
     }
 
-    public void setMessage(CharSequence message) {
+    public DappResultAlertDialog setMessage(CharSequence message) {
         messageText.setVisibility(View.VISIBLE);
         messageText.setText(message);
+        return this;
     }
 
-    public void setMessage(String message) {
+    public DappResultAlertDialog setMessage(String message) {
         messageText.setVisibility(View.VISIBLE);
         messageText.setText(message);
+        return this;
     }
 
-    public void setIcon(int resId) {
+    public DappResultAlertDialog setIcon(int resId) {
         if (resId == NONE) {
             this.icon.setVisibility(View.GONE);
         } else {
+            this.icon.setVisibility(View.VISIBLE);
             this.icon.setImageResource(resId);
         }
+        return this;
     }
 
-    public void setView(View view) {
+    public DappResultAlertDialog setView(View view) {
         viewContainer.addView(view);
+        return this;
     }
 
-    public void setTextStyle(TEXT_STYLE style) {
+    public DappResultAlertDialog setTextStyle(TEXT_STYLE style) {
         switch (style) {
             case CENTERED:
                 messageText.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -149,5 +172,6 @@ public class DappResultAlertDialog extends Dialog {
                 messageText.setGravity(Gravity.START);
                 break;
         }
+        return this;
     }
 }

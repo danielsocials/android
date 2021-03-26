@@ -150,13 +150,11 @@ class FindFragment : BaseFragment(), OnBackPressedCallback {
               val coinType = CoinType.convertByCoinName(dAppBrowserBean.chain)
               // 判断不支持的币种
               if (coinType == null) {
-                val dialog = BaseAlertBottomDialog(requireContext())
-                dialog.show()
-                dialog.setTitle(
-                    getString(
-                        R.string.title_does_not_support,
-                        dAppBrowserBean.chain))
-                dialog.setMessage(R.string.support_less_promote)
+                BaseAlertBottomDialog(requireContext()).apply {
+                  setTitle(getString(R.string.title_does_not_support, dAppBrowserBean.chain))
+                  setMessage(R.string.support_less_promote)
+                  show()
+                }
                 callback.onError()
                 return@subscribe
               }
@@ -164,28 +162,23 @@ class FindFragment : BaseFragment(), OnBackPressedCallback {
               if (currentWalletAccountInfo.value != null
                   && currentWalletAccountInfo.value!!.coinType
                   != coinType) {
-                val dialog = BaseAlertBottomDialog(requireContext())
-                dialog.show()
-                dialog.setIcon(dAppBrowserBean.img ?: URLUtils.getWebFavicon(dAppBrowserBean.url))
-                dialog.setTitle(
-                    getString(
-                        R.string.title_account_unavailable,
-                        dAppBrowserBean.chain))
-                dialog.setMessage(
-                    getString(
-                        R.string.hint_account_unavailable_content,
-                        dAppBrowserBean.chain))
-                dialog.setPrimaryButtonListener {
-                  dialog.dismiss()
-                  SelectAccountBottomSheetDialog.newInstance(coinType)
-                      .setOnSelectAccountCallback { openDapp(dAppBrowserBean, callback) }
-                      .show(
-                          parentFragmentManager,
-                          "SelectAccount")
-                }
-                dialog.setSecondaryButtonListener {
-                  callback.onError()
-                  dialog.dismiss()
+                BaseAlertBottomDialog(requireContext()).apply {
+                  setIcon(dAppBrowserBean.img ?: URLUtils.getWebFavicon(dAppBrowserBean.url))
+                  setTitle(getString(R.string.title_account_unavailable, dAppBrowserBean.chain))
+                  setMessage(getString(R.string.hint_account_unavailable_content, dAppBrowserBean.chain))
+                  setPrimaryButtonListener {
+                    dismiss()
+                    SelectAccountBottomSheetDialog.newInstance(coinType)
+                        .setOnSelectAccountCallback { openDapp(dAppBrowserBean, callback) }
+                        .show(
+                            parentFragmentManager,
+                            "SelectAccount")
+                  }
+                  setSecondaryButtonListener {
+                    callback.onError()
+                    dismiss()
+                  }
+                  show()
                 }
               } else {
                 openDapp(dAppBrowserBean, callback)
@@ -214,26 +207,21 @@ class FindFragment : BaseFragment(), OnBackPressedCallback {
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe({ dAppBrowserBean: DAppBrowserBean ->
           if (dAppBrowserBean.firstUse) {
-            val dialog = BaseAlertBottomDialog(requireContext())
-            dialog.show()
-            dialog.setIcon(dAppBrowserBean.img ?: URLUtils.getWebFavicon(dAppBrowserBean.url))
-            dialog.setTitle(
-                getString(
-                    R.string.title_frist_use_dapp,
-                    dAppBrowserBean.name))
-            dialog.setMessage(
-                getString(
-                    R.string.title_frist_use_dapp_privacy,
-                    dAppBrowserBean.name))
-            dialog.setPrimaryButtonText(R.string.i_know_)
-            dialog.setPrimaryButtonListener {
-              callback.onSuccess()
-              mDappManager.userDapp(dAppBrowserBean.name)
-              start(requireContext(), dAppBrowserBean)
-            }
-            dialog.setSecondaryButtonListener {
-              callback.onError()
-              dialog.dismiss()
+            BaseAlertBottomDialog(requireContext()).apply {
+              setIcon(dAppBrowserBean.img ?: URLUtils.getWebFavicon(dAppBrowserBean.url))
+              setTitle(getString(R.string.title_frist_use_dapp, dAppBrowserBean.name))
+              setMessage(getString(R.string.title_frist_use_dapp_privacy, dAppBrowserBean.name))
+              setPrimaryButtonText(R.string.i_know_)
+              setPrimaryButtonListener {
+                callback.onSuccess()
+                mDappManager.userDapp(dAppBrowserBean.name)
+                start(requireContext(), dAppBrowserBean)
+              }
+              setSecondaryButtonListener {
+                callback.onError()
+                dismiss()
+              }
+              show()
             }
           }
         }) { obj: Throwable ->

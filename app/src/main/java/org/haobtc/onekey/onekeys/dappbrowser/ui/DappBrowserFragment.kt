@@ -17,7 +17,6 @@ import android.webkit.WebChromeClient.FileChooserParams
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.orhanobut.logger.Logger
 import com.zy.multistatepage.MultiStatePage
@@ -125,16 +124,19 @@ class DappBrowserFragment : BaseFragment(),
     private const val EXT_CURRENT_URL = "current_url"
     private const val EXT_URL = "url"
     private const val EXT_DAPP_BEAN = "data"
+    private const val EXT_DAPP_MODE = "mode"
 
     private const val ACTION_COLLECTION_SUCCESS = 1
     private const val ACTION_CANCEL_COLLECTION_SUCCESS = 2
     private const val ACTION_COLLECTION_ERROR = 3
 
     @JvmStatic
-    fun start(url: String, dAppBrowserBean: DAppBrowserBean?): Fragment {
+    @JvmOverloads
+    fun start(url: String, dAppBrowserBean: DAppBrowserBean? = null, browserMode: Boolean = true): DappBrowserFragment {
       val dappBrowserFragment = DappBrowserFragment()
       dappBrowserFragment.arguments = Bundle().apply {
         putString(EXT_URL, url)
+        putBoolean(EXT_DAPP_MODE, browserMode)
         putParcelable(EXT_DAPP_BEAN, dAppBrowserBean)
       }
       return dappBrowserFragment
@@ -216,11 +218,19 @@ class DappBrowserFragment : BaseFragment(),
       mOnFinishOrBackCallback = context
       context.setOnBackPressed(this)
     }
+    parentFragment?.let {
+      if (it is OnFinishOrBackCallback) {
+        mOnFinishOrBackCallback = it
+        it.setOnBackPressed(this)
+      }
+    }
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     web3.setBackgroundColor(Color.parseColor("#F9F9FB"))
+
+    initMode(savedInstanceState)
 
     initLoadUrl(savedInstanceState)
 
@@ -232,6 +242,7 @@ class DappBrowserFragment : BaseFragment(),
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
     outState.putString(EXT_CURRENT_URL, web3.url)
+    outState.putBoolean(EXT_DAPP_MODE, arguments?.getBoolean(EXT_DAPP_MODE) ?: true)
   }
 
   override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -239,6 +250,17 @@ class DappBrowserFragment : BaseFragment(),
     when (requestCode) {
       REQUEST_FILE_ACCESS -> gotFileAccess(permissions, grantResults)
       REQUEST_FINE_LOCATION -> gotGeoAccess(permissions, grantResults)
+    }
+  }
+
+  private fun initMode(savedInstanceState: Bundle?) {
+    val mode = if (arguments != null && arguments?.getBoolean(EXT_DAPP_MODE) != null) {
+      arguments?.getBoolean(EXT_DAPP_MODE) ?: true
+    } else {
+      savedInstanceState?.getBoolean(EXT_DAPP_MODE, true) ?: true
+    }
+    if (!mode) {
+      mBinding.layoutTopBar.visibility = View.GONE
     }
   }
 
@@ -357,11 +379,12 @@ class DappBrowserFragment : BaseFragment(),
               showToast(R.string.hint_content_collection_success)
             }
             ACTION_COLLECTION_ERROR -> {
-              val dialog = BaseAlertBottomDialog(requireContext())
-              dialog.show()
-              dialog.setTitle(R.string.title_collection_is_full)
-              dialog.setMessage(R.string.hint_content_collection_is_full)
-              dialog.setPrimaryButtonText(R.string.i_know_)
+              BaseAlertBottomDialog(requireContext()).apply {
+                setTitle(R.string.title_collection_is_full)
+                setMessage(R.string.hint_content_collection_is_full)
+                setPrimaryButtonText(R.string.i_know_)
+                show()
+              }
             }
             ACTION_CANCEL_COLLECTION_SUCCESS -> {
               showToast(R.string.hint_content_cancel_collection_success)
@@ -621,10 +644,12 @@ class DappBrowserFragment : BaseFragment(),
     val walletInfo = mAppWalletViewModel.currentWalletAccountInfo.value
     // 观察钱包无法使用
     if (walletInfo?.walletType == Vm.WalletType.IMPORT_WATCH) {
-      val dialog = BaseAlertBottomDialog(requireContext())
-      dialog.show()
-      dialog.setTitle(R.string.hint_please_switch_account_observe)
-      dialog.setMessage(R.string.hint_account_observe_unavailable_content)
+      BaseAlertBottomDialog(requireContext()).apply {
+        setTitle(R.string.hint_please_switch_account_observe)
+        setMessage(R.string.hint_account_observe_unavailable_content)
+        show()
+      }
+
       return
     }
     // 硬件钱包授权

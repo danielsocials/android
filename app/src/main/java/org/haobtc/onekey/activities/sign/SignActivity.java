@@ -1,7 +1,5 @@
 package org.haobtc.onekey.activities.sign;
 
-import static org.haobtc.onekey.constant.Constant.CURRENT_SELECTED_WALLET_TYPE;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,11 +12,11 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import butterknife.BindView;
-import butterknife.OnClick;
-import butterknife.OnTextChanged;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.chaquo.python.Kwarg;
 import com.chaquo.python.PyObject;
 import com.google.common.base.Strings;
@@ -27,10 +25,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.yzq.zxinglibrary.android.CaptureActivity;
 import com.yzq.zxinglibrary.bean.ZxingConfig;
 import com.yzq.zxinglibrary.common.Constant;
-import dr.android.fileselector.FileSelectConstant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -42,6 +37,8 @@ import org.haobtc.onekey.asynctask.BusinessAsyncTask;
 import org.haobtc.onekey.bean.CurrentAddressDetail;
 import org.haobtc.onekey.bean.PyResponse;
 import org.haobtc.onekey.bean.TransactionInfoBean;
+import org.haobtc.onekey.bean.WalletAccountInfo;
+import org.haobtc.onekey.business.wallet.DeviceManager;
 import org.haobtc.onekey.business.wallet.SystemConfigManager;
 import org.haobtc.onekey.constant.PyConstant;
 import org.haobtc.onekey.constant.Vm;
@@ -59,6 +56,20 @@ import org.haobtc.onekey.ui.base.BaseActivity;
 import org.haobtc.onekey.ui.dialog.PassInputDialog;
 import org.haobtc.onekey.ui.dialog.TransactionConfirmDialog;
 import org.haobtc.onekey.utils.ClipboardUtils;
+import org.haobtc.onekey.viewmodel.AppWalletViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import butterknife.BindView;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
+import dr.android.fileselector.FileSelectConstant;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+
+import static org.haobtc.onekey.constant.Constant.CURRENT_SELECTED_WALLET_TYPE;
 
 /** @author liyan */
 public class SignActivity extends BaseActivity
@@ -116,11 +127,15 @@ public class SignActivity extends BaseActivity
     private String amounts;
     private SystemConfigManager mSystemConfigManager;
     private Vm.CoinType coinType;
+    private String mDeviceName;
 
     /** init */
     @Override
     public void init() {
         mSystemConfigManager = new SystemConfigManager(this);
+        AppWalletViewModel appWalletViewModel =
+                new ViewModelProvider(((MyApplication) getApplicationContext()))
+                        .get(AppWalletViewModel.class);
         Intent intent = getIntent();
         hidePhrass = intent.getStringExtra("hide_phrass");
         walletLabel = intent.getStringExtra(org.haobtc.onekey.constant.Constant.WALLET_LABEL);
@@ -142,6 +157,15 @@ public class SignActivity extends BaseActivity
             case org.haobtc.onekey.constant.Constant.WALLET_TYPE_HARDWARE_MULTI:
                 signMessage.setVisibility(View.GONE);
                 verifySignature.setVisibility(View.GONE);
+        }
+        WalletAccountInfo walletAccountInfo =
+                appWalletViewModel.currentWalletAccountInfo.getValue();
+        if (!Strings.isNullOrEmpty(walletAccountInfo.getDeviceId())) {
+            mDeviceName =
+                    DeviceManager.getInstance().getDeviceName(walletAccountInfo.getDeviceId());
+            if (Strings.isNullOrEmpty(mDeviceName)) {
+                mDeviceName = walletLabel;
+            }
         }
     }
 
@@ -370,11 +394,24 @@ public class SignActivity extends BaseActivity
 
     @Override
     public void onException(Exception e) {
+        EventBus.getDefault().post(new ExitEvent());
         if (e.getMessage().equals(" ")) {
             // 硬件按钮点击取消
             showToast(getString(R.string.hint_hardware_signature_cancelled));
         } else if (!Objects.requireNonNull(e.getMessage()).isEmpty()) {
-            showToast(e.getMessage());
+            if (!mCompositeDisposable.isDisposed()) {
+                mCompositeDisposable.dispose();
+            }
+            io.reactivex.rxjava3.disposables.Disposable disposable =
+                    Single.create(
+                            emitter -> {
+                                dealWithHardConnect(e.getMessage(), mDeviceName);
+                                emitter.onSuccess("");
+                            })
+                            .subscribeOn(AndroidSchedulers.mainThread())
+                            .subscribe(result -> {
+                            });
+            mCompositeDisposable.add(disposable);
         }
     }
 

@@ -63,6 +63,7 @@ import org.haobtc.onekey.bean.TemporaryTxInfo;
 import org.haobtc.onekey.bean.WalletAccountInfo;
 import org.haobtc.onekey.business.qrdecode.QRDecode;
 import org.haobtc.onekey.business.wallet.AccountManager;
+import org.haobtc.onekey.business.wallet.DeviceManager;
 import org.haobtc.onekey.business.wallet.SystemConfigManager;
 import org.haobtc.onekey.constant.Constant;
 import org.haobtc.onekey.constant.PyConstant;
@@ -285,6 +286,7 @@ public class SendEthActivity extends BaseActivity implements CustomEthFeeDialog.
     private String contractAddress;
     private int mAssetsID;
     private boolean isToken = false;
+    private String mDeviceName;
 
     /** init */
     @Override
@@ -413,6 +415,12 @@ public class SendEthActivity extends BaseActivity implements CustomEthFeeDialog.
                         isToken = false;
                     }
                 });
+        if (!Strings.isNullOrEmpty(walletInfo.getDeviceId())) {
+            mDeviceName = DeviceManager.getInstance().getDeviceName(walletInfo.getDeviceId());
+            if (Strings.isNullOrEmpty(mDeviceName)) {
+                mDeviceName = mAppWalletViewModel.currentWalletAccountInfo.getValue().getName();
+            }
+        }
     }
 
     private void initAssetBalance(Assets mAssets) {
@@ -957,8 +965,9 @@ public class SendEthActivity extends BaseActivity implements CustomEthFeeDialog.
                                             confirmDialog.getBtnConfirmPay().setEnabled(true);
                                         }
                                     } else {
-                                        finish();
-                                        mToast(stringPyResponse.getErrors());
+                                        EventBus.getDefault().post(new ExitEvent());
+                                        dealWithHardConnect(
+                                                stringPyResponse.getErrors(), mDeviceName);
                                     }
                                     signClickable = true;
                                 },

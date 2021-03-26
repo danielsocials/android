@@ -26,6 +26,9 @@ import com.lxj.xpopup.XPopup;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.yzq.zxinglibrary.encode.CodeCreator;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+
 import java.io.File;
 import java.util.Locale;
 import java.util.Objects;
@@ -42,6 +45,7 @@ import org.haobtc.onekey.bean.CurrentAddressDetail;
 import org.haobtc.onekey.bean.LocalWalletInfo;
 import org.haobtc.onekey.bean.WalletAccountInfo;
 import org.haobtc.onekey.business.wallet.AccountManager;
+import org.haobtc.onekey.business.wallet.DeviceManager;
 import org.haobtc.onekey.constant.PyConstant;
 import org.haobtc.onekey.constant.Vm;
 import org.haobtc.onekey.event.ButtonRequestEvent;
@@ -141,6 +145,7 @@ public class ReceiveHDActivity extends BaseActivity implements BusinessAsyncTask
     private Disposable subscriber;
     private Vm.CoinType mCoinType;
     @Vm.WalletType private int mWalletType;
+    private String mDeviceName;
 
     /** init */
     @Override
@@ -213,6 +218,15 @@ public class ReceiveHDActivity extends BaseActivity implements BusinessAsyncTask
         }
         // get receive address
         mGeneratecode();
+        WalletAccountInfo walletAccountInfo =
+                appWalletViewModel.currentWalletAccountInfo.getValue();
+        if (!Strings.isNullOrEmpty(walletAccountInfo.getDeviceId())) {
+            mDeviceName =
+                    DeviceManager.getInstance().getDeviceName(walletAccountInfo.getDeviceId());
+            if (Strings.isNullOrEmpty(mDeviceName)) {
+                mDeviceName = appWalletViewModel.currentWalletAccountInfo.getValue().getName();
+            }
+        }
     }
 
     private void showWatchTipDialog() {
@@ -421,7 +435,18 @@ public class ReceiveHDActivity extends BaseActivity implements BusinessAsyncTask
     @Override
     public void onException(Exception e) {
         EventBus.getDefault().post(new ExitEvent());
-        showToast(e.getMessage());
+        if (!mCompositeDisposable.isDisposed()) {
+            mCompositeDisposable.dispose();
+        }
+        io.reactivex.rxjava3.disposables.Disposable disposable =
+                Single.create(
+                        emitter -> {
+                            dealWithHardConnect(e.getMessage(), mDeviceName);
+                            emitter.onSuccess("");
+                        })
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribe(result -> {});
+        mCompositeDisposable.add(disposable);
     }
 
     @Override

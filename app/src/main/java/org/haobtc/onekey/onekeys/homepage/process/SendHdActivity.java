@@ -36,6 +36,7 @@ import com.yzq.zxinglibrary.bean.ZxingConfig;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.ObservableOnSubscribe;
+import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -57,8 +58,10 @@ import org.haobtc.onekey.bean.MainSweepcodeBean;
 import org.haobtc.onekey.bean.PyResponse;
 import org.haobtc.onekey.bean.TemporaryTxInfo;
 import org.haobtc.onekey.bean.TransactionInfoBean;
+import org.haobtc.onekey.bean.WalletAccountInfo;
 import org.haobtc.onekey.business.qrdecode.QRDecode;
 import org.haobtc.onekey.business.wallet.AccountManager;
+import org.haobtc.onekey.business.wallet.DeviceManager;
 import org.haobtc.onekey.business.wallet.SystemConfigManager;
 import org.haobtc.onekey.constant.Constant;
 import org.haobtc.onekey.constant.PyConstant;
@@ -271,6 +274,7 @@ public class SendHdActivity extends BaseActivity implements BusinessAsyncTask.He
     private boolean isAddressClickPaste;
     private boolean isAmountClickPaste;
     private String mWalletType;
+    private String mDeviceName;
 
     /** init */
     @Override
@@ -356,6 +360,17 @@ public class SendHdActivity extends BaseActivity implements BusinessAsyncTask.He
         registerLayoutChangeListener();
         editReceiverAddress.setOnPasteCallback(() -> isAddressClickPaste = true);
         editAmount.setOnPasteCallback(() -> isAmountClickPaste = true);
+
+        WalletAccountInfo walletAccountInfo =
+                mAppWalletViewModel.currentWalletAccountInfo.getValue();
+        if (!Strings.isNullOrEmpty(walletAccountInfo.getDeviceId())) {
+            mDeviceName =
+                    DeviceManager.getInstance().getDeviceName(walletAccountInfo.getDeviceId());
+            if (Strings.isNullOrEmpty(mDeviceName)) {
+                mDeviceName = hdWalletName;
+            }
+        }
+
     }
 
     private void showWatchTipDialog() {
@@ -1339,7 +1354,19 @@ public class SendHdActivity extends BaseActivity implements BusinessAsyncTask.He
 
     @Override
     public void onException(Exception e) {
-        showToast(e.getMessage());
+        EventBus.getDefault().post(new ExitEvent());
+        if (!mCompositeDisposable.isDisposed()) {
+            mCompositeDisposable.dispose();
+        }
+        Disposable disposable =
+                Single.create(
+                        emitter -> {
+                            dealWithHardConnect(e.getMessage(), mDeviceName);
+                            emitter.onSuccess("");
+                        })
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribe(result -> {});
+        mCompositeDisposable.add(disposable);
         signClickable = true;
     }
 

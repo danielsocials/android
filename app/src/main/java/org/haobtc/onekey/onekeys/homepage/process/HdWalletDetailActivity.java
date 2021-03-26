@@ -175,14 +175,14 @@ public class HdWalletDetailActivity extends BaseActivity {
                 deleteTV.setText(R.string.delete_wallet_single);
                 break;
             case WalletType.HARDWARE:
-                textHdWallet.setText(getString(R.string.hardware_wallet));
+                textHdWallet.setText(getString(R.string.hardware_account));
                 linSingleShow.setVisibility(View.VISIBLE);
                 // 硬件 导出私钥和助记词不可见
                 linSingle.setVisibility(View.GONE);
                 deleteTV.setText(R.string.delete_wallet_single);
                 break;
             case WalletType.IMPORT_WATCH:
-                textHdWallet.setText(getString(R.string.watch_wallet));
+                textHdWallet.setText(getString(R.string.watch_account));
                 deleteTV.setText(R.string.delete_wallet_single);
                 // 观察钱包 导出私钥和助记词不可见
                 linSingle.setVisibility(View.GONE);
@@ -199,7 +199,7 @@ public class HdWalletDetailActivity extends BaseActivity {
             case WalletType.STANDARD:
                 linHdWalletShow.setVisibility(View.GONE);
                 linSingleShow.setVisibility(View.VISIBLE);
-                textHdWallet.setText(getString(R.string.single));
+                textHdWallet.setText(getString(R.string.single_wallet));
                 if (coinType.chainType.equalsIgnoreCase(BTC.chainType)) {
                     exportKeystoreLayout.setVisibility(View.GONE);
                 } else if (coinType.chainType.equalsIgnoreCase(ETH.chainType)) {

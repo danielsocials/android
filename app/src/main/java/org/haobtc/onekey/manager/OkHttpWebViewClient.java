@@ -7,10 +7,12 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.concurrent.TimeUnit;
+
 import okhttp3.Authenticator;
 import okhttp3.CacheControl;
 import okhttp3.Credentials;
@@ -101,15 +103,16 @@ public class OkHttpWebViewClient extends WebViewClient {
             if (contentTypeValue.indexOf("charset=") > 0) {
                 final String[] contentTypeAndEncoding = contentTypeValue.split("; ");
                 final String contentType = contentTypeAndEncoding[0];
-                final String charset = contentTypeAndEncoding[1].split("=")[1];
-                return new WebResourceResponse(contentType, charset, resp.body().byteStream());
+                if (contentTypeAndEncoding.length > 1 && contentTypeAndEncoding[1].split("=").length > 1) {
+                    String charset = contentTypeAndEncoding[1].split("=")[1];
+                    return new WebResourceResponse(contentType, charset, resp.body().byteStream());
+                }
             } else {
                 return new WebResourceResponse(contentTypeValue, null, resp.body().byteStream());
             }
-        } else {
-            return new WebResourceResponse(
-                    "application/octet-stream", null, resp.body().byteStream());
         }
+        return new WebResourceResponse(
+                "application/octet-stream", null, resp.body().byteStream());
     }
 
     private void initClient() {

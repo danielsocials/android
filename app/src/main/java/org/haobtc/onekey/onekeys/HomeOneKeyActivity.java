@@ -41,10 +41,16 @@ public class HomeOneKeyActivity extends BaseActivity implements SetOnBackCallbac
 
     private String[] mTitles;
     private int[] mIconUnSelectIds = {
-        R.drawable.wallet_normal, R.drawable.wallet_tab_find_un, R.mipmap.mindno
+            R.drawable.wallet_normal,
+            R.drawable.wallet_tab_swap_un,
+            R.drawable.wallet_tab_find_un,
+            R.mipmap.mindno
     };
     private int[] mIconSelectIds = {
-        R.drawable.wallet_highlight, R.drawable.wallet_tab_find, R.mipmap.mindyes
+            R.drawable.wallet_highlight,
+            R.drawable.wallet_tab_swap,
+            R.drawable.wallet_tab_find,
+            R.mipmap.mindyes
     };
     private FragmentMainAdapter fragmentMainAdapter;
     private ArrayList<CustomTabEntity> mTabEntities;
@@ -80,9 +86,10 @@ public class HomeOneKeyActivity extends BaseActivity implements SetOnBackCallbac
     private void initPage() {
         mTitles =
                 new String[] {
-                    getString(R.string.wallet),
-                    getString(R.string.tab_found),
-                    getString(R.string.mind)
+                        getString(R.string.wallet),
+                        getString(R.string.tab_swap),
+                        getString(R.string.tab_found),
+                        getString(R.string.mind)
                 };
         mTabEntities = new ArrayList<>();
         fragmentMainAdapter = new FragmentMainAdapter(getSupportFragmentManager(), mTitles);
@@ -108,7 +115,7 @@ public class HomeOneKeyActivity extends BaseActivity implements SetOnBackCallbac
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (scrollViewPager != null && scrollViewPager.getCurrentItem() == 1) {
+        if (scrollViewPager != null && scrollViewPager.getCurrentItem() == 2) {
             if (mOnBackPressedCallback != null && mOnBackPressedCallback.onBackPressed()) {
                 return true;
             }

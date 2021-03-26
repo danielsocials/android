@@ -57,14 +57,23 @@ public class SelectAccountAdapter
 
         if (walletType == Vm.WalletType.MAIN) {
             helper.setGone(R.id.type_layout, true);
-            helper.setText(R.id.text_type, mContext.getString(R.string.main_account));
+            helper.setText(R.id.text_type, mContext.getString(R.string.account_main));
         } else if (walletType == Vm.WalletType.HARDWARE) {
             helper.setGone(R.id.type_layout, true);
-            helper.setText(R.id.text_type, item.getHardwareLabel());
+            if (!Strings.isNullOrEmpty(item.getHardwareLabel())){
+                helper.setText(R.id.text_type, item.getHardwareLabel());
+            }else {
+                helper.setText(R.id.text_type, mContext.getString(R.string.hardwares));
+            }
+
         } else if (walletType == Vm.WalletType.IMPORT_WATCH) {
             helper.setGone(R.id.type_layout, true);
             helper.setText(R.id.text_type, mContext.getString(R.string.watch));
-        } else {
+        }  else if (walletType == Vm.WalletType.STANDARD) {
+            helper.setVisible(R.id.type_layout, true);
+            helper.setText(R.id.text_type, mContext.getString(R.string.single));
+        }
+        else {
             helper.setGone(R.id.type_layout, false);
         }
         String address = item.getAddress();

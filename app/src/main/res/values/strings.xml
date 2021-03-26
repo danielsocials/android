@@ -1391,5 +1391,8 @@
     <string name="hint_warning_custom_fee_gasprice_too_big">Gas Price 太多，请保证账户有足够的余额</string>
     <string name="hint_warning_custom_fee_gasprice_too_small">Gas Price 太小，会导致交易上链缓慢</string>
     <string name="hint_warning_whether_continue">是否继续？</string>
+    <string name="account_main">主</string>
+    <string name="watch_account">观察账户</string>
+    <string name="hardware_account">硬件账户</string>
 
 </resources>

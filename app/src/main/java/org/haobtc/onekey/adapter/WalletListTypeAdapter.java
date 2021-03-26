@@ -7,17 +7,21 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.common.base.Strings;
 import com.noober.background.drawable.DrawableCreator;
-import java.util.List;
-import me.jessyan.autosize.utils.AutoSizeUtils;
+
 import org.haobtc.onekey.R;
 import org.haobtc.onekey.bean.WalletInfo;
 import org.haobtc.onekey.business.assetsLogo.AssetsLogo;
 import org.haobtc.onekey.constant.Vm;
 import org.haobtc.onekey.utils.ClipboardUtils;
+
+import java.util.List;
+
+import me.jessyan.autosize.utils.AutoSizeUtils;
 
 /** @Description: java类作用描述 @Author: peter Qin */
 public class WalletListTypeAdapter extends BaseMultiItemQuickAdapter<WalletInfo, BaseViewHolder> {
@@ -58,7 +62,7 @@ public class WalletListTypeAdapter extends BaseMultiItemQuickAdapter<WalletInfo,
                 view.setBackground(build);
                 if (item.mWalletType == Vm.WalletType.MAIN) {
                     helper.setVisible(R.id.type_layout, true);
-                    helper.setText(R.id.text_type, mContext.getString(R.string.main_account));
+                    helper.setText(R.id.text_type, mContext.getString(R.string.account_main));
                 } else if (item.mWalletType == Vm.WalletType.HARDWARE) {
                     helper.setVisible(R.id.type_layout, true);
                     if (!Strings.isNullOrEmpty(item.hardWareLabel)) {
@@ -69,6 +73,9 @@ public class WalletListTypeAdapter extends BaseMultiItemQuickAdapter<WalletInfo,
                 } else if (item.mWalletType == Vm.WalletType.IMPORT_WATCH) {
                     helper.setVisible(R.id.type_layout, true);
                     helper.setText(R.id.text_type, mContext.getString(R.string.watch));
+                } else if (item.mWalletType == Vm.WalletType.STANDARD) {
+                    helper.setVisible(R.id.type_layout, true);
+                    helper.setText(R.id.text_type, mContext.getString(R.string.single));
                 } else {
                     helper.setVisible(R.id.type_layout, false);
                 }

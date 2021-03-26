@@ -39,6 +39,14 @@ class DeviceManager private constructor(private val context: Context) {
     }
   }
 
+  fun getDeviceName(deviceId: String): String? {
+    val deviceInfo = getDeviceInfo(deviceId)
+    deviceInfo?.let {
+      return if (!Strings.isNullOrEmpty(deviceInfo.bleName)) deviceInfo.label else deviceInfo.bleName
+    }
+    return ""
+  }
+
   /**
    * 根据设备名称获取设备蓝牙 MacAddress
    *

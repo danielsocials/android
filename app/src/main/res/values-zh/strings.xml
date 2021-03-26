@@ -1336,4 +1336,6 @@
     <string name="account_main">主</string>
     <string name="watch_account">观察账户</string>
     <string name="hardware_account">硬件账户</string>
+    <string name="cannot_pair">Can\'t Pair With Your Device</string>
+    <string name="cannot_pair_device">可能是\"%s\"曾进行过重置并更换了助记词。请将原助记词导入此硬件钱包，然后再试一次。</string>
 </resources>

@@ -1,0 +1,12 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.4.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+  - repo: https://github.com/OneKeyHQ/google-style-precommit-hook
+    rev: e7990326dd4a22631bffca2bcf8abba49582f23e
+    hooks:
+    -   id: google-style-java

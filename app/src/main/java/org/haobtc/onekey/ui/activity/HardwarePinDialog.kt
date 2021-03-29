@@ -23,6 +23,7 @@ class HardwarePinDialog : DialogFragment(), HardwarePinFragment.HardwareTitleCha
     private const val EXT_PIN_ORIGIN = Constant.PIN_ORIGIN
 
     @JvmStatic
+    @JvmOverloads
     fun newInstance(@HardwarePinFragment.PinActionType action: String, originPin: String? = null): HardwarePinDialog {
       val hardwarePinDialog = HardwarePinDialog()
       val bundle = Bundle()

@@ -3,17 +3,14 @@ package org.haobtc.onekey.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+
 import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+
 import com.google.common.base.Strings;
 import com.lxj.xpopup.XPopup;
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.ObservableSource;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Function;
-import io.reactivex.rxjava3.schedulers.Schedulers;
+
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.haobtc.onekey.R;
@@ -32,13 +29,19 @@ import org.haobtc.onekey.onekeys.walletprocess.SelectChainCoinFragment;
 import org.haobtc.onekey.onekeys.walletprocess.SoftWalletNameSettingFragment;
 import org.haobtc.onekey.ui.base.BaseActivity;
 import org.haobtc.onekey.ui.dialog.custom.SelectWalletTypeDialog;
-import org.haobtc.onekey.ui.fragment.DevicePINFragment;
 import org.haobtc.onekey.utils.ToastUtils;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableSource;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class CreateHardWalletActivity extends BaseActivity
         implements SelectChainCoinFragment.OnSelectCoinTypeCallback,
-                SoftWalletNameSettingFragment.OnSetWalletNameCallback,
-                OnFinishViewCallBack {
+        SoftWalletNameSettingFragment.OnSetWalletNameCallback,
+        OnFinishViewCallBack {
 
     private ActivityCreateHardwareWalletNewBinding mBinding;
     private NavController mNavController;
@@ -121,7 +124,8 @@ public class CreateHardWalletActivity extends BaseActivity
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onButtonRequest(ButtonRequestEvent event) {
         if (PyConstant.PIN_CURRENT == event.getType()) {
-            startFragment(new DevicePINFragment(PyConstant.PIN_CURRENT));
+            HardwarePinDialog dialog = HardwarePinDialog.newInstance(HardwarePinFragment.PinActionType.VERIFY_PIN);
+            dialog.show(getSupportFragmentManager(), "");
         }
     }
 

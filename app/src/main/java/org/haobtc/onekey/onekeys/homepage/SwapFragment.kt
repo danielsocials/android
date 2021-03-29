@@ -44,15 +44,6 @@ class SwapFragment : BaseFragment() {
 
     mBinding.layoutFragmentContainer
     mAppWalletViewModel = ViewModelProvider(MyApplication.getInstance()).get(AppWalletViewModel::class.java)
-
-    mBinding.layoutSwipeRefresh.setOnRefreshListener {
-      if (!checkAccount()) {
-        dappBrowserFragment?.refreshEvent()
-      }
-      mBinding.layoutSwipeRefresh.postDelayed({
-        mBinding.layoutSwipeRefresh.isRefreshing = false
-      }, 1500)
-    }
   }
 
   override fun setUserVisibleHint(isVisibleToUser: Boolean) {

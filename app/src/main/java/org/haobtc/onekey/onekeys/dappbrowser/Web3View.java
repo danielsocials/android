@@ -48,6 +48,7 @@ public class Web3View extends WebView {
 
     public Web3View(@NonNull Context context) {
         super(context);
+        init();
     }
 
     public Web3View(@NonNull Context context, @Nullable AttributeSet attrs) {

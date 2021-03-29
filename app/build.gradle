@@ -157,29 +157,6 @@ android {
         variant.outputs.all {
             outputFileName = "bixin-${variant.versionCode}-${variant.productFlavors[0].name}-${variant.productFlavors[1].name}-${variant.buildType.name}.apk"
         }
-
-        // release 自增 version.properties
-        def obj
-        if (variant.hasProperty('assembleProvider')) {
-            obj = variant.assembleProvider.get()
-        } else {
-            obj = variant.assemble
-        }
-        obj.doLast { assemble ->
-            if (assemble.name.toLowerCase().contains("release")) {
-                println("release: version.properties increment")
-                File versionPropsFile = file('version.properties')
-                if (versionPropsFile.canRead()) {
-                    Properties versionProps = new Properties()
-                    versionProps.load(new FileInputStream(versionPropsFile))
-                    int version = versionProps['VERSION_CODE'].toInteger() + 1
-                    versionProps['VERSION_CODE'] = version.toString()
-                    versionProps.store(versionPropsFile.newWriter(), null)
-                } else {
-                    throw new GradleException("Could not read version.properties!")
-                }
-            }
-        }
     }
 
     packagingOptions {

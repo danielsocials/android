@@ -24,6 +24,7 @@ import com.zy.multistatepage.state.SuccessState
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
+import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.haobtc.onekey.BuildConfig
@@ -245,6 +246,18 @@ class DappBrowserFragment : BaseFragment(),
     outState.putBoolean(EXT_DAPP_MODE, arguments?.getBoolean(EXT_DAPP_MODE) ?: true)
   }
 
+  fun registerEventBus() {
+    if (!EventBus.getDefault().isRegistered(this)) {
+      EventBus.getDefault().register(this)
+    }
+  }
+
+  fun unregisterEventBus() {
+    if (EventBus.getDefault().isRegistered(this)) {
+      EventBus.getDefault().unregister(this)
+    }
+  }
+
   override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     when (requestCode) {
@@ -260,6 +273,7 @@ class DappBrowserFragment : BaseFragment(),
       savedInstanceState?.getBoolean(EXT_DAPP_MODE, true) ?: true
     }
     if (!mode) {
+      unregisterEventBus()
       mBinding.layoutTopBar.visibility = View.GONE
     }
   }

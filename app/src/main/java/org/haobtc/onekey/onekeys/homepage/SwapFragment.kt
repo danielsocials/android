@@ -20,7 +20,7 @@ class SwapFragment : BaseFragment() {
 
   private lateinit var mBinding: FragmentTabSwapBinding
   private var mAppWalletViewModel: AppWalletViewModel? = null
-  private lateinit var dappBrowserFragment: DappBrowserFragment
+  private var dappBrowserFragment: DappBrowserFragment? = null
 
   override fun getContentViewId() = 0
 
@@ -39,7 +39,7 @@ class SwapFragment : BaseFragment() {
     dappBrowserFragment = DappBrowserFragment.start("https://swap.onekey.so/#/swap", browserMode = false)
 
     childFragmentManager.beginTransaction()
-        .add(R.id.layout_fragment_container, dappBrowserFragment)
+        .add(R.id.layout_fragment_container, dappBrowserFragment!!)
         .commitAllowingStateLoss()
 
     mBinding.layoutFragmentContainer
@@ -47,7 +47,7 @@ class SwapFragment : BaseFragment() {
 
     mBinding.layoutSwipeRefresh.setOnRefreshListener {
       if (!checkAccount()) {
-        dappBrowserFragment.refreshEvent()
+        dappBrowserFragment?.refreshEvent()
       }
       mBinding.layoutSwipeRefresh.postDelayed({
         mBinding.layoutSwipeRefresh.isRefreshing = false
@@ -59,6 +59,9 @@ class SwapFragment : BaseFragment() {
     super.setUserVisibleHint(isVisibleToUser)
     if (isVisibleToUser) {
       checkAccount()
+      dappBrowserFragment?.registerEventBus()
+    } else {
+      dappBrowserFragment?.unregisterEventBus()
     }
   }
 
@@ -74,7 +77,7 @@ class SwapFragment : BaseFragment() {
           setPrimaryButtonListener {
             dismiss()
             SelectAccountBottomSheetDialog.newInstance(arrayListOf(Vm.CoinType.ETH, Vm.CoinType.BSC))
-                .setOnSelectAccountCallback { dappBrowserFragment.refreshEvent() }
+                .setOnSelectAccountCallback { dappBrowserFragment?.refreshEvent() }
                 .show(
                     parentFragmentManager,
                     "SelectAccount")

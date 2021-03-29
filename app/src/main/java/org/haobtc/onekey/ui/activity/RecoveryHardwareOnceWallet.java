@@ -4,14 +4,10 @@ import android.content.Intent;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
-import butterknife.BindView;
-import butterknife.OnClick;
+
 import com.google.common.base.Strings;
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.core.SingleOnSubscribe;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
+import com.orhanobut.logger.Logger;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -32,6 +28,15 @@ import org.haobtc.onekey.ui.fragment.DevicePINFragment;
 import org.haobtc.onekey.ui.fragment.RecoveryWalletFromHdFragment;
 import org.haobtc.onekey.ui.fragment.RecoveryWalletFromHdFragment.OnFindWalletInfoCallback;
 import org.haobtc.onekey.ui.fragment.RecoveryWalletFromHdFragment.OnFindWalletInfoProvider;
+import org.haobtc.onekey.utils.Utils;
+
+import butterknife.BindView;
+import butterknife.OnClick;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleOnSubscribe;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * @author liyan
@@ -75,6 +80,7 @@ public class RecoveryHardwareOnceWallet extends BaseActivity implements OnFindWa
                                                             MyApplication.getInstance()
                                                                     .getDeviceWay(),
                                                             PyConstant.ADDRESS_TYPE_P2WPKH);
+                                            Utils.finishActivity(InputPinOnHardware.class);
                                             if (Strings.isNullOrEmpty(response.getErrors())) {
                                                 emitter.onSuccess(response);
                                             } else {
@@ -89,7 +95,6 @@ public class RecoveryHardwareOnceWallet extends BaseActivity implements OnFindWa
                                 this::dealWithResponse,
                                 throwable -> {
                                     if (!Strings.isNullOrEmpty(throwable.getMessage())) {
-
                                         mToast(throwable.getMessage());
                                     }
                                     finish();

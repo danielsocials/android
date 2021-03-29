@@ -64,13 +64,16 @@ class SwapFragment : BaseFragment() {
 
   private fun checkAccount(): Boolean {
     mAppWalletViewModel?.currentWalletAccountInfo?.value?.let { currentWalletAccountInfo ->
-      if (currentWalletAccountInfo.coinType != Vm.CoinType.ETH) {
+      if (currentWalletAccountInfo.coinType != Vm.CoinType.ETH
+          && currentWalletAccountInfo.coinType != Vm.CoinType.BSC) {
         BaseAlertBottomDialog(requireContext()).apply {
-          setTitle(getString(R.string.title_account_unavailable, Vm.CoinType.ETH.coinName))
-          setMessage(getString(R.string.hint_onekey_swap_account_unavailable_content, Vm.CoinType.ETH.coinName))
+          setTitle(getString(R.string.title_account_unavailable,
+              "${Vm.CoinType.ETH.coinName}/${Vm.CoinType.BSC.coinName}"))
+          setMessage(getString(R.string.hint_onekey_swap_account_unavailable_content,
+              "${Vm.CoinType.ETH.coinName}/${Vm.CoinType.BSC.coinName}"))
           setPrimaryButtonListener {
             dismiss()
-            SelectAccountBottomSheetDialog.newInstance(Vm.CoinType.ETH)
+            SelectAccountBottomSheetDialog.newInstance(arrayListOf(Vm.CoinType.ETH, Vm.CoinType.BSC))
                 .setOnSelectAccountCallback { dappBrowserFragment.refreshEvent() }
                 .show(
                     parentFragmentManager,

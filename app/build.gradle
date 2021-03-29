@@ -26,7 +26,7 @@ android {
             throw new GradleException("Couldn't find version number")
         }
 
-        def TRAVIS_BUILD_NUMBER = System.getenv("TRAVIS_BUILD_NUMBER") ?: "0"
+        def TRAVIS_BUILD_NUMBER = System.getenv("TRAVIS_BUILD_NUMBER") ?: "600"
         def BUILD_NUM = TRAVIS_BUILD_NUMBER.toInteger()
         def verParsed = ecVersion.split(/\./).collect { Integer.parseInt(it) }
         versionCode = (verParsed[0] * 1000000) + (verParsed[1] * 10000) + BUILD_NUM

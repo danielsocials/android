@@ -1,5 +1,8 @@
 # Electrum Android app
 
+ [![](https://github.com/OneKeyHQ/android/workflows/android%20release%20build/badge.svg)](https://github.com/OneKeyHQ/android/actions/workflows/android-release.yml)
+ [![](https://github.com/OneKeyHQ/android/workflows/android%20pull%20request%20build/badge.svg)](https://github.com/OneKeyHQ/android/actions/workflows/android-pr.yml)
+  
 
 ## Release
 

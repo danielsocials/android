@@ -40,17 +40,18 @@ public class HomeOneKeyActivity extends BaseActivity implements SetOnBackCallbac
     private long firstTime = 0;
 
     private String[] mTitles;
+
     private int[] mIconUnSelectIds = {
-            R.drawable.wallet_normal,
-            R.drawable.wallet_tab_swap_un,
-            R.drawable.wallet_tab_find_un,
-            R.mipmap.mindno
+        R.drawable.vector_wallet_normal,
+        R.drawable.vector_swap_normal,
+        R.drawable.vector_find_normal,
+        R.drawable.vector_mine_normal
     };
     private int[] mIconSelectIds = {
-            R.drawable.wallet_highlight,
-            R.drawable.wallet_tab_swap,
-            R.drawable.wallet_tab_find,
-            R.mipmap.mindyes
+        R.drawable.vector_wallet_light,
+        R.drawable.vector_swap_light,
+        R.drawable.vector_find_light,
+        R.drawable.vector_mine_light
     };
     private FragmentMainAdapter fragmentMainAdapter;
     private ArrayList<CustomTabEntity> mTabEntities;
@@ -86,10 +87,10 @@ public class HomeOneKeyActivity extends BaseActivity implements SetOnBackCallbac
     private void initPage() {
         mTitles =
                 new String[] {
-                        getString(R.string.wallet),
-                        getString(R.string.tab_swap),
-                        getString(R.string.tab_found),
-                        getString(R.string.mind)
+                    getString(R.string.wallet),
+                    getString(R.string.tab_swap),
+                    getString(R.string.tab_found),
+                    getString(R.string.mind)
                 };
         mTabEntities = new ArrayList<>();
         fragmentMainAdapter = new FragmentMainAdapter(getSupportFragmentManager(), mTitles);

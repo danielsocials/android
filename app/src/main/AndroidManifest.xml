@@ -727,6 +727,7 @@
         <activity
             android:name=".ui.activity.CreateHardWalletActivity"
             android:screenOrientation="portrait" />
+        <meta-data android:name="io.sentry.dsn" android:value="https://baf0341cd75943e2ad3678072afe3d40@o554666.ingest.sentry.io/5698994" />
     </application>
 
 </manifest>

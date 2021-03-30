@@ -133,13 +133,6 @@ public final class PyEnv {
         loadLocalWalletInfo();
     }
 
-    private static void initChaquo() {
-        if (!Python.isStarted()) {
-            Python.start(new AndroidPlatform(MyApplication.getInstance()));
-        }
-        Global.py = Python.getInstance();
-    }
-
     public static PyObject initCommands() {
         if (sCommands == null) {
             try {

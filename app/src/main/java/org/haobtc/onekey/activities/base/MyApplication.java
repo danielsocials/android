@@ -5,27 +5,29 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.lifecycle.ViewModelStore;
 import androidx.lifecycle.ViewModelStoreOwner;
-import cn.com.heaton.blelibrary.ble.Ble;
-import com.chaquo.python.Python;
-import com.chaquo.python.android.AndroidPlatform;
+
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.tencent.bugly.crashreport.CrashReport;
-import io.reactivex.rxjava3.plugins.RxJavaPlugins;
-import java.util.UUID;
-import me.jessyan.autosize.AutoSizeConfig;
+
 import org.greenrobot.eventbus.EventBus;
 import org.haobtc.onekey.BuildConfig;
 import org.haobtc.onekey.MyEventBusIndex;
 import org.haobtc.onekey.constant.Constant;
 import org.haobtc.onekey.constant.StringConstant;
 import org.haobtc.onekey.manager.PreferencesManager;
-import org.haobtc.onekey.utils.Global;
 import org.haobtc.onekey.utils.Utils;
+
+import java.util.UUID;
+
+import cn.com.heaton.blelibrary.ble.Ble;
+import io.reactivex.rxjava3.plugins.RxJavaPlugins;
+import me.jessyan.autosize.AutoSizeConfig;
 import zendesk.answerbot.AnswerBot;
 import zendesk.core.AnonymousIdentity;
 import zendesk.core.Identity;
@@ -117,12 +119,6 @@ public class MyApplication extends Application implements ViewModelStoreOwner {
                 .create(this);
     }
 
-    private void initChaquo() {
-        if (!Python.isStarted()) {
-            Python.start(new AndroidPlatform(mInstance));
-        }
-        Global.py = Python.getInstance();
-    }
 
     public String getDeviceWay() {
         return (String)

@@ -44,6 +44,16 @@ class BaseAlertBottomDialog @JvmOverloads constructor(context: Context, @StyleRe
       setWindowAnimations(R.style.AnimBottom)
       addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
       navigationBarColor = Color.WHITE
+
+      decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+      decorView.setOnSystemUiVisibilityChangeListener {
+        val uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or  //布局位于状态栏下方
+            View.SYSTEM_UI_FLAG_FULLSCREEN or  //隐藏导航栏
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+            0x00001000
+        window?.decorView?.systemUiVisibility = uiOptions
+      }
     }
     mBinding.tvButtonSecondary.setOnClickListener { v: View? ->
       mSecondaryButtonListener?.onClick(v)

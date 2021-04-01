@@ -354,6 +354,11 @@ class DappBrowserFragment : BaseFragment(),
 
   private fun collectionDapp() {
     val webUrl = web3.url
+    val webTitle = if (mCurrentWebpageTitle.isNullOrEmpty()) {
+      URLUtils.removeQuery(webUrl)
+    } else {
+      mCurrentWebpageTitle
+    }
     Single
         .fromCallable {
           val uuid = generateDappUuid(mDAppBean?.uuid ?: webUrl)
@@ -365,7 +370,7 @@ class DappBrowserFragment : BaseFragment(),
           DappCollectionDO(
               uuid = uuid,
               type = type,
-              name = mDAppBean?.name ?: URLUtils.removeHTTPProtocol(webUrl),
+              name = mDAppBean?.name ?: webTitle,
               img = mDAppBean?.img ?: URLUtils.getWebFavicon(webUrl),
               url = mDAppBean?.url ?: URLUtils.removeQuery(webUrl),
               chain = mDAppBean?.chain,
@@ -989,6 +994,7 @@ class DappBrowserFragment : BaseFragment(),
 
   override fun onWebpageLoaded(url: String?, title: String?) {
     if (context == null) return  //could be a late return from dead fragment
+    this.mCurrentWebpageTitle = title
     onWebpageLoadComplete()
   }
 

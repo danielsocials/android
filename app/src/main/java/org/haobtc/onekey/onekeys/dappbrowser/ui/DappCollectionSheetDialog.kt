@@ -144,7 +144,7 @@ class CollectionAdapter : ListAdapter<DappCollectionDO, CollectionAdapter.Collec
   override fun onBindViewHolder(holder: CollectionViewHolder, position: Int) {
     val item = getItem(position)
     holder.bind.tvDappName.text = item.name ?: item.url
-    holder.bind.tvDappContent.text = item.description ?: item.subtitle ?: item.url
+    holder.bind.tvDappContent.text = item.subtitle ?: item.description ?: item.url
 
     Glide.with(holder.itemView).load(item.img
         ?: URLUtils.getWebFavicon(item.url)).placeholder(R.drawable.vector_dapp_default_ic)

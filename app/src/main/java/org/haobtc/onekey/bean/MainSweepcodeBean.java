@@ -1,6 +1,7 @@
 package org.haobtc.onekey.bean;
 
 import com.google.gson.annotations.SerializedName;
+import java.util.List;
 import org.haobtc.onekey.constant.Vm;
 
 public class MainSweepcodeBean {
@@ -45,17 +46,11 @@ public class MainSweepcodeBean {
         @SerializedName("amount")
         private String amount;
 
-        @SerializedName("message")
-        private String message;
-
-        @SerializedName("time")
-        private int time;
-
         @SerializedName("address")
         private String address;
 
-        @SerializedName("memo")
-        private String memo;
+        @SerializedName("selection")
+        private List<SelectionBean> selection;
 
         public String getAmount() {
             return amount;
@@ -63,22 +58,6 @@ public class MainSweepcodeBean {
 
         public void setAmount(String amount) {
             this.amount = amount;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
-
-        public int getTime() {
-            return time;
-        }
-
-        public void setTime(int time) {
-            this.time = time;
         }
 
         public String getAddress() {
@@ -89,14 +68,6 @@ public class MainSweepcodeBean {
             this.address = address;
         }
 
-        public String getMemo() {
-            return memo;
-        }
-
-        public void setMemo(String memo) {
-            this.memo = memo;
-        }
-
         public Vm.CoinType getCoin() {
             return Vm.CoinType.convertByCallFlag(coin);
         }
@@ -105,8 +76,44 @@ public class MainSweepcodeBean {
             this.coin = coin;
         }
 
+        public List<SelectionBean> getSelection() {
+            return selection;
+        }
+
+        public void setSelection(List<SelectionBean> selection) {
+            this.selection = selection;
+        }
+
         public Boolean isEmpty() {
             return coin == null || address == null;
+        }
+    }
+
+    // {"coin": "btc", "prefix": "bitcoin", "format": "b58"}
+    public static class SelectionBean {
+        @SerializedName("coin")
+        private String coin;
+
+        @SerializedName("prefix")
+        private String prefix;
+
+        @SerializedName("format")
+        private String format;
+
+        public void setCoin(String coin) {
+            this.coin = coin;
+        }
+
+        public String getPrefix() {
+            return prefix;
+        }
+
+        public void setPrefix(String prefix) {
+            this.prefix = prefix;
+        }
+
+        public Vm.CoinType getCoin() {
+            return Vm.CoinType.convertByCallFlag(coin);
         }
     }
 }

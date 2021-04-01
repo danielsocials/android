@@ -135,8 +135,18 @@ class SelectAccountBottomSheetDialog : BottomSheetDialogFragment() {
   }
 
   private fun initData() {
-    val coinList = arguments?.getStringArray(EXT_DATA)?.map { Vm.CoinType.convertByCallFlag(it) }
     val selectCoin = arguments?.getString(EXT_DATA_SELECT)
+    var coinList = arguments?.getStringArray(EXT_DATA)?.map { Vm.CoinType.convertByCallFlag(it) }
+
+    if (coinList?.isEmpty() == true) {
+      selectCoin?.let {
+        coinList = arrayListOf(Vm.CoinType.convertByCallFlag(it))
+      }
+    }
+
+    if (coinList?.isEmpty() == true && selectCoin != null) {
+      return
+    }
 
     val index = if (selectCoin == null) {
       0

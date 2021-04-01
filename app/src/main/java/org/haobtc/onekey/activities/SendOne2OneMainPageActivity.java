@@ -864,14 +864,13 @@ public class SendOne2OneMainPageActivity extends BaseActivity
                                 MainSweepcodeBean.DataBean listData = mainSweepcodeBean.getData();
                                 String address = listData.getAddress();
                                 String sendAmount = listData.getAmount();
-                                String message = listData.getMessage();
                                 editAddress.setText(address);
                                 if (!TextUtils.isEmpty(sendAmount)) {
                                     String amount =
                                             sendAmount.substring(0, sendAmount.indexOf(" "));
                                     tetamount.setText(amount);
                                 }
-                                editTextComments.setText(message);
+                                editTextComments.setText("");
                             } else {
                                 mToast(getString(R.string.address_wrong));
                             }

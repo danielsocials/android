@@ -826,7 +826,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                 MainSweepcodeBean.DataBean listData = mainSweepcodeBean.getData();
                                 String address = listData.getAddress();
                                 String sendAmount = listData.getAmount();
-                                String message = listData.getMessage();
                                 // address  -->  intent  send  activity
                                 Intent intent =
                                         new Intent(
@@ -834,7 +833,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                                 SendOne2OneMainPageActivity.class);
                                 intent.putExtra("sendAdress", address);
                                 intent.putExtra("sendamount", sendAmount);
-                                intent.putExtra("sendmessage", message);
+                                intent.putExtra("sendmessage", "");
                                 intent.putExtra("wallet_name", strNames);
                                 startActivity(intent);
                             } else if (type == 2) {

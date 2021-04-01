@@ -5,6 +5,7 @@ import android.content.Intent
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
+import com.orhanobut.logger.Logger
 import com.yzq.zxinglibrary.android.CaptureActivity
 import com.yzq.zxinglibrary.bean.ZxingConfig
 import com.yzq.zxinglibrary.common.Constant
@@ -66,6 +67,7 @@ class OnekeyScanQrActivity : CaptureActivity() {
           if (parseQrCode.errors?.isNotEmpty() == true) {
             it.onError(RuntimeException(parseQrCode.errors))
           } else {
+            Logger.e("scan code: ${parseQrCode.result ?: ""}")
             it.onSuccess(parseQrCode.result ?: "")
           }
         }
@@ -106,8 +108,10 @@ class OnekeyScanQrActivity : CaptureActivity() {
    * 转账跳转
    */
   private fun showAccountSelect(dataBean: MainSweepcodeBean.DataBean, rawResult: String?) {
+    val coins = dataBean.selection.map { it.coin }.toList()
+
     SelectAccountBottomSheetDialog
-        .newInstance(dataBean.coin.chainType, dataBean.coin)
+        .newInstance(coins, dataBean.coin)
         .setOnDismissListener {
           handler.restartPreviewAndDecodeDelayed(500)
         }

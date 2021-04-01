@@ -14,8 +14,6 @@ import cn.com.heaton.blelibrary.ble.model.BleDevice;
 import com.alibaba.fastjson.JSON;
 import com.chaquo.python.Kwarg;
 import com.chaquo.python.PyObject;
-import com.chaquo.python.Python;
-import com.chaquo.python.android.AndroidPlatform;
 import com.google.common.base.Strings;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -1885,6 +1883,19 @@ public final class PyEnv {
             RPCInfoBean token = new Gson().fromJson(result, RPCInfoBean.class);
             response.setResult(token);
         } catch (Exception e) {
+            Exception exception = PyEnvException.convert(e);
+            response.setErrors(exception.getMessage());
+        }
+        return response;
+    }
+
+    public static PyResponse<String> ethSendTx(String txHex) {
+        PyResponse<String> response = new PyResponse<>();
+        try {
+            String result = sCommands.callAttr("dapp_eth_send_tx", txHex).toString();
+            response.setResult(result);
+        } catch (Exception e) {
+            e.printStackTrace();
             Exception exception = PyEnvException.convert(e);
             response.setErrors(exception.getMessage());
         }

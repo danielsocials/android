@@ -53,10 +53,13 @@ class DappWeb3Manager {
           }
           it
         }
+        .map {
+          PyEnv.ethSendTx(it.raw).result
+        }
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe({
-          callback.transactionSuccess(transaction, it.raw)
+          callback.transactionSuccess(transaction, it)
         }, {
           callback.transactionError(transaction.leafPosition, PyEnvException.convert(it))
         })

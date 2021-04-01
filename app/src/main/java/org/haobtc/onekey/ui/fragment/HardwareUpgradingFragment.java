@@ -1,42 +1,44 @@
 package org.haobtc.onekey.ui.fragment;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.OnClick;
-import java.util.Objects;
+import android.view.ViewGroup;
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.common.base.Strings;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.haobtc.onekey.R;
 import org.haobtc.onekey.bean.UpdateSuccessEvent;
-import org.haobtc.onekey.constant.Constant;
-import org.haobtc.onekey.event.ExitEvent;
-import org.haobtc.onekey.event.RefreshViewEvent;
-import org.haobtc.onekey.event.UpdatingEvent;
+import org.haobtc.onekey.databinding.FragmentHardwareUpgradingBinding;
+import org.haobtc.onekey.event.HardWareUpdateEvent;
+import org.haobtc.onekey.event.UpdateEvent;
+import org.haobtc.onekey.ui.activity.HardwareUpgradeActivity;
 import org.haobtc.onekey.ui.base.BaseFragment;
+import org.haobtc.onekey.ui.custom.UpdateLoadingView;
 
 /**
  * @author liyan
- * @date 12/3/20
+ * @date 12/3/20 update 1/4 peter
  */
 public class HardwareUpgradingFragment extends BaseFragment {
 
-    @BindView(R.id.promote)
-    TextView promote;
+    private FragmentHardwareUpgradingBinding mBinding;
+    private HardwareUpgradeActivity mActivity;
 
-    @BindView(R.id.progressBar)
-    ProgressBar progressBar;
+    @IntDef({
+        HardwareType.BLE,
+        HardwareType.FIRMWARE,
+    })
+    public @interface HardwareType {
+        int BLE = 0;
+        int FIRMWARE = 1;
+    }
 
-    @BindView(R.id.progress_promote)
-    TextView progressPromote;
-
-    @BindView(R.id.complete)
-    Button complete;
-
-    private int promoteId;
+    private boolean mInstallComplete = false;
 
     /**
      * init views
@@ -45,9 +47,42 @@ public class HardwareUpgradingFragment extends BaseFragment {
      */
     @Override
     public void init(View view) {
-        promoteId = getArguments().getInt(Constant.TAG_HARDWARE_TYPE_PROMOTE_ID);
-        promote.setText(promoteId);
-        progressBar.setIndeterminate(true);
+        if (getActivity() instanceof HardwareUpgradeActivity) {
+            mActivity = (HardwareUpgradeActivity) getActivity();
+        }
+        mBinding.confirmButton.setEnabled(false);
+        mBinding.confirmButton.setTextColor(getResources().getColor(R.color.color_4DFFFFFF));
+        if (!Strings.isNullOrEmpty(HardwareUpgradeActivity.newFirmwareVersion)
+                && !Strings.isNullOrEmpty(HardwareUpgradeActivity.newBleVersion)) {
+            // have firmware and ble upload
+            mBinding.downloadBle.setStatus(UpdateLoadingView.DownLodStatus.START);
+            mBinding.installBle.setStatus(UpdateLoadingView.DownLodStatus.PREPARE);
+            mBinding.downloadFirmware.setStatus(UpdateLoadingView.DownLodStatus.PREPARE);
+            mBinding.installFirmware.setStatus(UpdateLoadingView.DownLodStatus.PREPARE);
+            mBinding.installFirmware.setLineVisibility(View.GONE);
+            EventBus.getDefault().post(new UpdateEvent(UpdateEvent.BLE));
+        } else if (!Strings.isNullOrEmpty(HardwareUpgradeActivity.newFirmwareVersion)
+                && Strings.isNullOrEmpty(HardwareUpgradeActivity.newBleVersion)) {
+            // only have firmware upload
+            mBinding.bleLayout.setVisibility(View.GONE);
+            mBinding.downloadFirmware.setStatus(UpdateLoadingView.DownLodStatus.START);
+            mBinding.installFirmware.setStatus(UpdateLoadingView.DownLodStatus.PREPARE);
+            mBinding.installFirmware.setLineVisibility(View.GONE);
+            EventBus.getDefault().post(new UpdateEvent(UpdateEvent.FIRMWARE));
+        } else if (!Strings.isNullOrEmpty(HardwareUpgradeActivity.newBleVersion)
+                && Strings.isNullOrEmpty(HardwareUpgradeActivity.newFirmwareVersion)) {
+            // only have ble upload
+            mBinding.firmwareLayout.setVisibility(View.GONE);
+            mBinding.downloadBle.setStatus(UpdateLoadingView.DownLodStatus.START);
+            mBinding.installBle.setStatus(UpdateLoadingView.DownLodStatus.PREPARE);
+            mBinding.installBle.setLineVisibility(View.GONE);
+            EventBus.getDefault().post(new UpdateEvent(UpdateEvent.BLE));
+        }
+
+        mBinding.confirmButton.setOnClickListener(
+                v -> {
+                    mActivity.showUpdateComplete();
+                });
     }
 
     /**
@@ -57,34 +92,116 @@ public class HardwareUpgradingFragment extends BaseFragment {
      */
     @Override
     public int getContentViewId() {
-        return R.layout.hardware_upgrading_fragment;
+        return 0;
     }
 
-    @OnClick(R.id.complete)
-    public void onViewClicked(View view) {
-        EventBus.getDefault().post(new ExitEvent());
+    @Override
+    public boolean enableViewBinding() {
+        return true;
     }
 
-    public ProgressBar getProgressBar() {
-        return progressBar;
+    @Nullable
+    @Override
+    public View getLayoutView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
+        mBinding = FragmentHardwareUpgradingBinding.inflate(inflater, container, false);
+        return mBinding.getRoot();
+    }
+
+    private void setBleDownProgress(int progress) {
+        if (progress == 100) {
+            mBinding.downloadBle.setStatus(UpdateLoadingView.DownLodStatus.DONE);
+            mBinding.downloadBle.setProgressShow(getString(R.string.download_complete));
+            mBinding.installBle.setStatus(UpdateLoadingView.DownLodStatus.START);
+            mBinding.installBle.setProgressShow(getString(R.string.install_now));
+        } else {
+            mBinding.downloadBle.setStatus(UpdateLoadingView.DownLodStatus.START);
+            mBinding.downloadBle.setProgressShow(
+                    String.format(getString(R.string.download_now) + "%d%%", progress));
+        }
+    }
+
+    private void setBleInstallProgress(int progress) {
+        if (progress == 100) {
+            mBinding.installBle.setStatus(UpdateLoadingView.DownLodStatus.DONE);
+            mBinding.installBle.setProgressShow(getString(R.string.install_complete));
+            mInstallComplete = true;
+            if (!Strings.isNullOrEmpty(HardwareUpgradeActivity.newFirmwareVersion)) {
+                mBinding.downloadFirmware.setStatus(UpdateLoadingView.DownLodStatus.START);
+            }
+        } else {
+            mBinding.installBle.setProgressShow(
+                    String.format(getString(R.string.install_now) + "%d%%", progress));
+            mBinding.installBle.setStatus(UpdateLoadingView.DownLodStatus.START);
+        }
+
+        if (mBinding.downloadBle.getIsProgress()) {
+            mBinding.downloadBle.setStatus(UpdateLoadingView.DownLodStatus.DONE);
+            mBinding.downloadBle.setProgressShow(getString(R.string.download_complete));
+        }
+    }
+
+    private void setFirmWareInstallProgress(int progress) {
+
+        if (progress == 100) {
+            mBinding.installFirmware.setStatus(UpdateLoadingView.DownLodStatus.DONE);
+            mBinding.installFirmware.setProgressShow(getString(R.string.install_complete));
+            mInstallComplete = true;
+        } else {
+            mBinding.installFirmware.setStatus(UpdateLoadingView.DownLodStatus.START);
+            mBinding.installFirmware.setProgressShow(
+                    String.format(getString(R.string.install_now) + "%d%%", progress));
+        }
+        if (mBinding.downloadFirmware.getIsProgress()) {
+            mBinding.downloadFirmware.setStatus(UpdateLoadingView.DownLodStatus.DONE);
+            mBinding.downloadFirmware.setProgressShow(getString(R.string.download_complete));
+        }
+    }
+
+    private void setFirmWareDownProgress(int progress) {
+        if (progress == 100) {
+            mBinding.downloadFirmware.setStatus(UpdateLoadingView.DownLodStatus.DONE);
+            mBinding.installFirmware.setStatus(UpdateLoadingView.DownLodStatus.START);
+            mBinding.downloadFirmware.setProgressShow(getString(R.string.download_complete));
+            mBinding.installFirmware.setProgressShow(getString(R.string.install_now));
+        } else {
+            mBinding.downloadFirmware.setStatus(UpdateLoadingView.DownLodStatus.START);
+            mBinding.downloadFirmware.setProgressShow(
+                    String.format(getString(R.string.download_now) + "%d%%", progress));
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onUpdatedSuccess(UpdateSuccessEvent event) {
-        if (Objects.isNull(progressPromote)) {
-            return;
+    public void onUpdatedSuccess(UpdateSuccessEvent event) {}
+
+    /**
+     * event.status : 0--> start download ;1--> start install
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUpdating(HardWareUpdateEvent event) {
+        if (event.hardwareType == HardwareType.BLE) {
+            if (event.status == 0) {
+                setBleDownProgress(event.progress);
+            } else {
+                setBleInstallProgress(event.progress);
+            }
+        } else if (event.hardwareType == HardwareType.FIRMWARE) {
+            if (event.status == 0) {
+                setFirmWareDownProgress(event.progress);
+            } else {
+                setFirmWareInstallProgress(event.progress);
+            }
         }
-        EventBus.getDefault().post(new RefreshViewEvent(promoteId));
-        progressPromote.setText(R.string.updated);
-        complete.setEnabled(true);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onUpdating(UpdatingEvent event) {
-        EventBus.getDefault().removeStickyEvent(event);
-        if (Objects.nonNull(progressPromote)) {
-            progressPromote.setText(R.string.updating);
-        }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUpdating(UpdateSuccessEvent event) {
+        mBinding.confirmButton.setEnabled(true);
+        mBinding.confirmButton.setTextColor(getResources().getColor(R.color.white));
     }
 
     @Override

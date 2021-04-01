@@ -1,7 +1,5 @@
 package org.haobtc.onekey.ui.activity;
 
-import static java.net.HttpURLConnection.HTTP_OK;
-
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -31,14 +29,12 @@ import no.nordicsemi.android.dfu.DfuProgressListenerAdapter;
 import no.nordicsemi.android.dfu.DfuServiceInitiator;
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 import okhttp3.Call;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
+import okhttp3.Callback;
 import okhttp3.Response;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.haobtc.onekey.R;
-import org.haobtc.onekey.aop.SingleClick;
 import org.haobtc.onekey.bean.HardwareFeatures;
 import org.haobtc.onekey.bean.PyResponse;
 import org.haobtc.onekey.bean.UpdateSuccessEvent;
@@ -48,17 +44,17 @@ import org.haobtc.onekey.dfu.service.DfuService;
 import org.haobtc.onekey.event.ButtonRequestEvent;
 import org.haobtc.onekey.event.ChangePinEvent;
 import org.haobtc.onekey.event.ExceptionEvent;
-import org.haobtc.onekey.event.ExitEvent;
+import org.haobtc.onekey.event.HardWareUpdateEvent;
 import org.haobtc.onekey.event.NotifySuccessfulEvent;
-import org.haobtc.onekey.event.PinInputComplete;
 import org.haobtc.onekey.event.UpdateEvent;
-import org.haobtc.onekey.event.UpdatingEvent;
 import org.haobtc.onekey.exception.HardWareExceptions;
 import org.haobtc.onekey.manager.BleManager;
 import org.haobtc.onekey.manager.PyEnv;
+import org.haobtc.onekey.onekeys.dappbrowser.ui.BaseAlertBottomDialog;
 import org.haobtc.onekey.ui.base.BaseActivity;
 import org.haobtc.onekey.ui.fragment.HardwareUpgradeFragment;
 import org.haobtc.onekey.ui.fragment.HardwareUpgradingFragment;
+import org.haobtc.onekey.utils.OKHttpUtils;
 
 /**
  * @author liyan
@@ -71,11 +67,11 @@ public class HardwareUpgradeActivity extends BaseActivity {
     // 当前固件版本
     public static String currentFirmwareVersion;
     // 当前蓝牙版本
-    public static String currentNrfVersion;
+    public static String currentBleVersion;
     // 固件的新版本
     public static String newFirmwareVersion;
     // 蓝牙的新版本
-    public static String newNrfVersion;
+    public static String newBleVersion;
     public static String firmwareChangelog;
     public static String nrfChangelog;
     private String firmwareUrl;
@@ -95,19 +91,20 @@ public class HardwareUpgradeActivity extends BaseActivity {
                 @Override
                 public void onDfuCompleted(@NonNull String deviceAddress) {
                     super.onDfuCompleted(deviceAddress);
-                    EventBus.getDefault().post(new UpdateSuccessEvent());
                     cancelDfu();
                     // 更新本地信息
                     String features = devices.getString(deviceId, "");
                     if (!Strings.isNullOrEmpty(features)) {
                         HardwareFeatures features1 = HardwareFeatures.objectFromData(features);
-                        features1.setBleVer(newNrfVersion);
+                        features1.setBleVer(newBleVersion);
                         devices.edit().putString(deviceId, features1.toString()).apply();
                     }
-                    currentNrfVersion = newNrfVersion;
-                    newNrfVersion = null;
-                    if (hardwareUpgradeFragment != null && hardwareUpgradeFragment.isAdded()) {
-                        hardwareUpgradeFragment.refreshView();
+                    currentBleVersion = newBleVersion;
+                    newBleVersion = null;
+                    if (!Strings.isNullOrEmpty(newFirmwareVersion)) {
+                        initBle();
+                    } else {
+                        EventBus.getDefault().post(new UpdateSuccessEvent());
                     }
                 }
 
@@ -137,14 +134,15 @@ public class HardwareUpgradeActivity extends BaseActivity {
                         int partsTotal) {
                     super.onProgressChanged(
                             deviceAddress, percent, speed, avgSpeed, currentPart, partsTotal);
-                    Optional.ofNullable(hardwareUpgradingFragment.getProgressBar())
-                            .ifPresent(
-                                    (progressBar -> {
-                                        if (progressBar.isIndeterminate()) {
-                                            progressBar.setIndeterminate(false);
-                                        }
-                                        progressBar.setProgress(percent);
-                                    }));
+                    if (hardwareUpgradingFragment.isAdded()
+                            && hardwareUpgradingFragment.isVisible()) {
+                        EventBus.getDefault()
+                                .post(
+                                        new HardWareUpdateEvent(
+                                                HardwareUpgradingFragment.HardwareType.BLE,
+                                                percent,
+                                                1));
+                    }
                 }
 
                 @Override
@@ -181,48 +179,24 @@ public class HardwareUpgradeActivity extends BaseActivity {
         pauseAction.putExtra(DfuBaseService.EXTRA_ACTION, DfuBaseService.ACTION_ABORT);
         LocalBroadcastManager.getInstance(this).sendBroadcast(pauseAction);
     }
-    /** 下载最新固件 */
-    static boolean updateFiles(String path, String url) {
-        OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
-        Request request = new Request.Builder().url(url).build();
-        Call call = okHttpClient.newCall(request);
-        File file = new File(path);
-        byte[] buf = new byte[2048];
-        int len = 0;
-        try (Response response = call.execute();
-                InputStream is = response.body().byteStream();
-                FileOutputStream fos = new FileOutputStream(file)) {
-            if (response.code() != HTTP_OK) {
-                return false;
-            }
-            while ((len = is.read(buf)) != -1) {
-                fos.write(buf, 0, len);
-            }
-            fos.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
 
     /** init */
     @Override
     public void init() {
         devices = getSharedPreferences("devices", Context.MODE_PRIVATE);
-        updateTitle(R.string.verson_update);
         dealBundle(Objects.requireNonNull(getIntent().getExtras()));
         hardwareUpgradeFragment = new HardwareUpgradeFragment();
         startFragment(hardwareUpgradeFragment);
         BleDevice bleDevice = Ble.getInstance().getBleDevice(mac);
         Ble.getInstance().autoConnect(bleDevice, false);
+        hardwareUpgradingFragment = new HardwareUpgradingFragment();
     }
 
     private void dealBundle(Bundle bundle) {
         currentFirmwareVersion = bundle.getString(Constant.TAG_FIRMWARE_VERSION);
-        currentNrfVersion = bundle.getString(Constant.TAG_NRF_VERSION);
+        currentBleVersion = bundle.getString(Constant.TAG_NRF_VERSION);
         newFirmwareVersion = bundle.getString(Constant.TAG_FIRMWARE_VERSION_NEW);
-        newNrfVersion = bundle.getString(Constant.TAG_NRF_VERSION_NEW);
+        newBleVersion = bundle.getString(Constant.TAG_NRF_VERSION_NEW);
         firmwareChangelog = bundle.getString(Constant.TAG_FIRMWARE_UPDATE_DES);
         nrfChangelog = bundle.getString(Constant.TAG_NRF_UPDATE_DES);
         firmwareUrl = bundle.getString(Constant.TAG_FIRMWARE_DOWNLOAD_URL);
@@ -235,9 +209,9 @@ public class HardwareUpgradeActivity extends BaseActivity {
         String features = devices.getString(deviceId, "");
         if (!Strings.isNullOrEmpty(features)) {
             HardwareFeatures hardware = HardwareFeatures.objectFromData(features);
-            if (hardware.getBleVer().equals(newNrfVersion)) {
-                currentNrfVersion = newNrfVersion;
-                newNrfVersion = null;
+            if (hardware.getBleVer().equals(newBleVersion)) {
+                currentBleVersion = newBleVersion;
+                newBleVersion = null;
             }
         }
     }
@@ -249,17 +223,32 @@ public class HardwareUpgradeActivity extends BaseActivity {
      */
     @Override
     public int getContentViewId() {
-        return R.layout.activity_title_container;
+        return R.layout.activity_hardware_upgrade;
     }
 
-    @SingleClick
     @OnClick(R.id.img_back)
     public void onViewClicked(View view) {
-        if (Objects.nonNull(task) && !task.isCancelled()) {
-            task.cancel(true);
+        if (hardwareUpgradingFragment.isAdded() && hardwareUpgradingFragment.isVisible()) {
+            new BaseAlertBottomDialog(mContext)
+                    .setMessage(R.string.stop_update_tip)
+                    .setSecondaryButtonText(R.string.stop_back)
+                    .setTitleOverride(R.string.stop_update)
+                    .setPrimaryButtonText(R.string.cancel)
+                    .setPrimaryButtonColor(R.color.color_993C3C43)
+                    .setSecondaryButtonTextColor(R.color.color_FF3B30)
+                    .setSecondaryButtonListener(
+                            v -> {
+                                if (Objects.nonNull(task) && !task.isCancelled()) {
+                                    task.cancel(true);
+                                    PyEnv.cancelAll();
+                                }
+                                finish();
+                            })
+                    .show();
+        } else {
+            finish();
         }
         cancelDfu();
-        finish();
     }
 
     @Override
@@ -279,7 +268,6 @@ public class HardwareUpgradeActivity extends BaseActivity {
                         Constant.UPDATE_FILE_NAME,
                         newFirmwareVersion,
                         Constant.FIRMWARE_UPDATE_FILE_SUFFIX);
-        toNext(R.string.firmware_stm32);
         new MyTask(
                         new MyTask.CallBack() {
                             @Override
@@ -301,11 +289,11 @@ public class HardwareUpgradeActivity extends BaseActivity {
         bleManager.connDevByMac(mac);
     }
     /** 更新监听 */
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUpdateEvent(UpdateEvent event) {
         switch (event.getType()) {
             case UpdateEvent.FIRMWARE:
-                runOnUiThread(this::initBle);
+                initBle();
                 break;
             case UpdateEvent.BLE:
                 String path =
@@ -313,7 +301,7 @@ public class HardwareUpgradeActivity extends BaseActivity {
                                 "%s/%s%s%s",
                                 cacheDir,
                                 Constant.UPDATE_FILE_NAME,
-                                newNrfVersion,
+                                newBleVersion,
                                 Constant.NRF_UPDATE_FILE_SUFFIX);
                 dfu(path, nrfUrl);
                 break;
@@ -327,30 +315,62 @@ public class HardwareUpgradeActivity extends BaseActivity {
                     Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
                 });
     }
+
     /** 升级蓝牙固件就绪 */
     private void dfu(String path, String url) {
-        toNext(R.string.firmware_nrf);
         File file = new File(path);
         if (file.exists()) {
+            EventBus.getDefault()
+                    .post(
+                            new HardWareUpdateEvent(
+                                    HardwareUpgradingFragment.HardwareType.BLE, 100, 0));
             beginDfu(path);
         } else {
-            if (updateFiles(path, url)) {
-                beginDfu(path);
-            }
+            // start install ble
+            OKHttpUtils.downloadFile(
+                    url,
+                    (currentBytes, contentLength, done) -> {
+                        int progress = (int) (currentBytes * 100 / contentLength);
+                        EventBus.getDefault()
+                                .post(
+                                        new HardWareUpdateEvent(
+                                                HardwareUpgradingFragment.HardwareType.BLE,
+                                                progress,
+                                                0));
+                        if (done) {
+                            beginDfu(path);
+                        }
+                    },
+                    new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {}
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response != null) {
+                                try {
+                                    InputStream is = response.body().byteStream();
+                                    FileOutputStream fos = new FileOutputStream(new File(path));
+                                    int len = 0;
+                                    byte[] buffer = new byte[2048];
+                                    while (-1 != (len = is.read(buffer))) {
+                                        fos.write(buffer, 0, len);
+                                    }
+                                    fos.flush();
+                                    fos.close();
+                                    is.close();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    });
         }
     }
-    /** 页面跳转 */
-    private void toNext(@StringRes int id) {
-        Bundle bundle = new Bundle();
-        bundle.putInt(Constant.TAG_HARDWARE_TYPE_PROMOTE_ID, id);
-        hardwareUpgradingFragment = new HardwareUpgradingFragment();
-        hardwareUpgradingFragment.setArguments(bundle);
-        startFragment(hardwareUpgradingFragment);
-    }
-    /** dfu 升级蓝牙固件 */
+
+    /** 升级蓝牙固件 */
     private void beginDfu(String path) {
         Ble.getInstance().disconnectAll();
-        EventBus.getDefault().postSticky(new UpdatingEvent());
         final DfuServiceInitiator starter = new DfuServiceInitiator(mac);
         starter.setDeviceName(label);
         starter.setKeepBond(true);
@@ -386,16 +406,16 @@ public class HardwareUpgradeActivity extends BaseActivity {
             devices.edit().putString(deviceId, features1.toString()).apply();
         }
         currentFirmwareVersion = newFirmwareVersion;
-        newFirmwareVersion = "";
-        if (hardwareUpgradeFragment != null && hardwareUpgradeFragment.isAdded()) {
-            hardwareUpgradeFragment.refreshView();
-        }
+        newFirmwareVersion = null;
+        EventBus.getDefault().post(new UpdateSuccessEvent());
     }
+
     /** stm32固件升级失败回调 */
     public void onCancel() {
         showPromptMessage(R.string.update_failed);
         finish();
     }
+
     /** 固件升级的异步任务 */
     public static class MyTask extends AsyncTask<String, Object, Void> {
         private CallBack callBack;
@@ -415,35 +435,75 @@ public class HardwareUpgradeActivity extends BaseActivity {
             String url = params[1];
             File file = new File(path);
             if (file.exists()) {
-                doUpdate(path);
+                doUpdateFirmWare(path);
             } else {
-                boolean uploadSuccessful = updateFiles(path, url);
-                if (uploadSuccessful) {
-                    doUpdate(path);
-                } else {
-                    cancel(true);
-                }
+                OKHttpUtils.downloadFile(
+                        url,
+                        new OKHttpUtils.ProgressListener() {
+                            @Override
+                            public void onProgress(
+                                    long currentBytes, long contentLength, boolean done) {
+                                int progress = (int) (currentBytes * 100 / contentLength);
+                                EventBus.getDefault()
+                                        .post(
+                                                new HardWareUpdateEvent(
+                                                        HardwareUpgradingFragment.HardwareType
+                                                                .FIRMWARE,
+                                                        progress,
+                                                        0));
+                                if (done) {
+                                    doUpdateFirmWare(path);
+                                }
+                            }
+                        },
+                        new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                // TODO: 2021/4/1 下载失败
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response)
+                                    throws IOException {
+                                if (response != null) {
+                                    try {
+                                        InputStream is = response.body().byteStream();
+                                        FileOutputStream fos = new FileOutputStream(new File(path));
+                                        int len = 0;
+                                        byte[] buffer = new byte[2048];
+                                        while (-1 != (len = is.read(buffer))) {
+                                            fos.write(buffer, 0, len);
+                                        }
+                                        fos.flush();
+                                        fos.close();
+                                        is.close();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        });
             }
             return null;
         }
 
         @Override
         protected void onProgressUpdate(Object... progresses) {
-            if (Objects.nonNull(fragment.getProgressBar())) {
-                if (fragment.getProgressBar().isIndeterminate()) {
-                    fragment.getProgressBar().setIndeterminate(false);
-                    // 当在硬件上输入PIN时，退出提醒页面
-                    EventBus.getDefault().post(new PinInputComplete());
-                }
-                fragment.getProgressBar()
-                        .setProgress(Integer.parseInt(((progresses[0]).toString())));
+            if (fragment.isAdded() && fragment.isResumed()) {
+                // 当在硬件上输入PIN时，退出提醒页面  todo
+                //                EventBus.getDefault().post(new PinInputComplete());
+                EventBus.getDefault()
+                        .post(
+                                new HardWareUpdateEvent(
+                                        HardwareUpgradingFragment.HardwareType.FIRMWARE,
+                                        Integer.parseInt(((progresses[0]).toString())),
+                                        1));
             }
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             callBack.onSuccess();
-            EventBus.getDefault().post(new UpdateSuccessEvent());
         }
 
         @Override
@@ -452,8 +512,14 @@ public class HardwareUpgradeActivity extends BaseActivity {
             callBack.onCancel();
         }
 
-        private void doUpdate(String path) {
-            EventBus.getDefault().postSticky(new UpdatingEvent());
+        // install firmware
+        private void doUpdateFirmWare(String path) {
+            if (fragment.isAdded() && fragment.isResumed()) {
+                EventBus.getDefault()
+                        .post(
+                                new HardWareUpdateEvent(
+                                        HardwareUpgradingFragment.HardwareType.FIRMWARE, 100, 0));
+            }
             File file = new File(path);
             PyEnv.setProgressReporter(this);
             PyResponse<Void> response = PyEnv.firmwareUpdate(path);
@@ -472,6 +538,7 @@ public class HardwareUpgradeActivity extends BaseActivity {
         interface CallBack {
             /** 升级完成回调 */
             void onSuccess();
+
             /** 失败回调 */
             void onCancel();
         }
@@ -499,10 +566,18 @@ public class HardwareUpgradeActivity extends BaseActivity {
     public boolean keepScreenOn() {
         return true;
     }
-    /** 切换页面 */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onExit(ExitEvent exitEvent) {
-        if (hasWindowFocus()) {
+
+    // start to update
+    public void replaceUpgradingFragment() {
+        if (!Strings.isNullOrEmpty(newFirmwareVersion) || !Strings.isNullOrEmpty(newBleVersion)) {
+            hardwareUpgradingFragment = new HardwareUpgradingFragment();
+            startFragment(hardwareUpgradingFragment);
+        }
+    }
+
+    //  show update complete version
+    public void showUpdateComplete() {
+        if (hardwareUpgradeFragment != null) {
             startFragment(hardwareUpgradeFragment);
             hardwareUpgradeFragment.refreshView();
         }

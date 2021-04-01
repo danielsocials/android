@@ -11,8 +11,7 @@
         android:layout_gravity="center_vertical"
         android:indeterminateBehavior="repeat"
         android:indeterminateDrawable="@drawable/progressbar_drawable"
-        android:indeterminateOnly="true"
-        android:layout_marginLeft="@dimen/dp_80"/>
+        android:indeterminateOnly="true" />
 
     <TextView
         android:id="@+id/item_text"

@@ -80,6 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_30"
+            android:layout_marginStart="@dimen/dp_80"
             app:text="@string/connecting" />
 
 
@@ -87,6 +88,7 @@
             android:id="@+id/retrieve_verify_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_80"
             app:text="@string/get_auth_sign" />
 
 
@@ -95,6 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp_20"
+            android:layout_marginStart="@dimen/dp_80"
             app:text="@string/push_auth_sign" />
 
 

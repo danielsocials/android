@@ -97,5 +97,9 @@
     <color name="color_f0b90b">#f0b90b</color>
     <color name="color_01943f">#01943f</color>
     <color name="color_3E5BF2">#3E5BF2</color>
+    <color name="color_F2F2F7"> #F2F2F7</color>
+    <color name="color_4DFFFFFF">#4DFFFFFF</color>
+    <color name="color_FF3B30">#FF3B30</color>
+    <color name="color_993C3C43">#993C3C43</color>
 
 </resources>

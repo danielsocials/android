@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.annotation.StyleRes
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import org.haobtc.onekey.R
 import org.haobtc.onekey.databinding.DialogBaseBottomBinding
@@ -138,6 +139,12 @@ class BaseAlertBottomDialog @JvmOverloads constructor(context: Context, @StyleRe
     return this
   }
 
+  fun setPrimaryButtonColor(resId: Int): BaseAlertBottomDialog {
+    mBinding.tvButtonPrimary.visibility = View.VISIBLE
+    mBinding.tvButtonPrimary.setTextColor(ContextCompat.getColor(context, resId))
+    return this
+  }
+
   fun setPrimaryButtonListener(listener: View.OnClickListener?): BaseAlertBottomDialog {
     mPrimaryButtonListener = listener
     return this
@@ -146,6 +153,12 @@ class BaseAlertBottomDialog @JvmOverloads constructor(context: Context, @StyleRe
   fun setSecondaryButtonText(resId: Int): BaseAlertBottomDialog {
     mBinding.tvButtonSecondary.visibility = View.VISIBLE
     mBinding.tvButtonSecondary.text = context.resources?.getString(resId)
+    return this
+  }
+
+  fun setSecondaryButtonTextColor(resId: Int): BaseAlertBottomDialog {
+    mBinding.tvButtonSecondary.visibility = View.VISIBLE
+    mBinding.tvButtonSecondary.setTextColor(ContextCompat.getColor(context, resId))
     return this
   }
 

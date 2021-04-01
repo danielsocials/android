@@ -8,14 +8,10 @@ import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
-
 import org.haobtc.onekey.R;
 
-/**
- * @author liyan
- */
+/** @author liyan */
 public class LoadingTextView extends LinearLayout {
 
     private TextView mText;
@@ -30,23 +26,21 @@ public class LoadingTextView extends LinearLayout {
     public LoadingTextView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
-        LayoutInflater.from(context).inflate(R.layout.item_loading_text,this);
+        LayoutInflater.from(context).inflate(R.layout.item_loading_text, this);
         mText = findViewById(R.id.item_text);
         mBar = findViewById(R.id.item_progress_bar);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LoadingTextView);
         String text = typedArray.getText(R.styleable.LoadingTextView_text).toString();
-        if(!TextUtils.isEmpty(text)){
+        if (!TextUtils.isEmpty(text)) {
             mText.setText(text);
         }
+        typedArray.recycle();
     }
 
-
-
-    public void completeLoading(){
-        if(mBar != null && mContext != null){
+    public void completeLoading() {
+        if (mBar != null && mContext != null) {
             mBar.setIndeterminateDrawable(null);
             mBar.setBackground(mContext.getDrawable(R.drawable.checked));
         }
     }
-
 }

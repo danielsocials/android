@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_F2F2F7"
+    android:paddingHorizontal="@dimen/dp_16">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:text="@string/upgrading_hardware"
+        android:textSize="28sp" />
+
+    <TextView
+        android:id="@+id/title_tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:alpha="0.6"
+        android:text="@string/upgrading_tip"
+        android:textColor="@color/color_3C3C43"
+        android:textSize="16sp" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bottom_layout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/dp_16">
+
+            <LinearLayout
+                android:id="@+id/ble_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <org.haobtc.onekey.ui.custom.UpdateLoadingView
+                    android:id="@+id/download_ble"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:progress_text=""
+                    app:statusText="@string/download_ble" />
+
+
+                <org.haobtc.onekey.ui.custom.UpdateLoadingView
+                    android:id="@+id/install_ble"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    app:progress_text=""
+                    app:statusText="@string/install_ble" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/firmware_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <org.haobtc.onekey.ui.custom.UpdateLoadingView
+                    android:id="@+id/download_firmware"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    app:progress_text=""
+                    app:statusText="@string/download_firmware" />
+
+                <org.haobtc.onekey.ui.custom.UpdateLoadingView
+                    android:id="@+id/install_firmware"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    app:progress_text=""
+                    app:statusText="@string/install_firmware" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+    <LinearLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.6"
+            android:gravity="center"
+            android:padding="@dimen/dp_8"
+            android:text="@string/upgrading_tip"
+            android:textColor="@color/color_3C3C43"
+            android:textSize="@dimen/sp_13" />
+
+        <org.haobtc.onekey.ui.widget.SuperTextView
+            android:id="@+id/confirm_button"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginBottom="@dimen/dp_40"
+            android:gravity="center"
+            android:text="@string/finish"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_17"
+            app:corner="@dimen/dp_8"
+            app:solid="@color/onekey" />
+    </LinearLayout>
+</RelativeLayout>

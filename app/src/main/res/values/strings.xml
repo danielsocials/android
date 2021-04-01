@@ -1398,4 +1398,23 @@
     <string name="cannot_pair_device">可能是\"%s\"曾进行过重置并更换了助记词。请将原助记词导入此硬件钱包，然后再试一次。</string>
     <string name="tab_swap">Swap</string>
     <string name="hint_onekey_swap_account_unavailable_content">当前兑换功能只支持 %s 账户</string>
+    <string name="ble_version">蓝牙固件</string>
+    <string name="firm_version">系统固件</string>
+    <string name="current_version">当前版本</string>
+    <string name="upgrade_tip">升级至最新版本，以获得更好的使用体验</string>
+    <string name="upgrading_tip">为避免设备重置，升级期间请勿离开 OneKey App，并确保硬件钱包始终处于解锁状态。</string>
+    <string name="up_firmware">固件升级</string>
+    <string name="one_upgrade">一键升级</string>
+    <string name="latest_version">当前固件已经是最新版本</string>
+    <string name="download_ble">下载蓝牙固件</string>
+    <string name="install_ble">安装蓝牙固件</string>
+    <string name="download_firmware">下载系统固件</string>
+    <string name="install_firmware">安装系统固件</string>
+    <string name="install_now">正在安装</string>
+    <string name="download_now">正在下载</string>
+    <string name="install_complete">安装完成</string>
+    <string name="download_complete">下载完成</string>
+    <string name="stop_update">要停止升级固件吗？</string>
+    <string name="stop_update_tip">现在退出将导致本次升级失败，有一定几率会造成设备重置从而抹除钱包数据。升级即将完成，建议耐心等待。</string>
+    <string name="stop_back">退出</string>
 </resources>

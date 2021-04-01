@@ -83,7 +83,14 @@
         <attr name="sidebarBallRadius" format="dimension" />
     </declare-styleable>
 
+
     <declare-styleable name="MaxHeightNestedScrollView">
         <attr name="maxHeight" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="UpgradeTextView">
+        <attr name="statusText" format="string" />
+        <attr name="progress_text" format="string" />
+        <attr name="line_visibility" format="boolean" />
     </declare-styleable>
 </resources>

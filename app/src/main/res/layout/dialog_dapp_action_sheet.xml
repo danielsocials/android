@@ -188,6 +188,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:gravity="center"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layout_expanded">
@@ -200,6 +201,45 @@
                     android:textColor="@color/text_color2"
                     android:textSize="@dimen/sp_17" />
 
+                <LinearLayout
+                    android:id="@+id/progress_load_fee"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="end"
+                    android:visibility="visible">
+
+                    <ProgressBar
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:indeterminate="true"
+                        android:padding="6dp"
+                        android:progressDrawable="@drawable/shape_bg_horizontal_progress" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_load_fee_retry"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center|end"
+                    android:paddingEnd="16dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:padding="8dp"
+                        android:src="@drawable/vector_refresh_error_ic" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/retry"
+                        android:textColor="@color/color_FF0000"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/text_tx_fee"
                     android:layout_width="0dp"
@@ -210,6 +250,7 @@
                     android:gravity="end|center"
                     android:textColor="@color/text_three"
                     android:textSize="@dimen/sp_14"
+                    android:visibility="gone"
                     tools:text="0.00019 ETH" />
 
                 <ImageView

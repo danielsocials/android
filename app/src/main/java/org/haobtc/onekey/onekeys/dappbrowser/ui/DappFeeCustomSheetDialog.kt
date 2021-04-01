@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.orhanobut.logger.Logger
 import com.scwang.smartrefresh.layout.util.SmartUtil
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
@@ -378,12 +379,12 @@ class DappFeeCustomSheetDialog private constructor() : BottomSheetDialogFragment
       defGasLimit: BigInteger = BigInteger.ZERO,
       defGasPrice: BigDecimal = BigDecimal.ZERO,
   ): FeeBean {
-    val gasLimit = if (defGasLimit == BigInteger.ZERO) {
+    val gasLimit = if (defGasLimit <= BigInteger.ONE) {
       feeDetails?.gasLimit?.toBigInteger() ?: BigInteger.ZERO
     } else {
       defGasLimit
     }
-    val gasPrice = if (defGasPrice == BigDecimal.ZERO) {
+    val gasPrice = if (defGasPrice <= BigDecimal("1000000000" /* 1GWei */)) {
       Convert.toWei(BigDecimal(feeDetails?.gasPrice?.toString() ?: "0"), Convert.Unit.GWEI)
     } else {
       defGasPrice
@@ -445,13 +446,14 @@ class DappFeeCustomSheetDialog private constructor() : BottomSheetDialogFragment
 
     fillFeeData(currentFeeDetails)
 
-    // 如果有某一项为 0,在重新填写一下
-    val defaultFeeBean = getDefaultFeeBean(currentFeeDetails.normal, mViewModel.gasLimitNumber, mViewModel.gasPriceNumber)
-    mBinding.viewFeeCustom.setGasLimit(defaultFeeBean.getGasLimit())
-    mBinding.viewFeeCustom.setGasPrice(defaultFeeBean.getGasPrice())
-
     mViewModel.feeDetails.value = currentFeeDetails
     mViewModel.coinFiat.value = calculationDollars(currentFeeDetails.normal)
+
+    // 如果有某一项为 0,在重新填写一下
+    val defaultFeeBean = getDefaultFeeBean(currentFeeDetails.normal, mViewModel.gasLimitNumber, mViewModel.gasPriceNumber)
+    Logger.e("defaultFeeBean:$defaultFeeBean   getGasLimit:${mViewModel.gasLimitNumber}")
+    mBinding.viewFeeCustom.setGasLimit(defaultFeeBean.getGasLimit())
+    mBinding.viewFeeCustom.setGasPrice(defaultFeeBean.getGasPrice())
   }
 
   private fun fillFeeData(
@@ -679,6 +681,10 @@ class FeeBean(
     } else {
       fee
     }
+  }
+
+  override fun toString(): String {
+    return "FeeBean(gasPrice=$gasPrice, gasLimit=$gasLimit, fee=$fee)"
   }
 }
 

@@ -779,24 +779,6 @@ class DappBrowserFragment : BaseFragment(),
           setCanceledOnTouchOutside(false)
           show()
         }
-        // 请求手续费
-        if (transaction.gasLimit.compareTo(BigInteger.ZERO) != 0 && transaction.gasPrice.compareTo(BigInteger.ZERO) != 0) {
-          confirmationDialog?.enableNextButton()
-        }
-        Single
-            .fromCallable { PyEnv.getDefFeeInfo(currentWallet.coinType, transaction.recipient.toString(), transaction.value, transaction.payload).result }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ currentFeeDetails ->
-              if (transaction.gasLimit.compareTo(BigInteger.ZERO) == 0) {
-                transaction.gasLimit = BigInteger.valueOf(currentFeeDetails.normal.gasLimit.toLong())
-              }
-              if (transaction.gasPrice.compareTo(BigInteger.ZERO) == 0) {
-                transaction.gasPrice = Convert.toWei(BigDecimal(currentFeeDetails.normal.gasPrice.toString()), Convert.Unit.GWEI).toBigInteger()
-              }
-              val recommend = (transaction.gasLimit.compareTo(BigInteger.ZERO) == 0 && transaction.gasPrice.compareTo(BigInteger.ZERO) == 0)
-              confirmationDialog?.setFeeDetails(currentFeeDetails, recommend)
-            }) { throwable: Throwable? -> }.isDisposed
         return
       }
     } catch (e: Exception) {

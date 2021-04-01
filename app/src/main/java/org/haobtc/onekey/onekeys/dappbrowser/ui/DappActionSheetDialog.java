@@ -14,6 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Locale;
@@ -24,6 +27,7 @@ import org.haobtc.onekey.bean.CurrentFeeDetails;
 import org.haobtc.onekey.bean.WalletAccountInfo;
 import org.haobtc.onekey.business.wallet.SystemConfigManager;
 import org.haobtc.onekey.constant.Vm;
+import org.haobtc.onekey.manager.PyEnv;
 import org.haobtc.onekey.onekeys.dappbrowser.bean.Signable;
 import org.haobtc.onekey.onekeys.dappbrowser.bean.Web3Transaction;
 import org.haobtc.onekey.onekeys.dappbrowser.callback.DappActionSheetCallback;
@@ -48,6 +52,10 @@ public class DappActionSheetDialog extends BottomSheetDialog
 
     private final View layoutProgress;
     private final View layoutHardwareProgress;
+
+    private View progressLoadFee;
+    private View layoutLoadFeeRetry;
+    private TextView txFee;
 
     private Web3Transaction candidateTransaction;
     private CurrentFeeDetails mCurrentFeeDetails;
@@ -88,7 +96,9 @@ public class DappActionSheetDialog extends BottomSheetDialog
         layoutHardwareProgress = findViewById(R.id.layout_hardware_progress);
         balance = findViewById(R.id.text_balance);
         amount = findViewById(R.id.text_tx_amount);
-        TextView txFee = findViewById(R.id.text_tx_fee);
+        txFee = findViewById(R.id.text_tx_fee);
+        progressLoadFee = findViewById(R.id.progress_load_fee);
+        layoutLoadFeeRetry = findViewById(R.id.layout_load_fee_retry);
 
         TextView walletNameTextView = findViewById(R.id.text_send_name);
         walletNameTextView.setText(wallet.getName());
@@ -122,6 +132,8 @@ public class DappActionSheetDialog extends BottomSheetDialog
 
         setupCancelListeners();
         setupNextListener();
+        loadFee();
+        layoutLoadFeeRetry.setOnClickListener(v -> loadFee());
         txFee.setOnClickListener(
                 v -> {
                     DappFeeCustomSheetDialog dappFeeCustomSheetDialog =
@@ -212,7 +224,71 @@ public class DappActionSheetDialog extends BottomSheetDialog
     }
 
     public void enableNextButton() {
-        nextButton.setEnabled(true);
+        if (txFee != null) txFee.setVisibility(View.VISIBLE);
+        if (progressLoadFee != null) progressLoadFee.setVisibility(View.GONE);
+        if (layoutLoadFeeRetry != null) layoutLoadFeeRetry.setVisibility(View.GONE);
+        if (nextButton != null) nextButton.setEnabled(true);
+    }
+
+    private void loadFee() {
+        // 请求手续费
+        if (candidateTransaction != null) {
+            if (progressLoadFee != null) progressLoadFee.setVisibility(View.VISIBLE);
+            if (txFee != null) txFee.setVisibility(View.GONE);
+            if (layoutLoadFeeRetry != null) layoutLoadFeeRetry.setVisibility(View.GONE);
+
+            if (candidateTransaction.gasLimit.compareTo(BigInteger.ZERO) != 0
+                    && candidateTransaction.gasPrice.compareTo(BigInteger.ZERO) != 0) {
+                enableNextButton();
+            }
+
+            Single.fromCallable(
+                            () ->
+                                    PyEnv.getDefFeeInfo(
+                                                    mCurrentCoinTypeProvider.currentCoinType(),
+                                                    candidateTransaction.recipient.toString(),
+                                                    candidateTransaction.value,
+                                                    candidateTransaction.payload)
+                                            .getResult())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            (currentFeeDetails) -> {
+                                if (candidateTransaction.gasLimit.compareTo(BigInteger.ZERO) == 0) {
+                                    candidateTransaction.gasLimit =
+                                            BigInteger.valueOf(
+                                                    currentFeeDetails.getNormal().getGasLimit());
+                                }
+                                if (candidateTransaction.gasPrice.compareTo(BigInteger.ZERO) == 0) {
+                                    candidateTransaction.gasPrice =
+                                            Convert.toWei(
+                                                            new BigDecimal(
+                                                                    String.valueOf(
+                                                                            currentFeeDetails
+                                                                                    .getNormal()
+                                                                                    .getGasPrice())),
+                                                            Convert.Unit.GWEI)
+                                                    .toBigInteger();
+                                }
+                                boolean recommend =
+                                        (candidateTransaction.gasLimit.compareTo(BigInteger.ZERO)
+                                                        == 0
+                                                && candidateTransaction.gasPrice.compareTo(
+                                                                BigInteger.ZERO)
+                                                        == 0);
+
+                                setFeeDetails(currentFeeDetails, recommend);
+                            },
+                            (throwable) -> {
+                                if (layoutLoadFeeRetry != null)
+                                    layoutLoadFeeRetry.setVisibility(View.VISIBLE);
+                                if (progressLoadFee != null)
+                                    progressLoadFee.setVisibility(View.GONE);
+                                if (txFee != null) txFee.setVisibility(View.GONE);
+                                if (nextButton != null) nextButton.setEnabled(false);
+                            })
+                    .isDisposed();
+        }
     }
 
     public void setFeeDetails(@Nullable CurrentFeeDetails currentFeeDetails, boolean recommend) {

@@ -132,6 +132,7 @@ public final class BleRequestImpl<T extends BleDevice> {
                     if (gatt != null && gatt.getDevice() != null) {
                         BleLog.d(TAG, "onMtuChanged mtu=" + mtu + ",status=" + status);
                         if (null != mtuWrapperCallback) {
+                            gatt.setPreferredPhy(BluetoothDevice.PHY_LE_2M_MASK, BluetoothDevice.PHY_LE_2M_MASK, BluetoothDevice.PHY_OPTION_NO_PREFERRED);
                             mtuWrapperCallback.onMtuChanged(
                                     getBleDeviceInternal(gatt.getDevice()), mtu, status);
                         }

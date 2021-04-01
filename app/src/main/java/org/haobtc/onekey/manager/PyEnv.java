@@ -30,6 +30,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.orhanobut.logger.Logger;
 import dr.android.utils.LogUtil;
+import io.sentry.Sentry;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -296,6 +298,7 @@ public final class PyEnv {
                     public void onFailure(@NonNull Throwable t) {
                         release();
                         Logger.e(t.getMessage());
+                        Sentry.captureException(t);
                         if (sBle != null) {
                             cancelAll();
                         }

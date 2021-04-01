@@ -20,6 +20,7 @@ import org.haobtc.onekey.BuildConfig;
 import org.haobtc.onekey.MyEventBusIndex;
 import org.haobtc.onekey.constant.Constant;
 import org.haobtc.onekey.constant.StringConstant;
+import org.haobtc.onekey.exception.MyUncaughtExceptionHandler;
 import org.haobtc.onekey.manager.PreferencesManager;
 import org.haobtc.onekey.utils.Utils;
 
@@ -48,6 +49,8 @@ public class MyApplication extends Application implements ViewModelStoreOwner {
     @Override
     public void onCreate() {
         super.onCreate();
+        // 设置全局异常处理
+        Thread.setDefaultUncaughtExceptionHandler(new MyUncaughtExceptionHandler());
         Utils.init(this);
         AutoSizeConfig.getInstance().setExcludeFontScale(true);
 

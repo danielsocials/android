@@ -29,7 +29,6 @@ import com.google.gson.JsonParser;
 import com.orhanobut.logger.Logger;
 import dr.android.utils.LogUtil;
 import io.sentry.Sentry;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -586,6 +585,7 @@ public final class PyEnv {
             AllWalletBalanceInfoDTO allWalletBalanceInfoDTO =
                     new Gson().fromJson(info, AllWalletBalanceInfoDTO.class);
             pyResponse.setResult(allWalletBalanceInfoDTO);
+            Logger.json(info);
         } catch (Exception e) {
             e.printStackTrace();
             Exception exception = HardWareExceptions.exceptionConvert(e);

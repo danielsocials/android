@@ -11,9 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
-import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
-import com.orhanobut.logger.Logger;
 import com.scwang.smartrefresh.layout.util.SmartUtil;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -32,7 +30,6 @@ import org.haobtc.onekey.bean.AllWalletBalanceInfoDTO;
 import org.haobtc.onekey.bean.BalanceCoinInfo;
 import org.haobtc.onekey.bean.BalanceInfoDTO;
 import org.haobtc.onekey.bean.PyResponse;
-import org.haobtc.onekey.bean.TokenList;
 import org.haobtc.onekey.business.wallet.BalanceManager;
 import org.haobtc.onekey.business.wallet.SystemConfigManager;
 import org.haobtc.onekey.business.wallet.TokenManager;
@@ -143,7 +140,6 @@ public class AllAssetsActivity extends BaseActivity implements TextWatcher {
                                                     mSystemConfigManager.getCurrentFiatSymbol();
                                             testAllAssets.setText(
                                                     String.format("%s %s", currencySymbol, money));
-                                            convertAdapterData(allWalletBalance.getWalletInfo());
                                             walletInfo.clear();
                                             walletInfo.addAll(allWalletBalance.getWalletInfo());
                                             mAdapterDatas.addAll(walletInfo);
@@ -159,25 +155,6 @@ public class AllAssetsActivity extends BaseActivity implements TextWatcher {
                                     mToast(HardWareExceptions.getThrowString(e));
                                     e.printStackTrace();
                                 });
-    }
-
-    private void convertAdapterData(List<BalanceInfoDTO> walletInfo) {
-        if (walletInfo != null && walletInfo.size() > 0) {
-            for (BalanceInfoDTO balanceInfoDTO : walletInfo) {
-                if (balanceInfoDTO.getWallets() != null && balanceInfoDTO.getWallets().size() > 0) {
-                    for (BalanceCoinInfo wallet : balanceInfoDTO.getWallets()) {
-                        if (!Strings.isNullOrEmpty(wallet.address)) {
-                            TokenList.ERCToken tokenByAddress =
-                                    mTokenManager.getTokenByAddress(wallet.address);
-                            if (tokenByAddress != null) {
-                                wallet.icon = tokenByAddress.logoURI;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        Logger.json(JSON.toJSONString(walletInfo));
     }
 
     @OnClick({R.id.img_back})

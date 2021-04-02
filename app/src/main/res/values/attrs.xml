@@ -88,7 +88,8 @@
         <attr name="maxHeight" format="dimension" />
     </declare-styleable>
 
-    <declare-styleable name="UpgradeTextView">
+
+    <declare-styleable name="UpdateLoadingView">
         <attr name="statusText" format="string" />
         <attr name="progress_text" format="string" />
         <attr name="line_visibility" format="boolean" />

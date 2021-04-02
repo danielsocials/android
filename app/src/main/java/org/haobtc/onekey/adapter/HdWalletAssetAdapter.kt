@@ -10,6 +10,7 @@ import org.haobtc.onekey.bean.BalanceCoinInfo
 import org.haobtc.onekey.bean.RemoteImage
 import org.haobtc.onekey.business.wallet.SystemConfigManager
 import java.math.BigDecimal
+import java.util.*
 
 class HdWalletAssetAdapter(context: Context, data: List<BalanceCoinInfo?>?) : BaseQuickAdapter<BalanceCoinInfo, BaseViewHolder>(R.layout.all_assets_item, data) {
   private val mSystemConfigManager by lazy {
@@ -17,9 +18,10 @@ class HdWalletAssetAdapter(context: Context, data: List<BalanceCoinInfo?>?) : Ba
   }
 
   override fun convert(helper: BaseViewHolder, item: BalanceCoinInfo) {
+
     RemoteImage(item.icon).intoTarget(helper.getView(R.id.imageView))
     helper.setText(R.id.text_balance, getFormatBalance(item, 8))
-    helper.setText(R.id.text_wallet_name, item.coin.toUpperCase())
+    helper.setText(R.id.text_wallet_name, item.coin.toUpperCase(Locale.getDefault()))
 
     val strFiat = if (!TextUtils.isEmpty(item.fiat) && item.fiat == "0") {
       "0.00"

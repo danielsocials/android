@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
+import java.util.Locale;
 import org.haobtc.onekey.utils.HexUtils;
 
 public class Address implements Parcelable {
@@ -13,7 +14,7 @@ public class Address implements Parcelable {
     private final String value;
 
     public Address(@NonNull String value) {
-        value = value.toLowerCase();
+        value = value.toLowerCase(Locale.getDefault());
         if (HexUtils.containsHexPrefix(value)) {
             value = HexUtils.cleanHexPrefix(value);
         }

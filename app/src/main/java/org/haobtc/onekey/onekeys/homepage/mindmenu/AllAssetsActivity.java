@@ -22,6 +22,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import org.haobtc.onekey.R;
 import org.haobtc.onekey.activities.base.BaseActivity;
 import org.haobtc.onekey.activities.base.MyApplication;
@@ -188,8 +189,10 @@ public class AllAssetsActivity extends BaseActivity implements TextWatcher {
     private List<BalanceInfoDTO> getSearchList(String searchText) {
         List<BalanceInfoDTO> list = new ArrayList<>();
         for (BalanceInfoDTO balanceInfoDTO : walletInfo) {
-            if (balanceInfoDTO.getName().contains(searchText.toLowerCase())
-                    || balanceInfoDTO.getName().contains(searchText.toUpperCase())) {
+            if (balanceInfoDTO.getName().contains(searchText.toLowerCase(Locale.getDefault()))
+                    || balanceInfoDTO
+                            .getName()
+                            .contains(searchText.toUpperCase(Locale.getDefault()))) {
                 list.add(balanceInfoDTO);
             } else {
                 if (balanceInfoDTO.getWallets() != null && balanceInfoDTO.getWallets().size() > 0) {
@@ -210,8 +213,8 @@ public class AllAssetsActivity extends BaseActivity implements TextWatcher {
     private List<BalanceCoinInfo> getTokenList(List<BalanceCoinInfo> wallets, String searchText) {
         List<BalanceCoinInfo> list = new ArrayList<>();
         for (BalanceCoinInfo wallet : wallets) {
-            if (wallet.getCoin().startsWith(searchText.toLowerCase())
-                    || wallet.getCoin().startsWith(searchText.toUpperCase())) {
+            if (wallet.getCoin().startsWith(searchText.toLowerCase(Locale.getDefault()))
+                    || wallet.getCoin().startsWith(searchText.toUpperCase(Locale.getDefault()))) {
                 list.add(wallet);
             }
         }

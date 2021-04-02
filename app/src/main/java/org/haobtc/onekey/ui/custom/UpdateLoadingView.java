@@ -46,10 +46,11 @@ public class UpdateLoadingView extends LinearLayout {
         switchImg = findViewById(R.id.switch_img);
         line = findViewById(R.id.bottom_line);
         progressTV = findViewById(R.id.download_progress);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.UpgradeTextView);
-        String text = typedArray.getText(R.styleable.UpgradeTextView_statusText).toString();
+        TypedArray typedArray =
+                context.obtainStyledAttributes(attrs, R.styleable.UpdateLoadingView);
+        String text = typedArray.getText(R.styleable.UpdateLoadingView_statusText).toString();
         String progressDefault =
-                typedArray.getText(R.styleable.UpgradeTextView_progress_text).toString();
+                typedArray.getText(R.styleable.UpdateLoadingView_progress_text).toString();
         if (!TextUtils.isEmpty(text)) {
             mText.setText(text);
         }

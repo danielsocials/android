@@ -25,6 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
 import org.haobtc.onekey.R;
 import org.haobtc.onekey.activities.base.LunchActivity;
@@ -32,8 +33,6 @@ import org.haobtc.onekey.business.language.LanguageManager;
 import org.haobtc.onekey.manager.ActivityManager;
 import org.haobtc.onekey.onekeys.dappbrowser.ui.BaseAlertBottomDialog;
 import org.haobtc.onekey.utils.MyDialog;
-
-import java.util.Locale;
 
 /** @author liyan */
 public abstract class BaseActivity extends AppCompatActivity implements IBaseView {
@@ -301,20 +300,21 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
                     }
                 });
     }
+
     // Unified handling connect reset hardware  with BusinessAsyncTask
     public void dealWithHardConnect(String errorMsg, String deviceName) {
         if (errorMsg.contains(getString(R.string.cannot_pair))) {
-            BaseAlertBottomDialog dialog = new BaseAlertBottomDialog(mContext);
-            dialog.show();
-            dialog.setTitle(R.string.fail);
-            dialog.setMessage(
-                    String.format(
-                            Locale.getDefault(),
-                            getString(R.string.cannot_pair_device),
-                            deviceName));
+            new BaseAlertBottomDialog.Builder(mContext)
+                    .setTitle(R.string.fail)
+                    .setMessage(
+                            String.format(
+                                    Locale.getDefault(),
+                                    getString(R.string.cannot_pair_device),
+                                    deviceName))
+                    .build()
+                    .showNow();
         } else {
             showToast(errorMsg);
         }
     }
-
 }

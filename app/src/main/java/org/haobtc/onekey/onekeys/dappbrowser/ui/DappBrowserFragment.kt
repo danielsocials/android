@@ -394,12 +394,11 @@ class DappBrowserFragment : BaseFragment(),
               showToast(R.string.hint_content_collection_success)
             }
             ACTION_COLLECTION_ERROR -> {
-              BaseAlertBottomDialog(requireContext()).apply {
+              BaseAlertBottomDialog.build(requireContext()) {
                 setTitle(R.string.title_collection_is_full)
                 setMessage(R.string.hint_content_collection_is_full)
                 setPrimaryButtonText(R.string.i_know_)
-                show()
-              }
+              }.showNow()
             }
             ACTION_CANCEL_COLLECTION_SUCCESS -> {
               showToast(R.string.hint_content_cancel_collection_success)
@@ -661,11 +660,10 @@ class DappBrowserFragment : BaseFragment(),
     val walletInfo = mAppWalletViewModel.currentWalletAccountInfo.value
     // 观察钱包无法使用
     if (walletInfo?.walletType == Vm.WalletType.IMPORT_WATCH) {
-      BaseAlertBottomDialog(requireContext()).apply {
+      BaseAlertBottomDialog.build(requireContext()) {
         setTitle(R.string.hint_please_switch_account_observe)
         setMessage(R.string.hint_account_observe_unavailable_content)
-        show()
-      }
+      }.showNow()
 
       return
     }
@@ -793,15 +791,16 @@ class DappBrowserFragment : BaseFragment(),
    * @param message 需要添加的币种信息
    */
   override fun onAddEthereumChain(message: AddEthereumChain?) {
-    BaseAlertBottomDialog(requireContext())
-        .setTitleOverride(R.string.hint_in_development)
-        .setMessage("添加币种 ${message?.nativeCurrency?.name ?: ""}")
-        .setPrimaryButtonText(R.string.i_know_)
-        .setPrimaryButtonListener {
-          web3.onCallFunctionError(message?.leafPosition
-              ?: 0, getString(R.string.hint_in_development))
-        }
-        .show()
+    BaseAlertBottomDialog.build(requireContext()) {
+      setTitle(R.string.hint_in_development)
+      setMessage("添加币种 ${message?.nativeCurrency?.name ?: ""}")
+      setPrimaryButtonText(R.string.i_know_)
+      setPrimaryButtonListener {
+        web3.onCallFunctionError(message?.leafPosition
+            ?: 0, getString(R.string.hint_in_development))
+      }
+    }
+        .showNow()
   }
 
   /**

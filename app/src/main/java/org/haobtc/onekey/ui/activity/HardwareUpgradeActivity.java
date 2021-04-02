@@ -412,12 +412,12 @@ public class HardwareUpgradeActivity extends BaseActivity
     }
 
     private void showInterceptDialog() {
-        new BaseAlertBottomDialog(mContext)
+        new BaseAlertBottomDialog.Builder(mContext)
                 .setMessage(R.string.stop_update_tip)
                 .setSecondaryButtonText(R.string.stop_back)
-                .setTitleOverride(R.string.stop_update)
+                .setTitle(R.string.stop_update)
                 .setPrimaryButtonText(R.string.cancel)
-                .setPrimaryButtonColor(R.color.color_993C3C43)
+                .setPrimaryButtonTextColor(R.color.color_993C3C43)
                 .setSecondaryButtonTextColor(R.color.color_FF3B30)
                 .setSecondaryButtonListener(
                         v -> {
@@ -427,7 +427,7 @@ public class HardwareUpgradeActivity extends BaseActivity
                             }
                             finish();
                         })
-                .show();
+                .build().showNow();
     }
 
     /** stm32固件升级成功回调 */

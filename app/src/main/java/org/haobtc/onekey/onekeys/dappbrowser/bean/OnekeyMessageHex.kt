@@ -2,7 +2,9 @@ package org.haobtc.onekey.onekeys.dappbrowser.bean
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
+import com.orhanobut.logger.Logger
 import org.haobtc.onekey.utils.HexUtils
+import org.haobtc.onekey.utils.JsonFormatUtil
 
 
 data class OnekeyMessageHex(
@@ -10,17 +12,21 @@ data class OnekeyMessageHex(
     val payload: String,
     val leafPosition: Long) : Signable {
   override fun getMessage(): String {
-    try {
+    return try {
       val jsonObject = JsonParser.parseString(payload)
-      if (jsonObject.isJsonArray || jsonObject.isJsonArray) {
-        val gson = GsonBuilder().setPrettyPrinting().create()
-        return gson.toJson(jsonObject)
-      } else {
-        return payload.replace("\"", "")
+      try {
+        JsonFormatUtil.format(jsonObject)
+      } catch (e: Exception) {
+        if (jsonObject.isJsonArray || jsonObject.isJsonObject) {
+          val gson = GsonBuilder().setPrettyPrinting().create()
+          gson.toJson(jsonObject)
+        } else {
+          payload
+        }
       }
     } catch (e: Exception) {
       e.printStackTrace()
-      return payload.replace("\"", "")
+      payload.replace("\"", "")
     }
   }
 

@@ -451,7 +451,6 @@ class DappFeeCustomSheetDialog private constructor() : BottomSheetDialogFragment
 
     // 如果有某一项为 0,在重新填写一下
     val defaultFeeBean = getDefaultFeeBean(currentFeeDetails.normal, mViewModel.gasLimitNumber, mViewModel.gasPriceNumber)
-    Logger.e("defaultFeeBean:$defaultFeeBean   getGasLimit:${mViewModel.gasLimitNumber}")
     mBinding.viewFeeCustom.setGasLimit(defaultFeeBean.getGasLimit())
     mBinding.viewFeeCustom.setGasPrice(defaultFeeBean.getGasPrice())
   }

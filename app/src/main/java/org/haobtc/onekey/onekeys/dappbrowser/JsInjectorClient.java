@@ -17,6 +17,7 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.haobtc.onekey.BuildConfig;
 import org.haobtc.onekey.R;
 
 public class JsInjectorClient {
@@ -184,7 +185,7 @@ public class JsInjectorClient {
         String initSrc = loadFile(context, R.raw.init);
         String address =
                 walletAddress == null ? "0000000000000000000000000000000000000000" : walletAddress;
-        return String.format(initSrc, address, rpcUrl, chainId);
+        return String.format(initSrc, address, rpcUrl, chainId, BuildConfig.DEBUG);
     }
 
     String injectStyleAndWrap(String view, String style) {

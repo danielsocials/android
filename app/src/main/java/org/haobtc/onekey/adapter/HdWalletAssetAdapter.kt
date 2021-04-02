@@ -10,7 +10,6 @@ import org.haobtc.onekey.bean.BalanceCoinInfo
 import org.haobtc.onekey.bean.RemoteImage
 import org.haobtc.onekey.business.wallet.SystemConfigManager
 import java.math.BigDecimal
-import java.math.RoundingMode
 
 class HdWalletAssetAdapter(context: Context, data: List<BalanceCoinInfo?>?) : BaseQuickAdapter<BalanceCoinInfo, BaseViewHolder>(R.layout.all_assets_item, data) {
   private val mSystemConfigManager by lazy {
@@ -33,13 +32,14 @@ class HdWalletAssetAdapter(context: Context, data: List<BalanceCoinInfo?>?) : Ba
   }
 
   fun getFormatBalance(item: BalanceCoinInfo, num: Int): String {
-    return if (!TextUtils.isEmpty(item.balance) && !item.balance.equals("0")) {
-      BigDecimal(item.balance)
-        .setScale(num, RoundingMode.DOWN)
-        .stripTrailingZeros().toPlainString()
-    } else {
-      "0"
+    item.balance?.let {
+      return if (BigDecimal(it).compareTo(BigDecimal.ZERO) == 0) {
+        "0"
+      } else {
+        it
+      }
     }
+    return "0"
   }
 
 }

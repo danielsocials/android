@@ -73,6 +73,12 @@ window.webkit = {
                 debugPrint('init.js request accounts', JSON.stringify(message))
                 executeCallback(message.id, null, [config.address])
             }
+        },
+        addEthereumChain: {
+            postMessage: (message) => {
+                debugPrint('init.js add ethereum chain', JSON.stringify(message))
+                onekeyJsCall.addEthereumChain(message.id, JSON.stringify(message.object))
+            }
         }
     }
 };

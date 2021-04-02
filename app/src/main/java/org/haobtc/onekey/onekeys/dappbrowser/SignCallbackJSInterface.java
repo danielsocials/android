@@ -4,9 +4,11 @@ import android.text.TextUtils;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import androidx.annotation.NonNull;
+import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import java.math.BigInteger;
 import java.net.URI;
+import org.haobtc.onekey.onekeys.dappbrowser.bean.AddEthereumChain;
 import org.haobtc.onekey.onekeys.dappbrowser.bean.Address;
 import org.haobtc.onekey.onekeys.dappbrowser.bean.CryptoFunctions;
 import org.haobtc.onekey.onekeys.dappbrowser.bean.EthereumMessage;
@@ -14,6 +16,7 @@ import org.haobtc.onekey.onekeys.dappbrowser.bean.EthereumTypedMessage;
 import org.haobtc.onekey.onekeys.dappbrowser.bean.OnekeyMessageHex;
 import org.haobtc.onekey.onekeys.dappbrowser.bean.SignMessageType;
 import org.haobtc.onekey.onekeys.dappbrowser.bean.Web3Transaction;
+import org.haobtc.onekey.onekeys.dappbrowser.listener.OnAddEthereumChainListener;
 import org.haobtc.onekey.onekeys.dappbrowser.listener.OnSignMessageHexListener;
 import org.haobtc.onekey.onekeys.dappbrowser.listener.OnSignMessageListener;
 import org.haobtc.onekey.onekeys.dappbrowser.listener.OnSignPersonalMessageListener;
@@ -30,6 +33,7 @@ public class SignCallbackJSInterface {
     @NonNull private final OnSignPersonalMessageListener onSignPersonalMessageListener;
     @NonNull private final OnSignTypedMessageListener onSignTypedMessageListener;
     @NonNull private final OnSignMessageHexListener onSignMessageHexListener;
+    @NonNull private final OnAddEthereumChainListener onAddEthereumChainListener;
 
     public SignCallbackJSInterface(
             WebView webView,
@@ -37,13 +41,15 @@ public class SignCallbackJSInterface {
             @NonNull OnSignMessageListener onSignMessageListener,
             @NonNull OnSignPersonalMessageListener onSignPersonalMessageListener,
             @NonNull OnSignTypedMessageListener onSignTypedMessageListener,
-            @NonNull OnSignMessageHexListener onSignMessageHexListener) {
+            @NonNull OnSignMessageHexListener onSignMessageHexListener,
+            @NonNull OnAddEthereumChainListener onAddEthereumChainListener) {
         this.webView = webView;
         this.onSignTransactionListener = onSignTransactionListener;
         this.onSignMessageListener = onSignMessageListener;
         this.onSignPersonalMessageListener = onSignPersonalMessageListener;
         this.onSignTypedMessageListener = onSignTypedMessageListener;
         this.onSignMessageHexListener = onSignMessageHexListener;
+        this.onAddEthereumChainListener = onAddEthereumChainListener;
     }
 
     @JavascriptInterface
@@ -125,6 +131,13 @@ public class SignCallbackJSInterface {
                 () ->
                         onSignMessageHexListener.onSignMessageHex(
                                 new OnekeyMessageHex(data, payload, callbackId)));
+    }
+
+    @JavascriptInterface
+    public void addEthereumChain(long callbackId, String data) {
+        AddEthereumChain addEthereumChain = new Gson().fromJson(data, AddEthereumChain.class);
+        addEthereumChain.setLeafPosition(callbackId);
+        webView.post(() -> onAddEthereumChainListener.onAddEthereumChain(addEthereumChain));
     }
 
     private String getUrl() {

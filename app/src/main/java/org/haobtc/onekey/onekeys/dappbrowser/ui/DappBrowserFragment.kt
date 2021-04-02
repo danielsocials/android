@@ -69,10 +69,7 @@ import org.haobtc.onekey.utils.HexUtils
 import org.haobtc.onekey.utils.URLUtils
 import org.haobtc.onekey.utils.Utils
 import org.haobtc.onekey.viewmodel.AppWalletViewModel
-import org.web3j.utils.Convert
 import org.web3j.utils.Numeric
-import java.math.BigDecimal
-import java.math.BigInteger
 import java.util.*
 
 /**
@@ -89,6 +86,7 @@ class DappBrowserFragment : BaseFragment(),
     OnSignTypedMessageListener,
     OnSignMessageListener,
     OnSignMessageHexListener,
+    OnAddEthereumChainListener,
     DappActionSheetCallback,
     SignAuthenticationCallback,
     CurrentCoinTypeProvider {
@@ -511,6 +509,7 @@ class DappBrowserFragment : BaseFragment(),
     web3.setOnSignTransactionListener(this)
     web3.setOnSignTypedMessageListener(this)
     web3.setOnSignMessageHexListener(this)
+    web3.setOnAddEthereumChainListener(this)
     if (mLoadOnInit != null) {
       web3.loadUrl(URLUtils.formatUrl(mLoadOnInit), getWeb3Headers())
       setDappTitle(URLUtils.formatUrl(mLoadOnInit))
@@ -790,6 +789,22 @@ class DappBrowserFragment : BaseFragment(),
   }
 
   /**
+   * 监听 Dapp 发起的 addEthereumChain
+   * @param message 需要添加的币种信息
+   */
+  override fun onAddEthereumChain(message: AddEthereumChain?) {
+    BaseAlertBottomDialog(requireContext())
+        .setTitleOverride(R.string.hint_in_development)
+        .setMessage("添加币种 ${message?.nativeCurrency?.name ?: ""}")
+        .setPrimaryButtonText(R.string.i_know_)
+        .setPrimaryButtonListener {
+          web3.onCallFunctionError(message?.leafPosition
+              ?: 0, getString(R.string.hint_in_development))
+        }
+        .show()
+  }
+
+  /**
    * 监听 Dapp 发起的 onSignPersonalMessage 操作
    * @param message 信息
    */
@@ -817,6 +832,10 @@ class DappBrowserFragment : BaseFragment(),
     handleSignMessage(message)
   }
 
+  /**
+   * 监听 Dapp 发钱的所有签字消息操作
+   * @param message 需要签字消息
+   */
   override fun onSignMessageHex(message: OnekeyMessageHex) {
     handleSignMessage(message)
   }

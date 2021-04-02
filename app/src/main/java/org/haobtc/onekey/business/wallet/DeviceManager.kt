@@ -5,7 +5,9 @@ import android.content.Context
 import androidx.fragment.app.FragmentActivity
 import cn.com.heaton.blelibrary.ble.callback.BleConnectCallback
 import cn.com.heaton.blelibrary.ble.model.BleDevice
+import com.alibaba.fastjson.JSON
 import com.google.common.base.Strings
+import com.orhanobut.logger.Logger
 import org.haobtc.onekey.activities.base.MyApplication
 import org.haobtc.onekey.bean.HardwareFeatures
 import org.haobtc.onekey.constant.Constant

@@ -60,7 +60,6 @@ public class HardwareUpgradingFragment extends BaseFragment {
             mBinding.downloadFirmware.setStatus(UpdateLoadingView.DownLodStatus.PREPARE);
             mBinding.installFirmware.setStatus(UpdateLoadingView.DownLodStatus.PREPARE);
             mBinding.installFirmware.setLineVisibility(View.GONE);
-            EventBus.getDefault().post(new UpdateEvent(UpdateEvent.BLE));
         } else if (!Strings.isNullOrEmpty(HardwareUpgradeActivity.newFirmwareVersion)
                 && Strings.isNullOrEmpty(HardwareUpgradeActivity.newBleVersion)) {
             // only have firmware upload
@@ -68,7 +67,6 @@ public class HardwareUpgradingFragment extends BaseFragment {
             mBinding.downloadFirmware.setStatus(UpdateLoadingView.DownLodStatus.START);
             mBinding.installFirmware.setStatus(UpdateLoadingView.DownLodStatus.PREPARE);
             mBinding.installFirmware.setLineVisibility(View.GONE);
-            EventBus.getDefault().post(new UpdateEvent(UpdateEvent.FIRMWARE));
         } else if (!Strings.isNullOrEmpty(HardwareUpgradeActivity.newBleVersion)
                 && Strings.isNullOrEmpty(HardwareUpgradeActivity.newFirmwareVersion)) {
             // only have ble upload
@@ -76,8 +74,8 @@ public class HardwareUpgradingFragment extends BaseFragment {
             mBinding.downloadBle.setStatus(UpdateLoadingView.DownLodStatus.START);
             mBinding.installBle.setStatus(UpdateLoadingView.DownLodStatus.PREPARE);
             mBinding.installBle.setLineVisibility(View.GONE);
-            EventBus.getDefault().post(new UpdateEvent(UpdateEvent.BLE));
         }
+        EventBus.getDefault().post(new UpdateEvent(UpdateEvent.BLE));
 
         mBinding.confirmButton.setOnClickListener(
                 v -> {
@@ -173,9 +171,6 @@ public class HardwareUpgradingFragment extends BaseFragment {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onUpdatedSuccess(UpdateSuccessEvent event) {}
-
     /**
      * event.status : 0--> start download ;1--> start install
      *
@@ -196,6 +191,10 @@ public class HardwareUpgradingFragment extends BaseFragment {
                 setFirmWareInstallProgress(event.progress);
             }
         }
+    }
+
+    public boolean getUpgradeComplete() {
+        return mBinding.confirmButton.isEnabled();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

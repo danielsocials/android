@@ -38,6 +38,7 @@ import org.haobtc.onekey.R;
 import org.haobtc.onekey.bean.HardwareFeatures;
 import org.haobtc.onekey.bean.PyResponse;
 import org.haobtc.onekey.bean.UpdateSuccessEvent;
+import org.haobtc.onekey.business.wallet.DeviceManager;
 import org.haobtc.onekey.constant.Constant;
 import org.haobtc.onekey.constant.PyConstant;
 import org.haobtc.onekey.dfu.service.DfuService;
@@ -45,22 +46,24 @@ import org.haobtc.onekey.event.ButtonRequestEvent;
 import org.haobtc.onekey.event.ChangePinEvent;
 import org.haobtc.onekey.event.ExceptionEvent;
 import org.haobtc.onekey.event.HardWareUpdateEvent;
-import org.haobtc.onekey.event.NotifySuccessfulEvent;
 import org.haobtc.onekey.event.UpdateEvent;
 import org.haobtc.onekey.exception.HardWareExceptions;
-import org.haobtc.onekey.manager.BleManager;
 import org.haobtc.onekey.manager.PyEnv;
 import org.haobtc.onekey.onekeys.dappbrowser.ui.BaseAlertBottomDialog;
 import org.haobtc.onekey.ui.base.BaseActivity;
 import org.haobtc.onekey.ui.fragment.HardwareUpgradeFragment;
 import org.haobtc.onekey.ui.fragment.HardwareUpgradingFragment;
 import org.haobtc.onekey.utils.OKHttpUtils;
+import org.haobtc.onekey.utils.Utils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author liyan
  * @date 12/3/20
  */
-public class HardwareUpgradeActivity extends BaseActivity {
+public class HardwareUpgradeActivity extends BaseActivity
+        implements DeviceManager.OnConnectDeviceListener {
 
     @BindView(R.id.img_back)
     ImageView imgBack;
@@ -85,13 +88,13 @@ public class HardwareUpgradeActivity extends BaseActivity {
     private String cacheDir;
     private MyTask task;
     private SharedPreferences devices;
+    private DeviceManager deviceManager;
     /** dfu callback */
     private final DfuProgressListener dfuProgressListener =
             new DfuProgressListenerAdapter() {
                 @Override
                 public void onDfuCompleted(@NonNull String deviceAddress) {
                     super.onDfuCompleted(deviceAddress);
-                    cancelDfu();
                     // 更新本地信息
                     String features = devices.getString(deviceId, "");
                     if (!Strings.isNullOrEmpty(features)) {
@@ -102,7 +105,7 @@ public class HardwareUpgradeActivity extends BaseActivity {
                     currentBleVersion = newBleVersion;
                     newBleVersion = null;
                     if (!Strings.isNullOrEmpty(newFirmwareVersion)) {
-                        initBle();
+                        deviceManager.connectDeviceByMacAddress(mac, HardwareUpgradeActivity.this);
                     } else {
                         EventBus.getDefault().post(new UpdateSuccessEvent());
                     }
@@ -187,9 +190,8 @@ public class HardwareUpgradeActivity extends BaseActivity {
         dealBundle(Objects.requireNonNull(getIntent().getExtras()));
         hardwareUpgradeFragment = new HardwareUpgradeFragment();
         startFragment(hardwareUpgradeFragment);
-        BleDevice bleDevice = Ble.getInstance().getBleDevice(mac);
-        Ble.getInstance().autoConnect(bleDevice, false);
         hardwareUpgradingFragment = new HardwareUpgradingFragment();
+        deviceManager = DeviceManager.getInstance();
     }
 
     private void dealBundle(Bundle bundle) {
@@ -226,41 +228,12 @@ public class HardwareUpgradeActivity extends BaseActivity {
         return R.layout.activity_hardware_upgrade;
     }
 
-    @OnClick(R.id.img_back)
-    public void onViewClicked(View view) {
-        if (hardwareUpgradingFragment.isAdded() && hardwareUpgradingFragment.isVisible()) {
-            new BaseAlertBottomDialog(mContext)
-                    .setMessage(R.string.stop_update_tip)
-                    .setSecondaryButtonText(R.string.stop_back)
-                    .setTitleOverride(R.string.stop_update)
-                    .setPrimaryButtonText(R.string.cancel)
-                    .setPrimaryButtonColor(R.color.color_993C3C43)
-                    .setSecondaryButtonTextColor(R.color.color_FF3B30)
-                    .setSecondaryButtonListener(
-                            v -> {
-                                if (Objects.nonNull(task) && !task.isCancelled()) {
-                                    task.cancel(true);
-                                    PyEnv.cancelAll();
-                                }
-                                finish();
-                            })
-                    .show();
-        } else {
-            finish();
-        }
-        cancelDfu();
-    }
-
     @Override
     public boolean needEvents() {
         return true;
     }
-    /** 升级固件就绪响应 */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onReadyBle(NotifySuccessfulEvent event) {
-        if (Strings.isNullOrEmpty(firmwareUrl)) {
-            return;
-        }
+
+    private void startUploadFirmware() {
         String path =
                 String.format(
                         "%s/%s%s%s",
@@ -268,7 +241,8 @@ public class HardwareUpgradeActivity extends BaseActivity {
                         Constant.UPDATE_FILE_NAME,
                         newFirmwareVersion,
                         Constant.FIRMWARE_UPDATE_FILE_SUFFIX);
-        new MyTask(
+        task =
+                new MyTask(
                         new MyTask.CallBack() {
                             @Override
                             public void onSuccess() {
@@ -280,33 +254,51 @@ public class HardwareUpgradeActivity extends BaseActivity {
                                 HardwareUpgradeActivity.this.onCancel();
                             }
                         },
-                        hardwareUpgradingFragment)
-                .execute(path, firmwareUrl);
+                        hardwareUpgradingFragment);
+
+        task.execute(path, firmwareUrl);
     }
-    /** 蓝牙初始化 */
-    private void initBle() {
-        BleManager bleManager = BleManager.getInstance(this);
-        bleManager.connDevByMac(mac);
-    }
-    /** 更新监听 */
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUpdateEvent(UpdateEvent event) {
         switch (event.getType()) {
-            case UpdateEvent.FIRMWARE:
-                initBle();
-                break;
             case UpdateEvent.BLE:
-                String path =
-                        String.format(
-                                "%s/%s%s%s",
-                                cacheDir,
-                                Constant.UPDATE_FILE_NAME,
-                                newBleVersion,
-                                Constant.NRF_UPDATE_FILE_SUFFIX);
-                dfu(path, nrfUrl);
+                startUpgrade();
                 break;
             default:
         }
+    }
+
+    private void startUpgrade() {
+        deviceManager.connectDeviceByMacAddress(
+                mac,
+                new DeviceManager.OnConnectDeviceListener<BleDevice>() {
+                    @Override
+                    public void onSuccess(BleDevice bleDevice) {
+                        if (!Strings.isNullOrEmpty(newBleVersion)) {
+                            startUploadBle();
+                        } else if (!Strings.isNullOrEmpty(newFirmwareVersion)) {
+                            startUploadFirmware();
+                        }
+                    }
+
+                    @Override
+                    public void onException(@Nullable BleDevice bleDevice, @NotNull Exception e) {
+                        showPromptMessage(R.string.update_failed);
+                        showUpdateComplete();
+                    }
+                });
+    }
+
+    private void startUploadBle() {
+        String path =
+                String.format(
+                        "%s/%s%s%s",
+                        cacheDir,
+                        Constant.UPDATE_FILE_NAME,
+                        newBleVersion,
+                        Constant.NRF_UPDATE_FILE_SUFFIX);
+        dfu(path, nrfUrl);
     }
 
     private void showPromptMessage(@StringRes int id) {
@@ -391,9 +383,51 @@ public class HardwareUpgradeActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         task = null;
+        cancelDfu();
         DfuServiceListenerHelper.unregisterProgressListener(this, dfuProgressListener);
+        super.onDestroy();
+    }
+
+    @OnClick(R.id.img_back)
+    public void onViewClicked(View view) {
+        if (hardwareUpgradingFragment.isAdded()
+                && hardwareUpgradingFragment.isVisible()
+                && !hardwareUpgradingFragment.getUpgradeComplete()) {
+            showInterceptDialog();
+        } else {
+            finish();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (hardwareUpgradingFragment.isAdded()
+                && hardwareUpgradingFragment.isVisible()
+                && !hardwareUpgradingFragment.getUpgradeComplete()) {
+            showInterceptDialog();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void showInterceptDialog() {
+        new BaseAlertBottomDialog(mContext)
+                .setMessage(R.string.stop_update_tip)
+                .setSecondaryButtonText(R.string.stop_back)
+                .setTitleOverride(R.string.stop_update)
+                .setPrimaryButtonText(R.string.cancel)
+                .setPrimaryButtonColor(R.color.color_993C3C43)
+                .setSecondaryButtonTextColor(R.color.color_FF3B30)
+                .setSecondaryButtonListener(
+                        v -> {
+                            if (Objects.nonNull(task) && !task.isCancelled()) {
+                                task.cancel(true);
+                                PyEnv.cancelAll();
+                            }
+                            finish();
+                        })
+                .show();
     }
 
     /** stm32固件升级成功回调 */
@@ -414,6 +448,17 @@ public class HardwareUpgradeActivity extends BaseActivity {
     public void onCancel() {
         showPromptMessage(R.string.update_failed);
         finish();
+    }
+
+    @Override
+    public void onSuccess(Object o) {
+        startUploadFirmware();
+    }
+
+    @Override
+    public void onException(@Nullable Object o, @NotNull Exception e) {
+        showPromptMessage(R.string.update_failed);
+        showUpdateComplete();
     }
 
     /** 固件升级的异步任务 */
@@ -458,9 +503,7 @@ public class HardwareUpgradeActivity extends BaseActivity {
                         },
                         new Callback() {
                             @Override
-                            public void onFailure(Call call, IOException e) {
-                                // TODO: 2021/4/1 下载失败
-                            }
+                            public void onFailure(Call call, IOException e) {}
 
                             @Override
                             public void onResponse(Call call, Response response)
@@ -489,9 +532,8 @@ public class HardwareUpgradeActivity extends BaseActivity {
 
         @Override
         protected void onProgressUpdate(Object... progresses) {
+            Utils.finishActivity(InputPinOnHardware.class);
             if (fragment.isAdded() && fragment.isResumed()) {
-                // 当在硬件上输入PIN时，退出提醒页面  todo
-                //                EventBus.getDefault().post(new PinInputComplete());
                 EventBus.getDefault()
                         .post(
                                 new HardWareUpdateEvent(

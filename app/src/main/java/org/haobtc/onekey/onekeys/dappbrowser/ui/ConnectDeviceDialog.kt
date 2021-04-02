@@ -31,7 +31,11 @@ import org.haobtc.onekey.viewmodel.AppWalletViewModel
  * @author Onekey@QuincySx
  * @create 2021-03-03 10:23 AM
  */
-class ConnectDeviceDialog(context: Context) : Dialog(context) {
+class ConnectDeviceDialog @JvmOverloads constructor(
+    context: Context,
+    private val macAddress: String? = null,
+    private val ignoreForceUpdate: Boolean = false
+) : Dialog(context) {
   enum class TEXT_STYLE {
     CENTERED, LEFT
   }
@@ -91,10 +95,42 @@ class ConnectDeviceDialog(context: Context) : Dialog(context) {
 
   override fun show() {
     super.show()
-    connect()
+
+    val callback = object : DeviceManager.OnConnectDeviceListener<BleDevice> {
+      override fun onSuccess(t: BleDevice) {
+        isDoneConnect = true
+        PyEnv.getFeature(context) {
+          mHandler.postAtFrontOfQueue {
+            if (TextUtils.isEmpty(it.errors)) {
+              dismiss()
+              if (!ignoreForceUpdate && forceUpdate(it.result)) {
+                error?.invoke(PyEnvException.ForcedHardwareUpgradeException())
+              } else {
+                success?.invoke(it.result)
+              }
+            } else {
+              dismiss()
+              error?.invoke(PyEnvException.convert(Exception(it.errors)))
+            }
+          }
+        }
+      }
+
+      override fun onException(t: BleDevice?, e: Exception) {
+        if (isShowing == true) {
+          dismiss()
+        }
+        error?.invoke(e)
+      }
+    }
+    if (macAddress.isNullOrEmpty()) {
+      connect(callback)
+    } else {
+      connectByMacAddress(macAddress, callback)
+    }
   }
 
-  private fun connect() {
+  private fun connect(callback: DeviceManager.OnConnectDeviceListener<BleDevice>) {
     mWalletInfo?.deviceId?.let { deviceId ->
       setOnDismissListener {
         if (!isDoneConnect) {
@@ -102,35 +138,22 @@ class ConnectDeviceDialog(context: Context) : Dialog(context) {
         }
       }
 
-      deviceManager.connectDeviceByDeviceId(deviceId, object : DeviceManager.OnConnectDeviceListener<BleDevice> {
-        override fun onSuccess(t: BleDevice) {
-          isDoneConnect = true
-          PyEnv.getFeature(context) {
-            mHandler.postAtFrontOfQueue {
-              if (TextUtils.isEmpty(it.errors)) {
-                dismiss()
-                if (forceUpdate(it.result)) {
-                  error?.invoke(PyEnvException.ForcedHardwareUpgradeException())
-                } else {
-                  success?.invoke(it.result)
-                }
-              } else {
-                dismiss()
-                error?.invoke(PyEnvException.convert(Exception(it.errors)))
-              }
-            }
-          }
-        }
-
-        override fun onException(t: BleDevice?, e: Exception) {
-          if (isShowing == true) {
-            dismiss()
-          }
-          error?.invoke(e)
-        }
-      })
+      deviceManager.connectDeviceByDeviceId(deviceId, callback)
     } ?: error?.invoke(DeviceException.OnConnectError())
   }
+
+
+  private fun connectByMacAddress(address: String, callback: DeviceManager.OnConnectDeviceListener<BleDevice>) {
+
+    setOnDismissListener {
+      if (!isDoneConnect) {
+        context.let { it1 -> DeviceManager.getInstance(it1).cancelDeviceByMacAddress(address) }
+      }
+    }
+
+    deviceManager.connectDeviceByMacAddress(address, callback)
+  }
+
 
   override fun setOnDismissListener(listener: DialogInterface.OnDismissListener?) {
     super.setOnDismissListener(listener)

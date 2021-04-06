@@ -192,6 +192,7 @@ public class HardwareUpgradeActivity extends BaseActivity
     /** init */
     @Override
     public void init() {
+        DfuServiceListenerHelper.registerProgressListener(this, dfuProgressListener);
         devices = getSharedPreferences("devices", Context.MODE_PRIVATE);
         dealBundle(Objects.requireNonNull(getIntent().getExtras()));
         hardwareUpgradeFragment = new HardwareUpgradeFragment();
@@ -214,14 +215,6 @@ public class HardwareUpgradeActivity extends BaseActivity
         deviceId = bundle.getString(Constant.SERIAL_NUM);
         cacheDir = getExternalCacheDir().getPath();
         isForceUpdate = bundle.getBoolean(Constant.FORCE_UPDATE, false);
-        String features = devices.getString(deviceId, "");
-        if (!Strings.isNullOrEmpty(features)) {
-            HardwareFeatures hardware = HardwareFeatures.objectFromData(features);
-            if (hardware.getBleVer().equals(newBleVersion)) {
-                currentBleVersion = newBleVersion;
-                newBleVersion = null;
-            }
-        }
     }
 
     /**
@@ -386,7 +379,6 @@ public class HardwareUpgradeActivity extends BaseActivity
     @Override
     protected void onResume() {
         super.onResume();
-        DfuServiceListenerHelper.registerProgressListener(this, dfuProgressListener);
     }
 
     @Override

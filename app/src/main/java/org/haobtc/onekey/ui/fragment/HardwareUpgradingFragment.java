@@ -129,9 +129,10 @@ public class HardwareUpgradingFragment extends BaseFragment {
         if (progress == 100) {
             mBinding.installBle.setStatus(UpdateLoadingView.DownLodStatus.DONE);
             mBinding.installBle.setProgressShow(getString(R.string.install_complete));
-            mInstallComplete = true;
             if (!Strings.isNullOrEmpty(HardwareUpgradeActivity.newFirmwareVersion)) {
                 mBinding.downloadFirmware.setStatus(UpdateLoadingView.DownLodStatus.START);
+            } else {
+                mInstallComplete = true;
             }
         } else {
             mBinding.installBle.setProgressShow(
@@ -203,8 +204,10 @@ public class HardwareUpgradingFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUpdating(UpdateSuccessEvent event) {
-        mBinding.confirmButton.setEnabled(true);
-        mBinding.confirmButton.setTextColor(getResources().getColor(R.color.white));
+        if (mInstallComplete) {
+            mBinding.confirmButton.setEnabled(true);
+            mBinding.confirmButton.setTextColor(getResources().getColor(R.color.white));
+        }
     }
 
     @Override

@@ -121,9 +121,10 @@
             android:layout_marginBottom="@dimen/dp_40"
             android:gravity="center"
             android:text="@string/finish"
-            android:textColor="@color/white"
+            android:enabled="false"
             android:textSize="@dimen/sp_17"
             app:corner="@dimen/dp_8"
+            android:textColor="@color/color_4DFFFFFF"
             app:solid="@color/onekey" />
     </LinearLayout>
 </RelativeLayout>

@@ -47,6 +47,7 @@ import org.haobtc.onekey.event.ChangePinEvent;
 import org.haobtc.onekey.event.ExceptionEvent;
 import org.haobtc.onekey.event.HardWareUpdateEvent;
 import org.haobtc.onekey.event.UpdateEvent;
+import org.haobtc.onekey.event.UpdateVersionEvent;
 import org.haobtc.onekey.exception.HardWareExceptions;
 import org.haobtc.onekey.manager.PyEnv;
 import org.haobtc.onekey.onekeys.dappbrowser.ui.BaseAlertBottomDialog;
@@ -107,6 +108,11 @@ public class HardwareUpgradeActivity extends BaseActivity
                     if (!Strings.isNullOrEmpty(newFirmwareVersion)) {
                         deviceManager.connectDeviceByMacAddress(mac, HardwareUpgradeActivity.this);
                     } else {
+                        EventBus.getDefault()
+                                .post(
+                                        new UpdateVersionEvent(
+                                                HardwareUpgradingFragment.HardwareType.BLE,
+                                                currentBleVersion));
                         EventBus.getDefault().post(new UpdateSuccessEvent());
                     }
                 }
@@ -419,8 +425,8 @@ public class HardwareUpgradeActivity extends BaseActivity
                 .setSecondaryButtonText(R.string.stop_back)
                 .setTitle(R.string.stop_update)
                 .setPrimaryButtonText(R.string.cancel)
-                .setPrimaryButtonTextColor(R.color.color_993C3C43)
-                .setSecondaryButtonTextColor(R.color.color_FF3B30)
+                .setPrimaryButtonTextColor(getColor(R.color.color_993C3C43))
+                .setSecondaryButtonTextColor(getColor(R.color.color_FF3B30))
                 .setSecondaryButtonListener(
                         v -> {
                             if (Objects.nonNull(task) && !task.isCancelled()) {
@@ -429,7 +435,8 @@ public class HardwareUpgradeActivity extends BaseActivity
                             }
                             finish();
                         })
-                .build().showNow();
+                .build()
+                .showNow();
     }
 
     /** stm32固件升级成功回调 */
@@ -444,6 +451,11 @@ public class HardwareUpgradeActivity extends BaseActivity
         currentFirmwareVersion = newFirmwareVersion;
         newFirmwareVersion = null;
         EventBus.getDefault().post(new UpdateSuccessEvent());
+        EventBus.getDefault()
+                .post(
+                        new UpdateVersionEvent(
+                                HardwareUpgradingFragment.HardwareType.FIRMWARE,
+                                currentFirmwareVersion));
     }
 
     /** stm32固件升级失败回调 */

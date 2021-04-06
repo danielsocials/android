@@ -56,8 +56,6 @@ public class HardwareUpgradingFragment extends BaseFragment {
         if (getActivity() instanceof HardwareUpgradeActivity) {
             mActivity = (HardwareUpgradeActivity) getActivity();
         }
-        mBinding.confirmButton.setEnabled(false);
-        mBinding.confirmButton.setTextColor(getResources().getColor(R.color.color_4DFFFFFF));
         if (!Strings.isNullOrEmpty(HardwareUpgradeActivity.newFirmwareVersion)
                 && !Strings.isNullOrEmpty(HardwareUpgradeActivity.newBleVersion)) {
             // have firmware and ble upload

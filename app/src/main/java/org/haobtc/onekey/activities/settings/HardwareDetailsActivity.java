@@ -53,6 +53,7 @@ import org.haobtc.onekey.event.GotVerifyInfoEvent;
 import org.haobtc.onekey.event.NotifySuccessfulEvent;
 import org.haobtc.onekey.event.PinInputComplete;
 import org.haobtc.onekey.event.PostVerifyInfoEvent;
+import org.haobtc.onekey.event.UpdateVersionEvent;
 import org.haobtc.onekey.event.VerifyFailedEvent;
 import org.haobtc.onekey.event.VerifySuccessEvent;
 import org.haobtc.onekey.event.WipeEvent;
@@ -71,6 +72,7 @@ import org.haobtc.onekey.ui.base.BaseActivity;
 import org.haobtc.onekey.ui.dialog.ConnectingDialog;
 import org.haobtc.onekey.ui.dialog.DeleteLocalDeviceDialog;
 import org.haobtc.onekey.ui.dialog.InvalidDeviceIdWarningDialog;
+import org.haobtc.onekey.ui.fragment.HardwareUpgradingFragment;
 
 /** @author liyan */
 public class HardwareDetailsActivity extends BaseActivity implements BusinessAsyncTask.Helper {
@@ -641,6 +643,18 @@ public class HardwareDetailsActivity extends BaseActivity implements BusinessAsy
             default:
         }
         currentMethod = "";
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateVersion(UpdateVersionEvent updateVersionEvent) {
+        switch (updateVersionEvent.hardwareType) {
+            case HardwareUpgradingFragment.HardwareType.BLE:
+                nrfVersion = updateVersionEvent.version;
+                break;
+            case HardwareUpgradingFragment.HardwareType.FIRMWARE:
+                firmwareVersion = updateVersionEvent.version;
+                break;
+        }
     }
 
     @Override

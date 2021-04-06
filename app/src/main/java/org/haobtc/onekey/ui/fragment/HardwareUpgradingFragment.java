@@ -38,6 +38,12 @@ public class HardwareUpgradingFragment extends BaseFragment {
         int FIRMWARE = 1;
     }
 
+    @IntDef({ProgressStatus.DOWNLOAD, ProgressStatus.INSTALL})
+    public @interface ProgressStatus {
+        int DOWNLOAD = 0;
+        int INSTALL = 1;
+    }
+
     private boolean mInstallComplete = false;
 
     /**
@@ -179,13 +185,13 @@ public class HardwareUpgradingFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUpdating(HardWareUpdateEvent event) {
         if (event.hardwareType == HardwareType.BLE) {
-            if (event.status == 0) {
+            if (event.status == ProgressStatus.DOWNLOAD) {
                 setBleDownProgress(event.progress);
             } else {
                 setBleInstallProgress(event.progress);
             }
         } else if (event.hardwareType == HardwareType.FIRMWARE) {
-            if (event.status == 0) {
+            if (event.status == ProgressStatus.DOWNLOAD) {
                 setFirmWareDownProgress(event.progress);
             } else {
                 setFirmWareInstallProgress(event.progress);

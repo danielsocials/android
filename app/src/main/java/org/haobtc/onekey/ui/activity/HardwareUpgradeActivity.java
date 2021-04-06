@@ -144,7 +144,7 @@ public class HardwareUpgradeActivity extends BaseActivity
                                         new HardWareUpdateEvent(
                                                 HardwareUpgradingFragment.HardwareType.BLE,
                                                 percent,
-                                                1));
+                                                HardwareUpgradingFragment.ProgressStatus.INSTALL));
                     }
                 }
 
@@ -315,7 +315,9 @@ public class HardwareUpgradeActivity extends BaseActivity
             EventBus.getDefault()
                     .post(
                             new HardWareUpdateEvent(
-                                    HardwareUpgradingFragment.HardwareType.BLE, 100, 0));
+                                    HardwareUpgradingFragment.HardwareType.BLE,
+                                    100,
+                                    HardwareUpgradingFragment.ProgressStatus.DOWNLOAD));
             beginDfu(path);
         } else {
             // start install ble
@@ -328,7 +330,7 @@ public class HardwareUpgradeActivity extends BaseActivity
                                         new HardWareUpdateEvent(
                                                 HardwareUpgradingFragment.HardwareType.BLE,
                                                 progress,
-                                                0));
+                                                HardwareUpgradingFragment.ProgressStatus.DOWNLOAD));
                         if (done) {
                             beginDfu(path);
                         }
@@ -495,7 +497,8 @@ public class HardwareUpgradeActivity extends BaseActivity
                                                         HardwareUpgradingFragment.HardwareType
                                                                 .FIRMWARE,
                                                         progress,
-                                                        0));
+                                                        HardwareUpgradingFragment.ProgressStatus
+                                                                .DOWNLOAD));
                                 if (done) {
                                     doUpdateFirmWare(path);
                                 }
@@ -539,7 +542,7 @@ public class HardwareUpgradeActivity extends BaseActivity
                                 new HardWareUpdateEvent(
                                         HardwareUpgradingFragment.HardwareType.FIRMWARE,
                                         Integer.parseInt(((progresses[0]).toString())),
-                                        1));
+                                        HardwareUpgradingFragment.ProgressStatus.INSTALL));
             }
         }
 
@@ -560,7 +563,9 @@ public class HardwareUpgradeActivity extends BaseActivity
                 EventBus.getDefault()
                         .post(
                                 new HardWareUpdateEvent(
-                                        HardwareUpgradingFragment.HardwareType.FIRMWARE, 100, 0));
+                                        HardwareUpgradingFragment.HardwareType.FIRMWARE,
+                                        100,
+                                        HardwareUpgradingFragment.ProgressStatus.DOWNLOAD));
             }
             File file = new File(path);
             PyEnv.setProgressReporter(this);

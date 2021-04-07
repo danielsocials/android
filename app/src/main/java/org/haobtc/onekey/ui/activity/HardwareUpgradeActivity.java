@@ -96,6 +96,7 @@ public class HardwareUpgradeActivity extends BaseActivity
                 @Override
                 public void onDfuCompleted(@NonNull String deviceAddress) {
                     super.onDfuCompleted(deviceAddress);
+                    cancelDfu();
                     // 更新本地信息
                     String features = devices.getString(deviceId, "");
                     if (!Strings.isNullOrEmpty(features)) {
@@ -490,27 +491,24 @@ public class HardwareUpgradeActivity extends BaseActivity
             } else {
                 OKHttpUtils.downloadFile(
                         url,
-                        new OKHttpUtils.ProgressListener() {
-                            @Override
-                            public void onProgress(
-                                    long currentBytes, long contentLength, boolean done) {
-                                int progress = (int) (currentBytes * 100 / contentLength);
-                                EventBus.getDefault()
-                                        .post(
-                                                new HardWareUpdateEvent(
-                                                        HardwareUpgradingFragment.HardwareType
-                                                                .FIRMWARE,
-                                                        progress,
-                                                        HardwareUpgradingFragment.ProgressStatus
-                                                                .DOWNLOAD));
-                                if (done) {
-                                    doUpdateFirmWare(path);
-                                }
+                        (currentBytes, contentLength, done) -> {
+                            int progress = (int) (currentBytes * 100 / contentLength);
+                            EventBus.getDefault()
+                                    .post(
+                                            new HardWareUpdateEvent(
+                                                    HardwareUpgradingFragment.HardwareType.FIRMWARE,
+                                                    progress,
+                                                    HardwareUpgradingFragment.ProgressStatus
+                                                            .DOWNLOAD));
+                            if (done) {
+                                doUpdateFirmWare(path);
                             }
                         },
                         new Callback() {
                             @Override
-                            public void onFailure(Call call, IOException e) {}
+                            public void onFailure(Call call, IOException e) {
+                                cancel(true);
+                            }
 
                             @Override
                             public void onResponse(Call call, Response response)
@@ -529,6 +527,7 @@ public class HardwareUpgradeActivity extends BaseActivity
                                         is.close();
                                     } catch (Exception e) {
                                         e.printStackTrace();
+                                        cancel(true);
                                     }
                                 }
                             }

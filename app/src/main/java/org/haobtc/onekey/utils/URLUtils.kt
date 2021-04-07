@@ -17,7 +17,7 @@ object URLUtils {
       url
     } else {
       if (url != null && isValidUrl(url)) {
-        HTTPS_PREFIX + url
+        HTTP_PREFIX + url
       } else {
         url ?: "$GOOGLE_SEARCH_PREFIX$url"
       }

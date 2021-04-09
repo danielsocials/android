@@ -129,7 +129,6 @@ public final class PyEnv {
         }
         sCommands = initCommands();
         loadAllWallet();
-        loadLocalWalletInfo();
     }
 
     public static PyObject initCommands() {
@@ -238,6 +237,11 @@ public final class PyEnv {
         sNotify();
     }
 
+    // notify hardware undo all operations
+    public static void ensureClient() {
+        sCommands.callAttr("ensure_client", MyApplication.getInstance().getDeviceWay());
+    }
+
     /** 回传PIN码 */
     public static void setPin(String pin) {
         sCustomerUI.callAttr(PyConstant.SET_PIN, pin);
@@ -249,7 +253,6 @@ public final class PyEnv {
 
     public static void loadAllWallet() {
         try {
-            Logger.d("sCommands -----》" + sCommands != null);
             sCommands.callAttr(PyConstant.LOAD_ALL_WALLET);
         } catch (Exception e) {
             Logger.d("异常---》");

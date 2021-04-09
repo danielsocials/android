@@ -370,7 +370,6 @@ public class SendHdActivity extends BaseActivity implements BusinessAsyncTask.He
                 mDeviceName = hdWalletName;
             }
         }
-
     }
 
     private void showWatchTipDialog() {
@@ -1360,10 +1359,10 @@ public class SendHdActivity extends BaseActivity implements BusinessAsyncTask.He
         }
         Disposable disposable =
                 Single.create(
-                        emitter -> {
-                            dealWithHardConnect(e.getMessage(), mDeviceName);
-                            emitter.onSuccess("");
-                        })
+                                emitter -> {
+                                    dealWithHardConnect(e.getMessage(), mDeviceName);
+                                    emitter.onSuccess("");
+                                })
                         .subscribeOn(AndroidSchedulers.mainThread())
                         .subscribe(result -> {});
         mCompositeDisposable.add(disposable);
@@ -1411,6 +1410,7 @@ public class SendHdActivity extends BaseActivity implements BusinessAsyncTask.He
 
     @Override
     protected void onDestroy() {
+        PyEnv.cancelAll();
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         mCompositeDisposable.clear();

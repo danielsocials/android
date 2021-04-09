@@ -28,7 +28,6 @@ import com.yzq.zxinglibrary.encode.CodeCreator;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
-
 import java.io.File;
 import java.util.Locale;
 import java.util.Objects;
@@ -146,6 +145,7 @@ public class ReceiveHDActivity extends BaseActivity implements BusinessAsyncTask
     private Vm.CoinType mCoinType;
     @Vm.WalletType private int mWalletType;
     private String mDeviceName;
+    private BusinessAsyncTask task;
 
     /** init */
     @Override
@@ -395,8 +395,8 @@ public class ReceiveHDActivity extends BaseActivity implements BusinessAsyncTask
     }
 
     private void verifyAddress() {
-        new BusinessAsyncTask()
-                .setHelper(this)
+        task = new BusinessAsyncTask();
+        task.setHelper(this)
                 .execute(
                         BusinessAsyncTask.SHOW_ADDRESS,
                         address,
@@ -440,10 +440,10 @@ public class ReceiveHDActivity extends BaseActivity implements BusinessAsyncTask
         }
         io.reactivex.rxjava3.disposables.Disposable disposable =
                 Single.create(
-                        emitter -> {
-                            dealWithHardConnect(e.getMessage(), mDeviceName);
-                            emitter.onSuccess("");
-                        })
+                                emitter -> {
+                                    dealWithHardConnect(e.getMessage(), mDeviceName);
+                                    emitter.onSuccess("");
+                                })
                         .subscribeOn(AndroidSchedulers.mainThread())
                         .subscribe(result -> {});
         mCompositeDisposable.add(disposable);
@@ -473,6 +473,7 @@ public class ReceiveHDActivity extends BaseActivity implements BusinessAsyncTask
 
     @Override
     protected void onDestroy() {
+        PyEnv.cancelAll();
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         Optional.ofNullable(subscriber).ifPresent(Disposable::dispose);

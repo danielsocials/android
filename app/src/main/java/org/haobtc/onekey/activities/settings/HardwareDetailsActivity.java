@@ -589,6 +589,7 @@ public class HardwareDetailsActivity extends BaseActivity implements BusinessAsy
 
     @Override
     protected void onDestroy() {
+        PyEnv.cancelAll();
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }

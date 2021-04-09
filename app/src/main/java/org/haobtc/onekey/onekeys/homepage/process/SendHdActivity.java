@@ -18,14 +18,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-import butterknife.BindView;
-import butterknife.OnClick;
-import butterknife.OnFocusChange;
-import butterknife.OnTextChanged;
+
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
 import com.lxj.xpopup.XPopup;
@@ -33,18 +31,7 @@ import com.orhanobut.logger.Logger;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.yzq.zxinglibrary.android.CaptureActivity;
 import com.yzq.zxinglibrary.bean.ZxingConfig;
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.ObservableOnSubscribe;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Optional;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -89,6 +76,23 @@ import org.haobtc.onekey.ui.widget.PointLengthFilter;
 import org.haobtc.onekey.utils.ClipboardUtils;
 import org.haobtc.onekey.utils.CoinDisplayUtils;
 import org.haobtc.onekey.viewmodel.AppWalletViewModel;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
+
+import butterknife.BindView;
+import butterknife.OnClick;
+import butterknife.OnFocusChange;
+import butterknife.OnTextChanged;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableOnSubscribe;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /** @author liyan */
 public class SendHdActivity extends BaseActivity implements BusinessAsyncTask.Helper {
@@ -1354,18 +1358,8 @@ public class SendHdActivity extends BaseActivity implements BusinessAsyncTask.He
     @Override
     public void onException(Exception e) {
         EventBus.getDefault().post(new ExitEvent());
-        if (!mCompositeDisposable.isDisposed()) {
-            mCompositeDisposable.dispose();
-        }
-        Disposable disposable =
-                Single.create(
-                                emitter -> {
-                                    dealWithHardConnect(e.getMessage(), mDeviceName);
-                                    emitter.onSuccess("");
-                                })
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .subscribe(result -> {});
-        mCompositeDisposable.add(disposable);
+        runOnUiThread(() -> dealWithHardConnect(e.getMessage(), mDeviceName));
+
         signClickable = true;
     }
 

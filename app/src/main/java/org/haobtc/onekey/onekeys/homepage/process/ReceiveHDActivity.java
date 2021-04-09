@@ -26,8 +26,11 @@ import com.lxj.xpopup.XPopup;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.yzq.zxinglibrary.encode.CodeCreator;
 import io.reactivex.disposables.Disposable;
+<<<<<<< HEAD
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
+=======
+>>>>>>> resolve hardware reset dialog
 import java.io.File;
 import java.util.Locale;
 import java.util.Objects;
@@ -435,18 +438,7 @@ public class ReceiveHDActivity extends BaseActivity implements BusinessAsyncTask
     @Override
     public void onException(Exception e) {
         EventBus.getDefault().post(new ExitEvent());
-        if (!mCompositeDisposable.isDisposed()) {
-            mCompositeDisposable.dispose();
-        }
-        io.reactivex.rxjava3.disposables.Disposable disposable =
-                Single.create(
-                                emitter -> {
-                                    dealWithHardConnect(e.getMessage(), mDeviceName);
-                                    emitter.onSuccess("");
-                                })
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .subscribe(result -> {});
-        mCompositeDisposable.add(disposable);
+        runOnUiThread(() -> dealWithHardConnect(e.getMessage(), mDeviceName));
     }
 
     @Override

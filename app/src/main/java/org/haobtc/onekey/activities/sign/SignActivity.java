@@ -1,7 +1,5 @@
 package org.haobtc.onekey.activities.sign;
 
-import static org.haobtc.onekey.constant.Constant.CURRENT_SELECTED_WALLET_TYPE;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,12 +12,11 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import butterknife.BindView;
-import butterknife.OnClick;
-import butterknife.OnTextChanged;
+
 import com.chaquo.python.Kwarg;
 import com.chaquo.python.PyObject;
 import com.google.common.base.Strings;
@@ -28,12 +25,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.yzq.zxinglibrary.android.CaptureActivity;
 import com.yzq.zxinglibrary.bean.ZxingConfig;
 import com.yzq.zxinglibrary.common.Constant;
-import dr.android.fileselector.FileSelectConstant;
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -65,6 +57,21 @@ import org.haobtc.onekey.ui.dialog.PassInputDialog;
 import org.haobtc.onekey.ui.dialog.TransactionConfirmDialog;
 import org.haobtc.onekey.utils.ClipboardUtils;
 import org.haobtc.onekey.viewmodel.AppWalletViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import butterknife.BindView;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
+import dr.android.fileselector.FileSelectConstant;
+
+import static org.haobtc.onekey.constant.Constant.CURRENT_SELECTED_WALLET_TYPE;
+
+<<<<<<<HEAD
+=======
+        >>>>>>>resolve hardware reset dialog
 
 /** @author liyan */
 public class SignActivity extends BaseActivity
@@ -394,18 +401,7 @@ public class SignActivity extends BaseActivity
             // 硬件按钮点击取消
             showToast(getString(R.string.hint_hardware_signature_cancelled));
         } else if (!Objects.requireNonNull(e.getMessage()).isEmpty()) {
-            if (!mCompositeDisposable.isDisposed()) {
-                mCompositeDisposable.dispose();
-            }
-            io.reactivex.rxjava3.disposables.Disposable disposable =
-                    Single.create(
-                                    emitter -> {
-                                        dealWithHardConnect(e.getMessage(), mDeviceName);
-                                        emitter.onSuccess("");
-                                    })
-                            .subscribeOn(AndroidSchedulers.mainThread())
-                            .subscribe(result -> {});
-            mCompositeDisposable.add(disposable);
+            runOnUiThread(() -> dealWithHardConnect(e.getMessage(), mDeviceName));
         }
     }
 

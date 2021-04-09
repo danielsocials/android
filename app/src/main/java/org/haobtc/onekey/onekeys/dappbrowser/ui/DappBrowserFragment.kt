@@ -791,16 +791,18 @@ class DappBrowserFragment : BaseFragment(),
    * @param message 需要添加的币种信息
    */
   override fun onAddEthereumChain(message: AddEthereumChain?) {
-    BaseAlertBottomDialog.build(requireContext()) {
-      setTitle(R.string.hint_in_development)
-      setMessage("添加币种 ${message?.nativeCurrency?.name ?: ""}")
-      setPrimaryButtonText(R.string.i_know_)
-      setPrimaryButtonListener {
-        web3.onCallFunctionError(message?.leafPosition
-            ?: 0, getString(R.string.hint_in_development))
-      }
-    }
-        .showNow()
+    web3.onCallFunctionError(message?.leafPosition
+        ?: 0, getString(R.string.hint_in_development))
+    // BaseAlertBottomDialog.build(requireContext()) {
+    //   setTitle(R.string.hint_in_development)
+    //   setMessage("添加币种 ${message?.nativeCurrency?.name ?: ""}")
+    //   setPrimaryButtonText(R.string.i_know_)
+    //   setPrimaryButtonListener {
+    //     web3.onCallFunctionError(message?.leafPosition
+    //         ?: 0, getString(R.string.hint_in_development))
+    //   }
+    // }
+    //     .showNow()
   }
 
   /**

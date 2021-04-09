@@ -138,6 +138,27 @@ public class Web3View extends WebView {
         loadInterface = iFace;
     }
 
+    public void changeWalletAddress(@NonNull String address) {
+        jsInjectorClient.setWalletAddress(address);
+        evaluateJavascript(
+                "javascript:function(){ window.ethereum.onekeyChangeAddress('" + address + "') }",
+                value -> Log.i("onekeyChangeAddress", value));
+    }
+
+    public void changeChainId(@NonNull int chainId) {
+        jsInjectorClient.setChainId(chainId);
+        evaluateJavascript(
+                "javascript:function(){ window.ethereum.onekeyChangeChainId('" + chainId + "') }",
+                value -> Log.i("onekeyChangeChainId", value));
+    }
+
+    public void changeChainRpcUrl(@NonNull String rpcUrl) {
+        jsInjectorClient.setRpcUrl(rpcUrl);
+        evaluateJavascript(
+                "javascript:function(){ window.ethereum.onekeyChangeRpcUrl('" + rpcUrl + "') }",
+                value -> Log.i("onekeyChangeRpcUrl", value));
+    }
+
     @Nullable
     public String getRpcUrl() {
         return jsInjectorClient.getRpcUrl();

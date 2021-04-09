@@ -184,7 +184,9 @@ public class JsInjectorClient {
     private String loadInitJs(Context context) {
         String initSrc = loadFile(context, R.raw.init);
         String address =
-                walletAddress == null ? "0000000000000000000000000000000000000000" : walletAddress;
+                walletAddress == null
+                        ? "0x0000000000000000000000000000000000000000"
+                        : walletAddress;
         return String.format(initSrc, address, rpcUrl, chainId, BuildConfig.DEBUG);
     }
 

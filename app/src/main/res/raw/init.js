@@ -3,7 +3,7 @@ console.log('Onekey web3 provider init')
 var config = {
     address: "%1$s",
     rpcUrl: "%2$s",
-    chainId: "%3$s",
+    chainId: Number("%3$s"),
     debug: "%4$s"
 };
 

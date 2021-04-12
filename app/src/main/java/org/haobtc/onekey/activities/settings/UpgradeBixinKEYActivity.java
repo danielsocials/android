@@ -10,6 +10,7 @@ import static org.haobtc.onekey.activities.service.CommunicationModeSelector.nfc
 import static org.haobtc.onekey.activities.service.CommunicationModeSelector.protocol;
 import static org.haobtc.onekey.activities.service.CommunicationModeSelector.way;
 import static org.haobtc.onekey.activities.settings.VersionUpgradeActivity.isDIY;
+import static org.haobtc.onekey.manager.PyEnv.python;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -64,7 +65,6 @@ import org.haobtc.onekey.event.ExitEvent;
 import org.haobtc.onekey.exception.HardWareExceptions;
 import org.haobtc.onekey.fragment.BleDeviceRecyclerViewAdapter;
 import org.haobtc.onekey.manager.PyEnv;
-import org.haobtc.onekey.utils.Global;
 import org.haobtc.onekey.utils.NfcUtils;
 
 public class UpgradeBixinKEYActivity extends BaseActivity {
@@ -207,7 +207,7 @@ public class UpgradeBixinKEYActivity extends BaseActivity {
         }
 
         private void doUpdate(String path) {
-            PyObject protocol = Global.py.getModule("trezorlib.transport.protocol");
+            PyObject protocol = python.getModule("trezorlib.transport.protocol");
             File file = null;
             try {
                 protocol.put("PROCESS_REPORTER", this);

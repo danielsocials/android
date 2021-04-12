@@ -1,6 +1,7 @@
 package org.haobtc.onekey.activities.service;
 
 import static org.haobtc.onekey.activities.sign.SignActivity.strinputAddress;
+import static org.haobtc.onekey.manager.PyEnv.python;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -136,7 +137,6 @@ import org.haobtc.onekey.fragment.ReadingOrSendingDialogFragment;
 import org.haobtc.onekey.fragment.mainwheel.CheckHideWalletFragment;
 import org.haobtc.onekey.manager.PyEnv;
 import org.haobtc.onekey.utils.CustomerUsbManager;
-import org.haobtc.onekey.utils.Global;
 import org.haobtc.onekey.utils.NfcUtils;
 
 /**
@@ -204,16 +204,16 @@ public class CommunicationModeSelector extends BaseActivity
     private AnimationDrawable animationDrawable;
 
     static {
-        nfc = Global.py.getModule("trezorlib.transport.nfc");
-        ble = Global.py.getModule("trezorlib.transport.bluetooth");
-        usb = Global.py.getModule("trezorlib.transport.android_usb");
-        protocol = Global.py.getModule("trezorlib.transport.protocol");
+        nfc = python.getModule("trezorlib.transport.nfc");
+        ble = python.getModule("trezorlib.transport.bluetooth");
+        usb = python.getModule("trezorlib.transport.android_usb");
+        protocol = python.getModule("trezorlib.transport.protocol");
         bleHandler = ble.get("BlueToothHandler");
         nfcHandler = nfc.get("NFCHandle");
         usbTransport = usb.get("AndroidUsbTransport");
         nfcTransport = nfc.get("NFCTransport");
         bleTransport = ble.get("BlueToothTransport");
-        customerUI = Global.py.getModule("trezorlib.customer_ui").get("CustomerUI");
+        customerUI = python.getModule("trezorlib.customer_ui").get("CustomerUI");
     }
 
     @Override

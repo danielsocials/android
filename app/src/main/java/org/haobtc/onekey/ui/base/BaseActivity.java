@@ -2,7 +2,6 @@ package org.haobtc.onekey.ui.base;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
@@ -28,9 +27,9 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import java.util.Locale;
 import org.greenrobot.eventbus.EventBus;
 import org.haobtc.onekey.R;
-import org.haobtc.onekey.activities.base.LunchActivity;
 import org.haobtc.onekey.business.language.LanguageManager;
 import org.haobtc.onekey.manager.ActivityManager;
+import org.haobtc.onekey.manager.PyEnv;
 import org.haobtc.onekey.onekeys.dappbrowser.ui.BaseAlertBottomDialog;
 import org.haobtc.onekey.utils.MyDialog;
 
@@ -68,12 +67,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setCustomDensity();
         super.onCreate(savedInstanceState);
+        PyEnv.init();
         ActivityManager.getInstance().addActivity(this);
-        if (null != savedInstanceState) {
-            Intent intent = new Intent(this, LunchActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        }
         mContext = this;
 
         if (showToolBar()) {

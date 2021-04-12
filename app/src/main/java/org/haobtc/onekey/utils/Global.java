@@ -2,10 +2,10 @@ package org.haobtc.onekey.utils;
 
 import android.app.Application;
 import android.os.Handler;
-
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 
+@Deprecated
 public final class Global {
     public static Application app;
     public static Python py;

@@ -40,6 +40,7 @@ import org.haobtc.onekey.activities.service.CommunicationModeSelector;
 import org.haobtc.onekey.business.language.LanguageManager;
 import org.haobtc.onekey.constant.Constant;
 import org.haobtc.onekey.manager.ActivityManager;
+import org.haobtc.onekey.manager.PyEnv;
 import org.haobtc.onekey.utils.MyDialog;
 import org.haobtc.onekey.utils.NfcUtils;
 
@@ -56,6 +57,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PyEnv.init();
         ActivityManager.getInstance().addActivity(this);
         if (!isSplash()) {
             if (enableViewBinding()) {

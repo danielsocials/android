@@ -1,5 +1,7 @@
 package org.haobtc.onekey.activities;
 
+import static org.haobtc.onekey.activities.service.CommunicationModeSelector.isNFC;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.MotionEvent;
@@ -9,7 +11,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import java.util.Optional;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -27,27 +32,23 @@ import org.haobtc.onekey.event.FinishEvent;
 import org.haobtc.onekey.event.OperationTimeoutEvent;
 import org.haobtc.onekey.event.PinEvent;
 import org.haobtc.onekey.event.SecondEvent;
-import org.haobtc.onekey.utils.Global;
+import org.haobtc.onekey.manager.PyEnv;
 import org.haobtc.onekey.utils.NumKeyboardUtil;
 import org.haobtc.onekey.utils.PasswordInputView;
-
-import java.util.Optional;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
-import static org.haobtc.onekey.activities.service.CommunicationModeSelector.isNFC;
 
 public class PinSettingActivity extends BaseActivity {
     @BindView(R.id.trader_pwd_set_pwd_edittext)
     PasswordInputView edtPwd;
+
     @BindView(R.id.img_back)
     ImageView imgBack;
+
     @BindView(R.id.bn_next)
     Button bnCreateWallet;
+
     @BindView(R.id.pin_description)
     TextView textViewPinDescription;
+
     private NumKeyboardUtil keyboardUtil;
     private String tag;
     public static final String TAG = PinSettingActivity.class.getSimpleName();
@@ -77,7 +78,6 @@ public class PinSettingActivity extends BaseActivity {
                 break;
             default:
                 textViewPinDescription.setText(getString(R.string.pin_input));
-
         }
         init();
     }
@@ -89,11 +89,12 @@ public class PinSettingActivity extends BaseActivity {
 
     @SuppressLint("ClickableViewAccessibility")
     private void init() {
-        edtPwd.setOnTouchListener((v, event) -> {
-            relativeLayoutKey.setVisibility(View.VISIBLE);
-            keyboardUtil.showKeyboard();
-            return false;
-        });
+        edtPwd.setOnTouchListener(
+                (v, event) -> {
+                    relativeLayoutKey.setVisibility(View.VISIBLE);
+                    keyboardUtil.showKeyboard();
+                    return false;
+                });
     }
 
     @Override
@@ -107,26 +108,29 @@ public class PinSettingActivity extends BaseActivity {
         return super.onTouchEvent(event);
     }
 
-
     @SingleClick
     @OnClick({R.id.img_back, R.id.bn_next})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_back:
-                Global.py.getModule("trezorlib.customer_ui").get("CustomerUI").put("user_cancel", 1);
+                PyEnv.python
+                        .getModule("trezorlib.customer_ui")
+                        .get("CustomerUI")
+                        .put("user_cancel", 1);
                 finish();
                 break;
             case R.id.bn_next:
                 String pin = edtPwd.getText().toString();
                 if (pin.length() == 6) {
                     switch (tag) {
-//                        case SetNameActivity.TAG:
-//                            Intent intent = new Intent(this, ActivatedProcessing.class);
-//                            intent.putExtra("pin", pin);
-//                            startActivity(intent);
-//                            finish();
-//                            break;
-                        // change pin
+                            //                        case SetNameActivity.TAG:
+                            //                            Intent intent = new Intent(this,
+                            // ActivatedProcessing.class);
+                            //                            intent.putExtra("pin", pin);
+                            //                            startActivity(intent);
+                            //                            finish();
+                            //                            break;
+                            // change pin
                         case SettingActivity.TAG_CHANGE_PIN:
                         case HardwareDetailsActivity.TAG:
                             if (pinType == 2) {
@@ -160,7 +164,11 @@ public class PinSettingActivity extends BaseActivity {
                     }
 
                 } else {
-                    Toast.makeText(getBaseContext(), getString(R.string.pass_morethan_6), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(
+                                    getBaseContext(),
+                                    getString(R.string.pass_morethan_6),
+                                    Toast.LENGTH_SHORT)
+                            .show();
                 }
                 break;
             default:

@@ -1,6 +1,9 @@
 package org.haobtc.onekey.activities.base;
 
+import android.app.ActivityManager;
 import android.app.Application;
+import android.content.ComponentCallbacks2;
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -14,6 +17,7 @@ import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.tencent.bugly.crashreport.CrashReport;
 import io.reactivex.rxjava3.plugins.RxJavaPlugins;
+import java.util.List;
 import java.util.UUID;
 import me.jessyan.autosize.AutoSizeConfig;
 import org.greenrobot.eventbus.EventBus;
@@ -23,6 +27,7 @@ import org.haobtc.onekey.constant.Constant;
 import org.haobtc.onekey.constant.StringConstant;
 import org.haobtc.onekey.exception.MyUncaughtExceptionHandler;
 import org.haobtc.onekey.manager.PreferencesManager;
+import org.haobtc.onekey.manager.PyEnv;
 import org.haobtc.onekey.utils.Utils;
 import zendesk.answerbot.AnswerBot;
 import zendesk.core.AnonymousIdentity;
@@ -68,6 +73,25 @@ public class MyApplication extends Application implements ViewModelStoreOwner {
         RxJavaPlugins.setErrorHandler(Throwable::printStackTrace);
         io.reactivex.plugins.RxJavaPlugins.setErrorHandler(Throwable::printStackTrace);
         initZendesk();
+        PyEnv.init();
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        if (level >= ComponentCallbacks2.TRIM_MEMORY_MODERATE) {
+            ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+            List<ActivityManager.RunningAppProcessInfo> processes =
+                    manager.getRunningAppProcesses();
+            int selfPid = android.os.Process.myPid();
+            for (ActivityManager.RunningAppProcessInfo runningAppProcessInfo : processes) {
+                if (runningAppProcessInfo.pid != selfPid) {
+                    android.os.Process.killProcess(runningAppProcessInfo.pid);
+                }
+            }
+            android.os.Process.killProcess(selfPid);
+            System.exit(0);
+        }
     }
 
     private void initZendesk() {

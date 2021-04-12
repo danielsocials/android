@@ -14,6 +14,8 @@ import cn.com.heaton.blelibrary.ble.model.BleDevice;
 import com.alibaba.fastjson.JSON;
 import com.chaquo.python.Kwarg;
 import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
 import com.google.common.base.Strings;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -77,13 +79,13 @@ import org.haobtc.onekey.exception.PyEnvException;
 import org.haobtc.onekey.onekeys.HomeOneKeyActivity;
 import org.haobtc.onekey.ui.base.BaseActivity;
 import org.haobtc.onekey.utils.Daemon;
-import org.haobtc.onekey.utils.Global;
 import org.jetbrains.annotations.NotNull;
 import org.web3j.utils.Convert;
 
 /** @author liyan */
 public final class PyEnv {
-
+    public static @NotNull Python python;
+    private static boolean hasInit;
     public static PyObject sBle,
             sCustomerUI,
             sNfc,
@@ -94,7 +96,8 @@ public final class PyEnv {
             sNfcTransport,
             sUsbTransport,
             sProtocol,
-            sCommands;
+            sCommands,
+            guiConsole;
     private static final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor =
             new ScheduledThreadPoolExecutor(
                     2,
@@ -104,23 +107,34 @@ public final class PyEnv {
             MoreExecutors.listeningDecorator(scheduledThreadPoolExecutor);
 
     static {
-        sNfc = Global.py.getModule(PyConstant.TREZORLIB_TRANSPORT_NFC);
-        sBle = Global.py.getModule(PyConstant.TREZORLIB_TRANSPORT_BLUETOOTH);
-        sUsb = Global.py.getModule(PyConstant.TREZORLIB_TRANSPORT_ANDROID_USB);
-        sProtocol = Global.py.getModule(PyConstant.TREZORLIB_TRANSPORT_PROTOCOL);
+        initChaquo();
+        python = Python.getInstance();
+        sNfc = python.getModule(PyConstant.TREZORLIB_TRANSPORT_NFC);
+        sBle = python.getModule(PyConstant.TREZORLIB_TRANSPORT_BLUETOOTH);
+        sUsb = python.getModule(PyConstant.TREZORLIB_TRANSPORT_ANDROID_USB);
+        sProtocol = python.getModule(PyConstant.TREZORLIB_TRANSPORT_PROTOCOL);
         sBleHandler = sBle.get(PyConstant.BLUETOOTH_HANDLER);
         sNfcHandler = sNfc.get(PyConstant.NFC_HANDLE);
         sUsbTransport = sUsb.get(PyConstant.ANDROID_USB_TRANSPORT);
         sNfcTransport = sNfc.get(PyConstant.NFC_TRANSPORT);
         sBleTransport = sBle.get(PyConstant.BLUETOOTH_TRANSPORT);
         sCustomerUI =
-                Global.py.getModule(PyConstant.TREZORLIB_CUSTOMER_UI).get(PyConstant.CUSTOMER_UI);
+                python.getModule(PyConstant.TREZORLIB_CUSTOMER_UI).get(PyConstant.CUSTOMER_UI);
+    }
+
+    private static void initChaquo() {
+        if (!Python.isStarted()) {
+            Python.start(new AndroidPlatform(MyApplication.getInstance()));
+        }
     }
 
     public static HardwareFeatures currentHwFeatures;
     public static Semaphore semaphore = new Semaphore(1);
 
     public static void init() {
+        if (hasInit) {
+            return;
+        }
         if (BuildConfig.net_type.equals(MyApplication.getInstance().getString(R.string.TestNet))) {
             setTestNet();
         } else if (BuildConfig.net_type.equals(
@@ -129,15 +143,17 @@ public final class PyEnv {
         }
         sCommands = initCommands();
         loadAllWallet();
+        loadLocalWalletInfo();
+        hasInit = true;
     }
 
     public static PyObject initCommands() {
         if (sCommands == null) {
             try {
-                Global.guiConsole = Global.py.getModule(PyConstant.ELECTRUM_GUI_ANDROID_CONSOLE);
+                guiConsole = python.getModule(PyConstant.ELECTRUM_GUI_ANDROID_CONSOLE);
                 String ethNetwork = Vm.getEthNetwork();
                 return sCommands =
-                        Global.guiConsole.callAttr(
+                        guiConsole.callAttr(
                                 PyConstant.ANDROID_COMMANDS,
                                 new Kwarg("chain_type", ethNetwork),
                                 new Kwarg(PyConstant.ANDROID_ID, "112233"),
@@ -169,7 +185,7 @@ public final class PyEnv {
     }
 
     private static void setNetType(String type) {
-        Global.py.getModule(PyConstant.ELECTRUM_CONSTANTS_MODULE).callAttr(type);
+        python.getModule(PyConstant.ELECTRUM_CONSTANTS_MODULE).callAttr(type);
     }
 
     /** 提醒后台任务线程结束等待 */
@@ -503,8 +519,7 @@ public final class PyEnv {
         return infos;
     }
 
-    public static PyResponse<CreateWalletBean> recoveryXpubWallet(String xPubs, boolean hd)
-            throws Exception {
+    public static PyResponse<CreateWalletBean> recoveryXpubWallet(String xPubs, boolean hd) {
         PyResponse<CreateWalletBean> response = new PyResponse<>();
         try {
             String walletsInfo =
@@ -618,10 +633,7 @@ public final class PyEnv {
      * @param xpub 待校验的扩展公钥
      */
     public static boolean validateXpub(String xpub) {
-        if (Global.guiConsole != null) {
-            return Global.guiConsole.callAttr(PyConstant.VALIDATE_XPUB, xpub).toBoolean();
-        }
-        return false;
+        return guiConsole.callAttr(PyConstant.VALIDATE_XPUB, xpub).toBoolean();
     }
 
     /**
@@ -630,10 +642,7 @@ public final class PyEnv {
      * @param address 待校验的地址
      */
     public static boolean verifyAddress(String address) {
-        if (Global.guiConsole != null) {
-            return Global.guiConsole.callAttr(PyConstant.VERIFY_ADDRESS, address).toBoolean();
-        }
-        return false;
+        return guiConsole.callAttr(PyConstant.VERIFY_ADDRESS, address).toBoolean();
     }
 
     /**

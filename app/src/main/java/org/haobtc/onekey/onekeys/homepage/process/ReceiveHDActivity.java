@@ -26,11 +26,6 @@ import com.lxj.xpopup.XPopup;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.yzq.zxinglibrary.encode.CodeCreator;
 import io.reactivex.disposables.Disposable;
-<<<<<<< HEAD
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
-=======
->>>>>>> resolve hardware reset dialog
 import java.io.File;
 import java.util.Locale;
 import java.util.Objects;

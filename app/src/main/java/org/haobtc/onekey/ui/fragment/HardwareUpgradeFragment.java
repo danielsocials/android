@@ -93,7 +93,7 @@ public class HardwareUpgradeFragment extends BaseFragment {
                                     Locale.getDefault(),
                                     "%s %s",
                                     getString(R.string.current_version),
-                                    R.string.unknown_version));
+                                    getString(R.string.unknown_version)));
                 } else {
                     firmCurrentVersion.setText(
                             String.format(
@@ -124,7 +124,7 @@ public class HardwareUpgradeFragment extends BaseFragment {
                                     Locale.getDefault(),
                                     "%s %s",
                                     getString(R.string.current_version),
-                                    R.string.unknown_version));
+                                    getString(R.string.unknown_version)));
                 } else {
                     bleCurrentVersion.setText(
                             String.format(

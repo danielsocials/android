@@ -302,6 +302,7 @@ public class TokenManagerActivity extends BaseActivity
         if (tempData.size() == 0) {
             mMultiStateContainer.show(
                     NoSearchState.class,
+                    true,
                     noSearch -> {
                         noSearch.setOnAddTokenListener(
                                 v -> {

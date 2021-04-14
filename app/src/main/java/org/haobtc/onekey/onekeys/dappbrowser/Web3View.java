@@ -346,8 +346,8 @@ public class Web3View extends WebView {
         @Override
         public void onReceivedError(
                 WebView view, WebResourceRequest request, WebResourceError error) {
-            loadingError = true;
             if (request.isForMainFrame()) {
+                loadingError = true;
                 loadInterface.onWebpageLoadError();
             }
             if (externalClient != null) {

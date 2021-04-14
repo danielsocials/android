@@ -64,6 +64,8 @@ public class HardwareUpgradingFragment extends BaseFragment {
             mBinding.downloadFirmware.setStatus(UpdateLoadingView.DownLodStatus.PREPARE);
             mBinding.installFirmware.setStatus(UpdateLoadingView.DownLodStatus.PREPARE);
             mBinding.installFirmware.setLineVisibility(View.GONE);
+            EventBus.getDefault().post(UpdateEvent.ALL);
+
         } else if (!Strings.isNullOrEmpty(HardwareUpgradeActivity.newFirmwareVersion)
                 && Strings.isNullOrEmpty(HardwareUpgradeActivity.newBleVersion)) {
             // only have firmware upload
@@ -71,6 +73,7 @@ public class HardwareUpgradingFragment extends BaseFragment {
             mBinding.downloadFirmware.setStatus(UpdateLoadingView.DownLodStatus.START);
             mBinding.installFirmware.setStatus(UpdateLoadingView.DownLodStatus.PREPARE);
             mBinding.installFirmware.setLineVisibility(View.GONE);
+            EventBus.getDefault().post(UpdateEvent.FIRMWARE_ONLY);
         } else if (!Strings.isNullOrEmpty(HardwareUpgradeActivity.newBleVersion)
                 && Strings.isNullOrEmpty(HardwareUpgradeActivity.newFirmwareVersion)) {
             // only have ble upload
@@ -78,13 +81,9 @@ public class HardwareUpgradingFragment extends BaseFragment {
             mBinding.downloadBle.setStatus(UpdateLoadingView.DownLodStatus.START);
             mBinding.installBle.setStatus(UpdateLoadingView.DownLodStatus.PREPARE);
             mBinding.installBle.setLineVisibility(View.GONE);
+            EventBus.getDefault().post(UpdateEvent.BLE_ONLY);
         }
-        EventBus.getDefault().post(new UpdateEvent(UpdateEvent.BLE));
-
-        mBinding.confirmButton.setOnClickListener(
-                v -> {
-                    mActivity.showUpdateComplete();
-                });
+        mBinding.confirmButton.setOnClickListener(v -> mActivity.showUpdateComplete());
     }
 
     /**

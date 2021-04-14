@@ -63,8 +63,7 @@ import org.jetbrains.annotations.Nullable;
  * @author liyan
  * @date 12/3/20
  */
-public class HardwareUpgradeActivity extends BaseActivity
-        implements DeviceManager.OnConnectDeviceListener {
+public class HardwareUpgradeActivity extends BaseActivity {
 
     @BindView(R.id.img_back)
     ImageView imgBack;
@@ -107,7 +106,7 @@ public class HardwareUpgradeActivity extends BaseActivity
                     currentBleVersion = newBleVersion;
                     newBleVersion = null;
                     if (!Strings.isNullOrEmpty(newFirmwareVersion)) {
-                        deviceManager.connectDeviceByMacAddress(mac, HardwareUpgradeActivity.this);
+                        onFirmwareUpgrade();
                     } else {
                         EventBus.getDefault()
                                 .post(
@@ -261,24 +260,30 @@ public class HardwareUpgradeActivity extends BaseActivity
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUpdateEvent(UpdateEvent event) {
-        switch (event.getType()) {
-            case UpdateEvent.BLE:
-                startUpgrade();
+        switch (event) {
+            case ALL:
+            case BLE_ONLY:
+                onUpdateBle();
+                break;
+            case FIRMWARE_ONLY:
+                onFirmwareUpgrade();
                 break;
             default:
+                throw new UnsupportedOperationException("");
         }
     }
 
-    private void startUpgrade() {
+    private void onFirmwareUpgrade() {
         deviceManager.connectDeviceByMacAddress(
                 mac,
                 new DeviceManager.OnConnectDeviceListener<BleDevice>() {
                     @Override
                     public void onSuccess(BleDevice bleDevice) {
-                        if (!Strings.isNullOrEmpty(newBleVersion)) {
-                            startUploadBle();
-                        } else if (!Strings.isNullOrEmpty(newFirmwareVersion)) {
+                        if (!Strings.isNullOrEmpty(newFirmwareVersion)) {
                             startUploadFirmware();
+                        } else {
+                            showPromptMessage(R.string.update_failed);
+                            showUpdateComplete();
                         }
                     }
 
@@ -289,8 +294,11 @@ public class HardwareUpgradeActivity extends BaseActivity
                     }
                 });
     }
-
-    private void startUploadBle() {
+    /**
+     * 更新蓝牙固件成功后，视情况(see {@link HardwareUpgradeActivity#newFirmwareVersion not be null or
+     * empty})决定是否升级stm32固件
+     */
+    private void onUpdateBle() {
         String path =
                 String.format(
                         "%s/%s%s%s",
@@ -320,7 +328,7 @@ public class HardwareUpgradeActivity extends BaseActivity
                                     HardwareUpgradingFragment.ProgressStatus.DOWNLOAD));
             beginDfu(path);
         } else {
-            // start install ble
+            // start process ble
             OKHttpUtils.downloadFile(
                     url,
                     (currentBytes, contentLength, done) -> {
@@ -337,25 +345,21 @@ public class HardwareUpgradeActivity extends BaseActivity
                     },
                     new Callback() {
                         @Override
-                        public void onFailure(Call call, IOException e) {}
+                        public void onFailure(@NotNull Call call, @NotNull IOException e) {}
 
                         @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            if (response != null) {
-                                try {
-                                    InputStream is = response.body().byteStream();
-                                    FileOutputStream fos = new FileOutputStream(new File(path));
-                                    int len = 0;
-                                    byte[] buffer = new byte[2048];
-                                    while (-1 != (len = is.read(buffer))) {
-                                        fos.write(buffer, 0, len);
-                                    }
-                                    fos.flush();
-                                    fos.close();
-                                    is.close();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                        public void onResponse(@NotNull Call call, @NotNull Response response) {
+                            try (InputStream is =
+                                            Objects.requireNonNull(response.body()).byteStream();
+                                    FileOutputStream fos = new FileOutputStream(new File(path))) {
+                                int len;
+                                byte[] buffer = new byte[2048];
+                                while (-1 != (len = is.read(buffer))) {
+                                    fos.write(buffer, 0, len);
                                 }
+                                fos.flush();
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
                     });
@@ -457,21 +461,10 @@ public class HardwareUpgradeActivity extends BaseActivity
         finish();
     }
 
-    @Override
-    public void onSuccess(Object o) {
-        startUploadFirmware();
-    }
-
-    @Override
-    public void onException(@Nullable Object o, @NotNull Exception e) {
-        showPromptMessage(R.string.update_failed);
-        showUpdateComplete();
-    }
-
     /** 固件升级的异步任务 */
     public static class MyTask extends AsyncTask<String, Object, Void> {
-        private CallBack callBack;
-        private HardwareUpgradingFragment fragment;
+        private final CallBack callBack;
+        private final HardwareUpgradingFragment fragment;
 
         public MyTask(CallBack callBack, HardwareUpgradingFragment fragment) {
             this.callBack = callBack;
@@ -506,29 +499,26 @@ public class HardwareUpgradeActivity extends BaseActivity
                         },
                         new Callback() {
                             @Override
-                            public void onFailure(Call call, IOException e) {
+                            public void onFailure(@NotNull Call call, @NotNull IOException e) {
                                 cancel(true);
                             }
 
                             @Override
-                            public void onResponse(Call call, Response response)
-                                    throws IOException {
-                                if (response != null) {
-                                    try {
-                                        InputStream is = response.body().byteStream();
-                                        FileOutputStream fos = new FileOutputStream(new File(path));
-                                        int len = 0;
-                                        byte[] buffer = new byte[2048];
-                                        while (-1 != (len = is.read(buffer))) {
-                                            fos.write(buffer, 0, len);
-                                        }
-                                        fos.flush();
-                                        fos.close();
-                                        is.close();
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        cancel(true);
+                            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                                try (InputStream is =
+                                                Objects.requireNonNull(response.body())
+                                                        .byteStream();
+                                        FileOutputStream fos =
+                                                new FileOutputStream(new File(path))) {
+                                    int len;
+                                    byte[] buffer = new byte[2048];
+                                    while (-1 != (len = is.read(buffer))) {
+                                        fos.write(buffer, 0, len);
                                     }
+                                    fos.flush();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    cancel(true);
                                 }
                             }
                         });

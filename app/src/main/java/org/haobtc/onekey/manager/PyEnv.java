@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.Semaphore;
@@ -100,7 +101,7 @@ public final class PyEnv {
             guiConsole;
     private static final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor =
             new ScheduledThreadPoolExecutor(
-                    2,
+                    5,
                     new ThreadFactoryBuilder().setNameFormat("PyEnv-schedule-%d").build(),
                     new ThreadPoolExecutor.DiscardPolicy());
     public static ListeningScheduledExecutorService mExecutorService =
@@ -293,7 +294,7 @@ public final class PyEnv {
                                                         PyConstant.GET_FEATURE,
                                                         MyApplication.getInstance().getDeviceWay())
                                                 .toString()),
-                        5,
+                        10,
                         TimeUnit.SECONDS,
                         mExecutorService);
         Futures.addCallback(
@@ -315,6 +316,11 @@ public final class PyEnv {
                         release();
                         Logger.e(t.getMessage());
                         Sentry.captureException(t);
+                        Sentry.captureMessage(
+                                "current active thread count >>>>>> "
+                                        + scheduledThreadPoolExecutor.getActiveCount()
+                                        + "current task count>>>>>>>"
+                                        + scheduledThreadPoolExecutor.getTaskCount());
                         if (sBle != null) {
                             cancelAll();
                         }
@@ -2008,6 +2014,9 @@ public final class PyEnv {
     @CheckResult
     public static boolean tryAcquire() {
         Logger.d("try acquire form>>>>>");
+        if (Objects.isNull(semaphore)) {
+            semaphore = new Semaphore(1);
+        }
         return semaphore.tryAcquire();
     }
 

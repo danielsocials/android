@@ -22,7 +22,10 @@ import cn.com.heaton.blelibrary.ble.model.BleDevice;
 import com.lxj.xpopup.XPopup;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import io.reactivex.disposables.Disposable;
+import io.sentry.Sentry;
 import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import org.greenrobot.eventbus.EventBus;
 import org.haobtc.onekey.R;
 import org.haobtc.onekey.business.wallet.OnekeyBleConnectCallback;
@@ -394,6 +397,8 @@ public final class BleManager {
     private void setNotify(BleDevice device, BleNotiftCallback<BleDevice> callback) {
         // buffered a proportion of response
         StringBuffer buffer = new StringBuffer();
+        // can not be reuse
+        CountDownLatch latch = new CountDownLatch(1);
         Ble.getInstance()
                 .enableNotify(
                         device,
@@ -417,14 +422,19 @@ public final class BleManager {
                                                     @Override
                                                     public void onMtuChanged(
                                                             BleDevice device, int mtu, int status) {
-                                                        super.onMtuChanged(device, mtu, status);
-                                                        PyEnv.bleEnable(device, mWriteCallBack);
-                                                        EventBus.getDefault()
-                                                                .post(new NotifySuccessfulEvent());
-                                                        connecting = false;
-                                                        callback.onNotifySuccess(device);
+                                                        latch.countDown();
                                                     }
                                                 });
+                                try {
+                                    latch.await(5, TimeUnit.SECONDS);
+                                } catch (InterruptedException e) {
+                                    Sentry.captureMessage("Wait notify success timeout");
+                                    setNotify(device, callback);
+                                }
+                                PyEnv.bleEnable(device, mWriteCallBack);
+                                EventBus.getDefault().post(new NotifySuccessfulEvent());
+                                connecting = false;
+                                callback.onNotifySuccess(device);
                                 currentAddress = device.getBleAddress();
                                 currentBleName = device.getBleName();
                             }

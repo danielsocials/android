@@ -1,7 +1,5 @@
 package org.haobtc.onekey.asynctask;
 
-import static org.haobtc.onekey.activities.service.CommunicationModeSelector.ble;
-
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import com.chaquo.python.Kwarg;
@@ -90,8 +88,9 @@ public class BusinessAsyncTask extends AsyncTask<String, Void, String> {
                     String request =
                             (strings[0].endsWith("single") ? GET_EXTEND_PUBLIC_KEY : strings[0]);
                 } catch (Exception e) {
-                    cancel(true);
-                    onException(e);
+                    if (cancel(true)) {
+                        onException(e);
+                    }
                 }
                 break;
             case RECOVER:
@@ -102,8 +101,9 @@ public class BusinessAsyncTask extends AsyncTask<String, Void, String> {
                                     .callAttr(strings[0], strings[1], strings[2], strings[3])
                                     .toString();
                 } catch (Exception e) {
-                    cancel(true);
-                    onException(e);
+                    if (cancel(true)) {
+                        onException(e);
+                    }
                 }
                 break;
             case GET_EXTEND_PUBLIC_KEY:
@@ -115,8 +115,9 @@ public class BusinessAsyncTask extends AsyncTask<String, Void, String> {
                     result = PyEnv.sCommands.callAttr(strings[0], strings[1]).toString();
                     Logger.d("look Seeds:" + result);
                 } catch (Exception e) {
-                    cancel(true);
-                    onException(e);
+                    if (cancel(true)) {
+                        onException(e);
+                    }
                 }
                 break;
             case INIT_DEVICE:
@@ -132,8 +133,9 @@ public class BusinessAsyncTask extends AsyncTask<String, Void, String> {
                                             strings[4])
                                     .toString();
                 } catch (Exception e) {
-                    cancel(true);
-                    onException(e);
+                    if (cancel(true)) {
+                        onException(e);
+                    }
                 }
                 break;
             case APPLY_SETTING:
@@ -193,8 +195,9 @@ public class BusinessAsyncTask extends AsyncTask<String, Void, String> {
                                         .toString();
                     }
                 } catch (Exception e) {
-                    cancel(true);
-                    onException(e);
+                    if (cancel(true)) {
+                        onException(e);
+                    }
                 }
                 break;
             case SHOW_ADDRESS:
@@ -204,8 +207,9 @@ public class BusinessAsyncTask extends AsyncTask<String, Void, String> {
                                     .callAttr(strings[0], strings[1], strings[2], strings[3])
                                     .toString();
                 } catch (Exception e) {
-                    cancel(true);
-                    onException(e);
+                    if (cancel(true)) {
+                        onException(e);
+                    }
                 }
                 EventBus.getDefault().post(new CheckReceiveAddress("getResult"));
                 break;
@@ -221,8 +225,9 @@ public class BusinessAsyncTask extends AsyncTask<String, Void, String> {
                                                     WhiteListEnum.Inquire.getWhiteListType()))
                                     .toString();
                 } catch (Exception e) {
-                    cancel(true);
-                    onException(e);
+                    if (cancel(true)) {
+                        onException(e);
+                    }
                 }
                 break;
             case ADD_AND_DELETE_WHITE_LIST:
@@ -251,8 +256,9 @@ public class BusinessAsyncTask extends AsyncTask<String, Void, String> {
                                         .toString();
                     }
                 } catch (Exception e) {
-                    cancel(true);
-                    onException(e);
+                    if (cancel(true)) {
+                        onException(e);
+                    }
                 }
                 break;
 
@@ -263,7 +269,6 @@ public class BusinessAsyncTask extends AsyncTask<String, Void, String> {
     }
 
     private void onException(Exception e) {
-        PyEnv.release();
         if (Objects.nonNull(e.getMessage())
                         && HardWareExceptions.PASSPHRASE_OPERATION_TIMEOUT
                                 .getMessage()
@@ -278,9 +283,6 @@ public class BusinessAsyncTask extends AsyncTask<String, Void, String> {
             }
             helper.onException(HardWareExceptions.exceptionConvert(e));
         }
-        if (ble != null) {
-            PyEnv.cancelAll();
-        }
     }
 
     @Override
@@ -290,6 +292,8 @@ public class BusinessAsyncTask extends AsyncTask<String, Void, String> {
             return;
         }
         helper.onCancelled();
+        PyEnv.cancelAll();
+        PyEnv.release();
     }
 
     @Override

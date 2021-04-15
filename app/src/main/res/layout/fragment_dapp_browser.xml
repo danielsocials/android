@@ -9,7 +9,7 @@
         android:id="@+id/layout_top_bar"
         android:layout_width="0dp"
         android:layout_height="84dp"
-        android:background="@color/color_white"
+        android:background="@color/color_page_background"
         android:paddingTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

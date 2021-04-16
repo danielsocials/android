@@ -14,8 +14,7 @@ jobs:
             submodules: 'true'
       - name: build debug
         run: |
-          ./gradlew app:clean
-          ./gradlew app:assembleDebug
+          ~/build.sh
       - name: push to server
         run: |
             # push release apk

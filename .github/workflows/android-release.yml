@@ -26,9 +26,7 @@ jobs:
           RELEASE_STORE_FILE: ${{ secrets.RELEASE_STORE_FILE }}
           RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
         run: |
-          ./gradlew app:assembleMainNetOnekeyRelease
-          ./gradlew app:assembleMainNetGooglePlayRelease
-          ./gradlew app:assembleRegTestOneKeyRelease
+          ~/release.sh
       - name: push to server
         run: |
             # push release apk
